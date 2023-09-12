@@ -13,6 +13,16 @@ export const cn = {
     testPage: "开发者临时测试页面",
     notFoundPage: "404页面"
   },
+  cvPageTitle: {
+    basicInformation: "基本信息",
+    community: "交个朋友",
+    journey: "履历",
+    projectExperience: "项目经历",
+    certificate: "技能证书",
+    skillDegree: "技能水平",
+    interestingBlog: "折腾碎念",
+    selfAppraisal: "自我评价"
+  },
   message: {
     helloWorld: "你好，世界",
     pleaseEnter: "请输入",

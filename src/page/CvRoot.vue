@@ -19,7 +19,7 @@
           <!--基本信息-->
           <cv-chapter
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_basic_information')"
+            :the-title="t('cvPageTitle.basicInformation')"
           >
             <template #default>
               <basic-info-glance
@@ -40,7 +40,7 @@
           <cv-chapter
             v-if="'community' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_community')"
+            :the-title="t('cvPageTitle.community')"
             the-slogan="Talk is cheap,show me the code!"
           >
             <community-box v-bind="cvData.community" :the-font-size-in-pixel="theFontSizeInPixel" />
@@ -49,7 +49,7 @@
           <cv-chapter
             v-if="'journey' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_journey')"
+            :the-title="t('cvPageTitle.journey')"
           >
             <record-item
               v-for="item in cvData.journey"
@@ -65,7 +65,7 @@
           <cv-chapter
             v-if="'projectExperience' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_projectExperience')"
+            :the-title="t('cvPageTitle.projectExperience')"
           >
             <project-experience-item
               v-for="item in cvData.projectExperience"
@@ -81,7 +81,7 @@
           <cv-chapter
             v-if="'certificate' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_certificate')"
+            :the-title="t('cvPageTitle.certificate')"
           >
             <text-prettier
               v-for="item in cvData.certificate"
@@ -94,7 +94,7 @@
           <cv-chapter
             v-if="'skillDegree' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_skill_degree')"
+            :the-title="t('cvPageTitle.skillDegree')"
           >
             <personal-ability
               :the-font-size-in-pixel="theFontSizeInPixel"
@@ -105,7 +105,7 @@
           <cv-chapter
             v-if="'interestingBlog' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_blog')"
+            :the-title="t('cvPageTitle.interestingBlog')"
           >
             <div :style="{ fontSize: theFontSize }">
               <ul style="margin: 0" :style="{ padding: '0 ' + theFontSize }">
@@ -119,7 +119,7 @@
           <cv-chapter
             v-if="'selfAppraisal' in cvData"
             :the-font-size-in-pixel="theFontSizeInPixel"
-            :the-title="t('word.xfl_title_self_appraisal')"
+            :the-title="t('cvPageTitle.selfAppraisal')"
           >
             <text-prettier :style="{ fontSize: theFontSize }" :content="cvData.selfAppraisal" />
           </cv-chapter>
