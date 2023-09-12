@@ -42,7 +42,7 @@ const store = createStore({
       }
     },
     browserDefaultFontFamily: getBrowserFirstDefaultFontFamily(),
-    browserInitiated: JSON.parse(env.VITE_DISABLE_BROWSER_INITIATED ?? "false"),
+    browserInitiated: JSON.parse(env.VITE_DISABLE_BROWSER_INITIALIZATION ?? "false"),
     // browserInitiated: false,
     cookieManager,
     loginManager,
