@@ -1,18 +1,6 @@
 <template>
   <div ref="templateRoot" :style="rootStyle">
-    <div
-      :style="{
-        /* box-shadow: x-shadow y-shadow blur spread color inset; */
-        backgroundColor: theBackgroundColor,
-        border: theBackgroundColor + ' solid 1px',
-        borderRadius: quarterOfFontSize,
-        boxShadow: oneEighthOfFontSize + ' ' + oneEighthOfFontSize + ' ' + oneEighthOfFontSize + ' 0 gray',
-        filter: isHover ? 'invert(100%)' : 'invert(0)'
-        // mixBlendMode: isHover ? 'difference' : 'normal'
-      }"
-      @mouseenter="() => (isHover = true)"
-      @mouseleave="() => (isHover = false)"
-    >
+    <div class="xflsCardViewInvertBgColor" :style="cardStyle">
       <slot />
     </div>
   </div>
@@ -47,17 +35,37 @@ const oneEighthOfFontSize = computed(() => {
 });
 const rootStyle = computed<VuePartialCssProperties>(() => {
   return {
-    margin:
-      Math.floor(quarterOfFontSizeInPixel.value / 2) +
-      "px " +
-      quarterOfFontSize.value +
-      " " +
-      quarterOfFontSize.value +
-      " " +
+    margin: [
+      Math.floor(quarterOfFontSizeInPixel.value / 2) + "px",
       quarterOfFontSize.value,
+      quarterOfFontSize.value,
+      quarterOfFontSize.value
+    ].join(" "),
     fontSize: theFontSize.value
   };
 });
-
-const isHover = ref(false);
+const cardStyle = computed<VuePartialCssProperties>(() => {
+  return {
+    /* box-shadow: x-shadow y-shadow blur spread color inset; */
+    boxShadow: [
+      oneEighthOfFontSize.value, // x-shadow
+      oneEighthOfFontSize.value, // y-shadow
+      oneEighthOfFontSize.value, // blur
+      "0", // spread
+      "gray" // color
+    ].join(" "),
+    backgroundColor: props.theBackgroundColor,
+    border: [props.theBackgroundColor, "solid", "1px"].join(" "),
+    borderRadius: quarterOfFontSize.value
+  };
+});
 </script>
+
+<style scoped>
+.xflsCardViewInvertBgColor {
+  filter: invert(0);
+}
+.xflsCardViewInvertBgColor:hover {
+  filter: invert(100);
+}
+</style>
