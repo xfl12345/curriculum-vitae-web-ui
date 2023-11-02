@@ -1,6 +1,6 @@
 export const getTargetKvFromDocumentCookie = (targetFieldName: string) => {
   const targetKvList = document.cookie
-    .split(";")
+    .split("; ")
     .filter((value, index, array) => value.startsWith(targetFieldName + "="));
   return targetKvList.length > 0 ? targetKvList[0] : "";
 };
@@ -17,7 +17,9 @@ export class ClientCookieManager {
 
   saveCookie = () => {
     const myself = this;
-    const expires = getTargetKvFromDocumentCookie("expires");
-    document.cookie = currentCookieKey + "=" + JSON.stringify(myself.clientCookie) + ";" + expires;
+    // const expires = getTargetKvFromDocumentCookie("expires");
+    // document.cookie = currentCookieKey + "=" + JSON.stringify(myself.clientCookie) + ";" + expires;
+    const expire = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 100).toUTCString();
+    document.cookie = currentCookieKey + "=" + JSON.stringify(myself.clientCookie) + "; " + expire;
   };
 }
