@@ -1,7 +1,5 @@
 <template>
-  <div :style="{ fontFamily }">
-    <router-view />
-  </div>
+  <router-view :style="{ fontFamily }" />
 </template>
 
 <script setup lang="tsx">
