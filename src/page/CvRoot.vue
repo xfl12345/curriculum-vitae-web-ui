@@ -29,7 +29,7 @@
               />
             </template>
             <template #slogan>
-              <div style="text-align: right">
+              <div style="text-align: right" :style="{ lineHeight: theFontSize }">
                 <span style="cursor: pointer" :style="{ fontSize: theFontSize }" @click="openHiddenEggPanel"
                   >🌼</span
                 >
