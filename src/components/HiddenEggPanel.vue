@@ -41,31 +41,25 @@
             <span style="color: aqua">恭喜你发现了彩蛋！！！</span>
             <span>🌼🎉✨✨✨</span>
           </div>
-          <div>{{}}</div>
+          <div></div>
           <div>
             <button
               style="cursor: pointer; font-size: inherit"
-              :style="{
-                borderRadius: theFontSize
-              }"
+              :style="{ borderRadius: theFontSize }"
               @click="$emit('refreshCvData')"
             >
               刷新简历数据
             </button>
             <button
               style="cursor: pointer; font-size: inherit"
-              :style="{
-                borderRadius: theFontSize
-              }"
+              :style="{ borderRadius: theFontSize }"
               @click="$emit('jump2IndexPage')"
             >
               前往导航页面
             </button>
             <button
               style="cursor: pointer; font-size: inherit"
-              :style="{
-                borderRadius: theFontSize
-              }"
+              :style="{ borderRadius: theFontSize }"
               @click="closePanel"
             >
               关闭彩蛋面板
@@ -108,6 +102,7 @@
             复位
           </button>
         </div>
+        <!-- TODO 设计实现 debug 模式切换 -->
         <br />
         <br />
         <div>
