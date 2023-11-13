@@ -48,6 +48,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const { t } = useI18n();
+    const routes = router.getRoutes().filter((item) => isDefinedAndNotNull(item.name));
 
     return {
       templateRoot,
@@ -84,9 +85,7 @@ export default defineComponent({
     },
     routes(): RouteRecord[] {
       const myself = this;
-      return myself.router.getRoutes().filter((item) => {
-        return isDefinedAndNotNull(item.name);
-      });
+      return myself.router.getRoutes().filter((item) => isDefinedAndNotNull(item.name));
     }
   },
   watch: {},

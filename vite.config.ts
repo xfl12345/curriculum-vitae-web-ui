@@ -7,6 +7,9 @@ import legacy from "@vitejs/plugin-legacy";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import eslintPlugin from "vite-plugin-eslint";
 import mockDevServerPlugin from "vite-plugin-mock-dev-server";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 import axios from "axios";
 
 export default ({ mode }) => {
@@ -24,6 +27,17 @@ export default ({ mode }) => {
         }),
         legacy({
           targets: ["defaults", "not IE 11"]
+        }),
+        AutoImport({
+          imports: [
+            "vue",
+            {
+              "naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"]
+            }
+          ]
+        }),
+        Components({
+          resolvers: [NaiveUiResolver()]
         })
       ],
       assetsInclude: ["**/*.bmp"],
@@ -102,17 +116,17 @@ export default ({ mode }) => {
       axios.get(remoteServerRootURL + "/login/status").then(
         (response) => {
           console.log("Remote server API request succeed!");
-          resolve2(defineConfig(myViteConfig as UserConfigExport));
+          resolve2(defineConfig(myViteConfig));
         },
         (reason) => {
-          console.log("Remote server API request failed! Use mock instead.");
           // 当 远程API 不可用的时候，使用 mock
+          console.log("Remote server API request failed! Use mock instead.");
           myViteConfig.plugins.push(mockDevServerPlugin());
-          resolve2(defineConfig(myViteConfig as UserConfigExport));
+          resolve2(defineConfig(myViteConfig));
         }
       );
     } else {
-      resolve2(myViteConfig);
+      resolve2(defineConfig(myViteConfig));
     }
   });
 };

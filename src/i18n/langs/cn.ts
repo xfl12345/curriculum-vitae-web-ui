@@ -11,6 +11,7 @@ export const cn = {
     cv: "简历页面",
     testFontSupport: "测试字体页面",
     testPage: "开发者临时测试页面",
+    settingPage: "设置页面",
     notFoundPage: "404页面"
   },
   cvPageTitle: {

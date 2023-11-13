@@ -7,6 +7,7 @@ import TestFontSupport from "@/page/TestFontSupport.vue";
 import FirstTimeLoadingPage from "@/page/FirstTimeLoadingPage.vue";
 import TestPage from "@/page/TestPage.vue";
 import IndexPage from "@/page/IndexPage.vue";
+import SettingPage from "@/page/SettingPage.vue";
 
 type routeNode = Array<RouteRecordRaw>;
 const routes: routeNode = [
@@ -27,6 +28,7 @@ const routes: routeNode = [
   { path: "/cv", name: "cv", component: CvRoot },
   { path: "/test-font-support", name: "testFontSupport", component: TestFontSupport },
   { path: "/test", name: "testPage", component: TestPage },
+  { path: "/setting", name: "settingPage", component: SettingPage },
   {
     path: "/404",
     name: "notFoundPage",

@@ -6,16 +6,13 @@ import type { Buildable } from "ts-essentials";
 import { getBrowserFirstDefaultFontFamily, getTextSize } from "@/components/xfl-common/ts/FontUtils";
 import { ClientCookieManager } from "@/components/xfl-common/ts/ClientCookieManager";
 import { LoginMananger } from "@/model/LoginMananger";
+import { StringKeyMapType } from "@/components/xfl-common/ts/StringMapType";
 
 const env = import.meta.env ?? ({} as any);
 
-const cookieManager = new ClientCookieManager();
-cookieManager.reloadCookie();
-const loginManager = new LoginMananger();
-
 const store = createStore({
   state: {
-    isDevelopmentMode: env.DEV ?? false,
+    isDevelopmentMode: JSON.parse(env.VITE_ENABLE_DEV_MODE ?? "false"),
     uiCalculation: {
       rootScale: 8,
       theGlobalDefaultFontSizeInPixel: Math.ceil(getTextSize("xx-large")),
@@ -44,8 +41,8 @@ const store = createStore({
     browserDefaultFontFamily: getBrowserFirstDefaultFontFamily(),
     browserInitiated: JSON.parse(env.VITE_DISABLE_BROWSER_INITIALIZATION ?? "false"),
     // browserInitiated: false,
-    cookieManager,
-    loginManager,
+    cookieManager: new ClientCookieManager(),
+    loginManager: new LoginMananger(),
     diyDefaultFontFamilyList: [
       "Microsoft YaHei UI",
       ...document.defaultView.getComputedStyle(document.body, "").fontFamily.split(",")
@@ -88,15 +85,34 @@ const store = createStore({
     setBrowserInitiatedFlag(state, flag: boolean) {
       state.browserInitiated = flag;
     },
-    setCookie(state, cookie) {
-      state.cookieManager.clientCookie = cookie;
+    setCookie(state, theDict: StringKeyMapType) {
+      Object.keys(theDict).forEach((key) => {
+        state.cookieManager.clientCookie[key] = theDict[key];
+      });
+      console.log(JSON.stringify(state.cookieManager.clientCookie));
       state.cookieManager.saveCookie();
+    },
+    setDevMode(state, flag: boolean) {
+      state.isDevelopmentMode = flag;
     }
   },
 
   actions: {},
   modules: {}
 });
+
+const cookieManager = store.state.cookieManager;
+cookieManager.reloadCookie();
+if (
+  "uiCalculation" in cookieManager.clientCookie &&
+  "rootScale" in cookieManager.clientCookie.uiCalculation
+) {
+  store.commit("setRootScale", cookieManager.clientCookie.uiCalculation.rootScale);
+}
+if ("isDevelopmentMode" in cookieManager.clientCookie) {
+  store.commit("setDevMode", cookieManager.clientCookie.isDevelopmentMode);
+}
+console.log(JSON.stringify(store.state.cookieManager));
 
 // const windowInAnyType = window as any;
 // windowInAnyType.vuexStoreSetCookie = (cookie: any) => {
@@ -122,6 +138,8 @@ window.addEventListener("load", (event) => {
 });
 window.addEventListener("close", (event) => {
   rootNodeResizeObserver.unobserve(document.documentElement);
+  store.state.cookieManager.clientCookie.uiCalculation.rootScale = store.state.uiCalculation.rootScale;
+  store.state.cookieManager.saveCookie();
 });
 
 export default store;
