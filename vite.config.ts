@@ -27,18 +27,18 @@ export default ({ mode }) => {
         }),
         legacy({
           targets: ["defaults", "not IE 11"]
-        }),
-        AutoImport({
-          imports: [
-            "vue",
-            {
-              "naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"]
-            }
-          ]
-        }),
-        Components({
-          resolvers: [NaiveUiResolver()]
         })
+        // AutoImport({
+        //   imports: [
+        //     "vue",
+        //     {
+        //       "naive-ui": ["useDialog", "useMessage", "useNotification", "useLoadingBar"]
+        //     }
+        //   ]
+        // }),
+        // Components({
+        //   resolvers: [NaiveUiResolver()]
+        // })
       ],
       assetsInclude: ["**/*.bmp"],
       resolve: {
