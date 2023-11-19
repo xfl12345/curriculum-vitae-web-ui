@@ -1,15 +1,15 @@
 import { resolve } from "node:path";
 
 import type { ServerOptions, UserConfig, UserConfigExport } from "vite";
-import { defineConfig, loadEnv } from "vite";
+import { createLogger, defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import legacy from "@vitejs/plugin-legacy";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import eslintPlugin from "vite-plugin-eslint";
 import mockDevServerPlugin from "vite-plugin-mock-dev-server";
-import AutoImport from "unplugin-auto-import/vite";
-import Components from "unplugin-vue-components/vite";
-import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
+// import AutoImport from "unplugin-auto-import/vite";
+// import Components from "unplugin-vue-components/vite";
+// import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 import axios from "axios";
 
 export default ({ mode }) => {
@@ -73,7 +73,9 @@ export default ({ mode }) => {
       const remoteServerHost = env.VITE_SERVER_REMOTE_HOST ?? "127.0.0.1:8880";
       const remoteServerRootURL = remoteServerHttpScheme + "://" + remoteServerHost;
 
-      console.log("remoteServerRootURL", remoteServerRootURL);
+      const logger = createLogger("info", { prefix: "[vite:dynamic-mock-server]" });
+      const justLog = (...msg) => logger.info(msg.join(" "), { clear: false, timestamp: true });
+      justLog("remoteServerRootURL=" + remoteServerRootURL);
       myViteConfig.server = {
         // hmr: {
         //   overlay: false
@@ -115,12 +117,12 @@ export default ({ mode }) => {
       // 验证 远程API 是否可用
       axios.get(remoteServerRootURL + "/login/status").then(
         (response) => {
-          console.log("Remote server API request succeed!");
+          justLog("Remote server API request succeed!");
           resolve2(defineConfig(myViteConfig));
         },
         (reason) => {
           // 当 远程API 不可用的时候，使用 mock
-          console.log("Remote server API request failed! Use mock instead.");
+          justLog("Remote server API request failed! Use mock instead.");
           myViteConfig.plugins.push(mockDevServerPlugin());
           resolve2(defineConfig(myViteConfig));
         }
