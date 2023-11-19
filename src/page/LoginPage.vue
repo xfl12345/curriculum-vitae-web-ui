@@ -10,9 +10,9 @@
     :style="rootStyle"
   >
     <center-box
-      :x-grow="(isCaptchaPanelOpened ? 0 : 1 - 0.618) + ''"
-      :x-basis="isCaptchaPanelOpened ? 'auto' : theCenterBoxMinWidth + 'px'"
-      :x-shrink="(isCaptchaPanelOpened ? 1 : 0) + ''"
+      :x-grow="(captchaPanelOpened ? 0 : 1 - 0.618) + ''"
+      :x-basis="captchaPanelOpened ? 'auto' : theCenterBoxMinWidth + 'px'"
+      :x-shrink="(captchaPanelOpened ? 1 : 0) + ''"
     >
       <div
         ref="contentBox"
@@ -29,7 +29,7 @@
           }"
         >
           <div
-            v-if="!isCaptchaPanelOpened && !isSignedIn"
+            v-if="!captchaPanelOpened && !signedIn"
             style="/*box-sizing: border-box;*/ height: 100%; /* border: 1px dashed aqua; */"
           >
             <div
@@ -37,7 +37,7 @@
               :style="{ fontSize: theFontSizeInPixel * 2 + 'px' }"
             >
               <span v-if="loginMessage === ''">{{ t("word.welcome") }}</span>
-              <span :style="{ color: isSignedIn ? 'lawngreen' : 'red' }">{{ loginMessage }}</span>
+              <span :style="{ color: signedIn ? 'lawngreen' : 'red' }">{{ loginMessage }}</span>
             </div>
             <br />
             <div style="box-sizing: border-box; width: 100%; display: flex; /* border: 1px dashed aqua; */">
@@ -81,7 +81,7 @@
                       @click.prevent="
                         () => {
                           if (!isInSmsCoolDown) {
-                            isCaptchaPanelOpened = true;
+                            captchaPanelOpened = true;
                           }
                         }
                       "
@@ -104,15 +104,15 @@
             </div>
           </div>
           <captcha-box-type-rotate
-            v-if="isCaptchaPanelOpened"
+            v-if="captchaPanelOpened"
             :dom-box-width="captchaBoxDomWidth"
             :enable-result-feedback="true"
             :tianai-captcha-client="tianaiCaptchaClient"
             :props-css-style="{ fontSize: 'initial', boxShadow: 'none' }"
-            @on-click-close-button="(args) => (isCaptchaPanelOpened = false)"
+            @on-click-close-button="(args) => (captchaPanelOpened = false)"
             @captcha-done="onCaptchaDone"
           />
-          <div v-if="isSignedIn">
+          <div v-if="signedIn">
             <div
               style="display: flex; justify-content: center"
               :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
@@ -178,10 +178,10 @@ export default defineComponent({
       theFontSizeInPixel: 16,
       phoneNumber: "",
       verificationCode: "",
-      isSignedIn: false,
+      signedIn: false,
       loginMessage: "",
-      isCaptchaPanelOpened: false,
-      isCaptchaPassed: false,
+      captchaPanelOpened: false,
+      captchaPassed: false,
       smsCoolDownTimeLeft: 0,
       smsCoolDownHelper,
       tianaiCaptchaClient,
@@ -230,7 +230,7 @@ export default defineComponent({
   beforeMount() {
     const myself = this;
     myself.store.state.loginManager.isAlreadyLogin().then((result: boolean) => {
-      myself.isSignedIn = result;
+      myself.signedIn = result;
     });
     myself.theFontSizeInPixel = myself.getTheFontSizeInPixel();
   },
@@ -288,7 +288,7 @@ export default defineComponent({
       myself.store.state.loginManager
         .loginViaSms(myself.phoneNumber, myself.verificationCode)
         .then((result: any) => {
-          myself.isSignedIn = result.success;
+          myself.signedIn = result.success;
           myself.loginMessage = result.message;
           if (result.success) {
             myself.jump2CvPage();
@@ -298,15 +298,15 @@ export default defineComponent({
     onClickLogoutButton() {
       const myself = this;
       myself.store.state.loginManager.logout().then((result: boolean) => {
-        myself.isSignedIn = !result;
+        myself.signedIn = !result;
         myself.loginMessage = "";
       });
     },
     onCaptchaDone(args: RequestResult) {
       const myself = this;
-      myself.isCaptchaPassed = args.success;
-      if (myself.isCaptchaPassed) {
-        myself.isCaptchaPanelOpened = false;
+      myself.captchaPassed = args.success;
+      if (myself.captchaPassed) {
+        myself.captchaPanelOpened = false;
       }
 
       const responseData = args.payload as IGenericJsonApiResponseData<
