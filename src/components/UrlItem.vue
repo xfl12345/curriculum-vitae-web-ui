@@ -16,6 +16,8 @@
     <a
       style="display: inline; text-decoration: none; vertical-align: inherit; font-size: inherit"
       :href="theUrl"
+      target="_blank"
+      rel="noopener noreferrer"
     >
       <text-prettier
         style="line-height: inherit; font-size: inherit"
