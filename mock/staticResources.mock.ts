@@ -7,12 +7,12 @@ export default [
     status: 500
   }),
   defineMock({
-    url: "/mock/assets/pic/vue.svg",
-    type: "vue.svg",
-    body: () => createReadStream("mock/assets/pic/vue.svg")
+    url: "/static/secret/json/xflsCurriculumVitaeData.json",
+    type: "xflsCurriculumVitaeData.json",
+    body: () => createReadStream("mock/assets/json/xflsCurriculumVitaeData.json")
   }),
   defineMock({
-    url: "/static/secret/json/xflsCurriculumVitaeData.json",
+    url: "/static/public/json/xflsCurriculumVitaeData.json",
     type: "xflsCurriculumVitaeData.json",
     body: () => createReadStream("mock/assets/json/xflsCurriculumVitaeData.json")
   }),
@@ -25,5 +25,10 @@ export default [
     url: "/static/font/FZ_KAITI_ZH_HANS.woff2",
     type: "FZ_KAITI_ZH_HANS.woff2",
     body: () => createReadStream("public/static/font/FZ_KAITI_ZH_HANS.woff2")
+  }),
+  defineMock({
+    url: "/static/json/publicWebUiData.json",
+    type: "publicWebUiData.json",
+    body: () => createReadStream("mock/assets/json/publicWebUiData.json")
   })
 ];

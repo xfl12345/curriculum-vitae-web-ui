@@ -12,7 +12,7 @@ const env = import.meta.env ?? ({} as any);
 
 const store = createStore({
   state: {
-    isDevelopmentMode: JSON.parse(env.VITE_ENABLE_DEV_MODE ?? "false"),
+    developmentModeFlag: JSON.parse(env.VITE_ENABLE_DEV_MODE ?? "false"),
     uiCalculation: {
       rootScale: 8,
       theGlobalDefaultFontSizeInPixel: Math.ceil(getTextSize("xx-large")),
@@ -93,7 +93,7 @@ const store = createStore({
       state.cookieManager.saveCookie();
     },
     setDevMode(state, flag: boolean) {
-      state.isDevelopmentMode = flag;
+      state.developmentModeFlag = flag;
     }
   },
 
@@ -109,8 +109,8 @@ if (
 ) {
   store.commit("setRootScale", cookieManager.clientCookie.uiCalculation.rootScale);
 }
-if ("isDevelopmentMode" in cookieManager.clientCookie) {
-  store.commit("setDevMode", cookieManager.clientCookie.isDevelopmentMode);
+if ("developmentModeFlag" in cookieManager.clientCookie) {
+  store.commit("setDevMode", cookieManager.clientCookie.developmentModeFlag);
 }
 console.log(JSON.stringify(store.state.cookieManager));
 

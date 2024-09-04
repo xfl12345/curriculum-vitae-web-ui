@@ -74,7 +74,7 @@ export default ({ mode }) => {
       const remoteServerRootURL = remoteServerHttpScheme + "://" + remoteServerHost;
 
       const logger = createLogger("info", { prefix: "[vite:dynamic-mock-server]" });
-      const justLog = (...msg) => logger.info(msg.join(" "), { clear: false, timestamp: true });
+      const justLog = (...msg: any[]) => logger.info(msg.join(" "), { clear: false, timestamp: true });
       justLog("remoteServerRootURL=" + remoteServerRootURL);
       myViteConfig.server = {
         // hmr: {
@@ -90,6 +90,10 @@ export default ({ mode }) => {
             target: remoteServerRootURL,
             changeOrigin: true
             // rewrite: (path) => path.replace(/^\/backend/, "")
+          },
+          "/static/public/": {
+            target: remoteServerRootURL,
+            changeOrigin: true
           },
           "/captcha": {
             target: remoteServerRootURL,

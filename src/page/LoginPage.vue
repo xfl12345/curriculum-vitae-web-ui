@@ -1,130 +1,165 @@
 <template>
   <div
     ref="templateRoot"
-    style="
-      background-size: 100% auto;
-      background-repeat: repeat-y;
-      color: white;
-      background-image: url('/yourname_dusk.jpg');
-    "
+    style="background-size: 100% auto; background-repeat: repeat-y; background-color: black; color: white"
     :style="rootStyle"
   >
-    <center-box
-      :x-grow="(captchaPanelOpened ? 0 : 1 - 0.618) + ''"
-      :x-basis="captchaPanelOpened ? 'auto' : theCenterBoxMinWidth + 'px'"
-      :x-shrink="(captchaPanelOpened ? 1 : 0) + ''"
-    >
-      <div
-        ref="contentBox"
-        style="box-sizing: border-box; width: 100%"
-        :style="{ padding: theFontSizeInPixel / 2 + 'px' }"
-      >
-        <div
-          class="broderBreath"
-          style="box-sizing: border-box; background-color: rgba(0, 0, 0, 0.75)"
-          :style="{
-            padding: boxPaddingInPixel + 'px',
-            // R^2=2*((R-P)^2)  --->  R=(2+sqrt(2))*P
-            borderRadius: boxPaddingInPixel * 3.4142 + 'px'
-          }"
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: column">
+      <div style="width: 100%; flex-grow: 1">
+        <center-box
+          :x-grow="(captchaPanelOpened ? 0 : 1 - 0.618) + ''"
+          :x-basis="captchaPanelOpened ? 'auto' : theCenterBoxMinWidth + 'px'"
+          :x-shrink="(captchaPanelOpened ? 1 : 0) + ''"
         >
           <div
-            v-if="!captchaPanelOpened && !signedIn"
-            style="/*box-sizing: border-box;*/ height: 100%; /* border: 1px dashed aqua; */"
+            ref="contentBox"
+            style="box-sizing: border-box; width: 100%"
+            :style="{ padding: theFontSizeInPixel / 2 + 'px' }"
           >
             <div
-              style="width: 100%; text-align: center"
-              :style="{ fontSize: theFontSizeInPixel * 2 + 'px' }"
+              class="broderBreath"
+              style="box-sizing: border-box; background-color: rgba(0, 0, 0, 0.75)"
+              :style="{
+                padding: boxPaddingInPixel + 'px',
+                // R^2=2*((R-P)^2)  --->  R=(2+sqrt(2))*P
+                borderRadius: boxPaddingInPixel * 3.4142 + 'px'
+              }"
             >
-              <span v-if="loginMessage === ''">{{ t("word.welcome") }}</span>
-              <span :style="{ color: signedIn ? 'lawngreen' : 'red' }">{{ loginMessage }}</span>
-            </div>
-            <br />
-            <div style="box-sizing: border-box; width: 100%; display: flex; /* border: 1px dashed aqua; */">
-              <div style="flex-grow: 1; flex-shrink: 1" :style="{ flexBasis: formDivHorizontalPadding }" />
               <div
-                style="
-                  box-sizing: border-box;
-                  flex-grow: 99998;
-                  flex-shrink: 0; /* border: 1px dashed aqua; */
-                "
+                v-if="!captchaPanelOpened && !signedIn"
+                style="/*box-sizing: border-box;*/ height: 100%; /* border: 1px dashed aqua; */"
               >
-                <xfls-single-line-input
-                  ref="inputPhoneNumber"
-                  v-model:the-input-value="phoneNumber"
-                  :the-font-size-in-pixel="theFontSizeInPixel"
-                  :the-title="t('word.phoneNumber')"
-                  the-input-type="number"
-                  @on-key-down-enter="onInputPhoneNumberKeyDownEnter"
-                />
-                <br />
-                <xfls-single-line-input
-                  ref="inputVerificationCode"
-                  v-model:the-input-value="verificationCode"
-                  :the-font-size-in-pixel="theFontSizeInPixel"
-                  :the-title="t('word.verificationCode')"
-                  the-input-type="text"
-                  @on-key-down-enter="onInputVerificationCodeKeyDownEnter"
+                <div
+                  style="width: 100%; text-align: center"
+                  :style="{ fontSize: theFontSizeInPixel * 2 + 'px' }"
                 >
-                  <template #inputRight>
-                    <div
-                      style="box-sizing: border-box; background-color: darkgreen; text-align: center"
-                      :style="{
-                        padding: '0 ' + Math.floor(theFontSizeInPixel / 2) + 'px',
-                        cursor: isInSmsCoolDown ? 'unset' : 'pointer',
-                        backgroundColor: isInSmsCoolDown ? 'grey' : 'darkgreen',
-                        // flexGrow: 0,
-                        // flexShrink: 0,
-                        // flexBasis: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
-                        miniWidth: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
-                      }"
-                      @click.prevent="
-                        () => {
-                          if (!isInSmsCoolDown) {
-                            captchaPanelOpened = true;
-                          }
-                        }
-                      "
+                  <span v-if="loginMessage === ''">{{ t("word.welcome") }}</span>
+                  <span :style="{ color: signedIn ? 'lawngreen' : 'red' }">{{ loginMessage }}</span>
+                </div>
+                <br />
+                <div
+                  style="box-sizing: border-box; width: 100%; display: flex; /* border: 1px dashed aqua; */"
+                >
+                  <div
+                    style="flex-grow: 1; flex-shrink: 1"
+                    :style="{ flexBasis: formDivHorizontalPadding }"
+                  />
+                  <div
+                    style="
+                      box-sizing: border-box;
+                      flex-grow: 99998;
+                      flex-shrink: 0; /* border: 1px dashed aqua; */
+                    "
+                  >
+                    <xfls-single-line-input
+                      ref="inputPhoneNumber"
+                      v-model:the-input-value="phoneNumber"
+                      :the-font-size-in-pixel="theFontSizeInPixel"
+                      :the-title="t('word.phoneNumber')"
+                      the-input-type="number"
+                      @on-key-down-enter="onInputPhoneNumberKeyDownEnter"
+                    />
+                    <br />
+                    <xfls-single-line-input
+                      ref="inputVerificationCode"
+                      v-model:the-input-value="verificationCode"
+                      :the-font-size-in-pixel="theFontSizeInPixel"
+                      :the-title="t('word.verificationCode')"
+                      the-input-type="text"
+                      @on-key-down-enter="onInputVerificationCodeKeyDownEnter"
                     >
-                      <span>{{ isInSmsCoolDown ? smsCoolDownTimeLeft : t("message.clickMe2Get") }}</span>
-                    </div>
-                  </template>
-                </xfls-single-line-input>
+                      <template #inputRight>
+                        <div
+                          style="box-sizing: border-box; background-color: darkgreen; text-align: center"
+                          :style="{
+                            padding: '0 ' + Math.floor(theFontSizeInPixel / 2) + 'px',
+                            cursor: isInSmsCoolDown ? 'unset' : 'pointer',
+                            backgroundColor: isInSmsCoolDown ? 'grey' : 'darkgreen',
+                            // flexGrow: 0,
+                            // flexShrink: 0,
+                            // flexBasis: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
+                            miniWidth:
+                              theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
+                          }"
+                          @click.prevent="
+                            () => {
+                              if (!isInSmsCoolDown) {
+                                captchaPanelOpened = true;
+                              }
+                            }
+                          "
+                        >
+                          <span>{{
+                            isInSmsCoolDown ? smsCoolDownTimeLeft : t("message.clickMe2Get")
+                          }}</span>
+                        </div>
+                      </template>
+                    </xfls-single-line-input>
+                  </div>
+                  <div
+                    style="flex-grow: 1; flex-shrink: 1"
+                    :style="{ flexBasis: formDivHorizontalPadding }"
+                  />
+                </div>
+                <br />
+                <div
+                  style="display: flex; justify-content: space-evenly"
+                  :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
+                >
+                  <button class="mySubmitBtn" style="cursor: pointer" @click="onClickLoginButton">
+                    {{ t("word.login") }}
+                  </button>
+                  <button class="mySubmitBtn" style="cursor: pointer" @click="onClickAnonymousEntryButton">
+                    {{ t("word.anonymousEntry") }}
+                  </button>
+                </div>
               </div>
-              <div style="flex-grow: 1; flex-shrink: 1" :style="{ flexBasis: formDivHorizontalPadding }" />
-            </div>
-            <br />
-            <div
-              style="display: flex; justify-content: center"
-              :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
-            >
-              <button class="mySubmitBtn" style="cursor: pointer" @click="onClickLoginButton">
-                {{ t("word.login") }}
-              </button>
-            </div>
-          </div>
-          <captcha-box-type-rotate
-            v-if="captchaPanelOpened"
-            :dom-box-width="captchaBoxDomWidth"
-            :enable-result-feedback="true"
-            :tianai-captcha-client="tianaiCaptchaClient"
-            :props-css-style="{ fontSize: 'initial', boxShadow: 'none' }"
-            @on-click-close-button="(args) => (captchaPanelOpened = false)"
-            @captcha-done="onCaptchaDone"
-          />
-          <div v-if="signedIn">
-            <div
-              style="display: flex; justify-content: center"
-              :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
-            >
-              <button class="mySubmitBtn" style="cursor: pointer" @click="onClickLogoutButton">
-                {{ t("word.logout") }}
-              </button>
+              <captcha-box-type-rotate
+                v-if="captchaPanelOpened"
+                :dom-box-width="captchaBoxDomWidth"
+                :enable-result-feedback="true"
+                :tianai-captcha-client="tianaiCaptchaClient"
+                :props-css-style="{ fontSize: 'initial', boxShadow: 'none' }"
+                @on-click-close-button="(args) => (captchaPanelOpened = false)"
+                @captcha-done="onCaptchaDone"
+              />
+              <div v-if="signedIn">
+                <div
+                  style="display: flex; justify-content: center"
+                  :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
+                >
+                  <button class="mySubmitBtn" style="cursor: pointer" @click="onClickLogoutButton">
+                    {{ t("word.logout") }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </center-box>
       </div>
-    </center-box>
+      <div
+        style="
+          width: 100%;
+          flex-basis: 36px;
+          flex-shrink: 0;
+          background-color: rgba(0, 0, 0, 61.8%);
+          white-space: nowrap;
+          display: flex;
+          justify-content: space-between;
+          flex-direction: row-reverse;
+        "
+        :style="{ flexBasis: theFontSize, lineHeight: theFontSize }"
+      >
+        <a href="https://github.com/xfl12345" target="_blank">Designed by xfl12345@github.com</a>
+        <a
+          v-if="extraTextOfChinaICP !== ''"
+          id="beian"
+          href="https://beian.miit.gov.cn/#/Integrated/recordQuery"
+          target="_blank"
+          >{{ extraTextOfChinaICP }}</a
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -142,6 +177,8 @@ import { RequestResult } from "@/components/tianai-captcha/ts/TianaiCaptchaClien
 import { IGenericJsonApiResponseData, RateLimitedApiResultPayload } from "@/model/JsonApiResponseData";
 import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import { getTextSize } from "@/components/xfl-common/ts/FontUtils";
+
+import { getPublicWebUiData } from "@/model/SecretDataApi";
 
 export default defineComponent({
   components: {
@@ -185,7 +222,9 @@ export default defineComponent({
       smsCoolDownTimeLeft: 0,
       smsCoolDownHelper,
       tianaiCaptchaClient,
-      captchaBoxDomWidth: 360
+      captchaBoxDomWidth: 360,
+      extraTextOfChinaICP: "",
+      theBackGroundImage: ""
     };
   },
   computed: {
@@ -222,17 +261,24 @@ export default defineComponent({
         // width: uiCalculation.document.body.scrollWidth + "px",
         // height: uiCalculation.document.body.scrollHeight + "px",
         minWidth: myself.theCenterBoxMinWidth + "px",
-        fontSize: myself.theFontSize
+        fontSize: myself.theFontSize,
         // minWidth: myself.theFontSizeInPixel * 26 + "px"
+        backgroundImage:
+          myself.theBackGroundImage === "" ? undefined : `url('${myself.theBackGroundImage}')`
       };
     }
   },
   beforeMount() {
     const myself = this;
+    myself.theFontSizeInPixel = myself.getTheFontSizeInPixel();
+    getPublicWebUiData().then((publicWebUiData) => {
+      console.log(publicWebUiData);
+      myself.extraTextOfChinaICP = publicWebUiData.textOfChinaICP;
+      myself.theBackGroundImage = publicWebUiData.backgroundPathOfIndexPage;
+    });
     myself.store.state.loginManager.isAlreadyLogin().then((result: boolean) => {
       myself.signedIn = result;
     });
-    myself.theFontSizeInPixel = myself.getTheFontSizeInPixel();
   },
   mounted() {
     const myself = this;
@@ -294,6 +340,14 @@ export default defineComponent({
             myself.jump2CvPage();
           }
         });
+    },
+    onClickAnonymousEntryButton() {
+      const myself = this;
+      myself.store.state.loginManager.loginAsAnonymous().then((result: any) => {
+        myself.signedIn = result;
+        myself.loginMessage = "";
+        myself.jump2CvPage();
+      });
     },
     onClickLogoutButton() {
       const myself = this;
@@ -402,5 +456,22 @@ export default defineComponent({
   animation: myLoadingRotateAnimation 3s infinite;
   animation-timing-function: linear;
   animation-delay: 0s;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  text-decoration: none;
+}
+a:hover {
+  color: white;
+  text-decoration: none;
+}
+a:active {
+  color: white;
+  text-decoration: none;
 }
 </style>

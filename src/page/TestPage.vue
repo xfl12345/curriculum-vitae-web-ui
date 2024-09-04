@@ -1,11 +1,9 @@
 <template>
-  <div></div>
+  <!--<convert-svg-element-to-data-url-test-page />-->
+  <convert-img-data-to-data-url-test-page />
 </template>
 
-<script lang="tsx">
-import { defineComponent, computed, ref } from "vue";
-
-export default defineComponent({
-  setup() {}
-});
+<script setup lang="tsx">
+import ConvertSvgElementToDataUrlTestPage from "@/page/ConvertSvgElementToDataUrlTestPage.vue";
+import ConvertImgDataToDataUrlTestPage from "@/page/ConvertImgDataToDataUrlTestPage.vue";
 </script>

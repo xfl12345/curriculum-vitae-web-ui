@@ -10,7 +10,7 @@
       <div style="display: flex; white-space: nowrap">
         <span>开发者模式</span>
         <n-space>
-          <n-switch v-model:value="isDevelopmentMode" />
+          <n-switch v-model:value="developmentModeFlag" />
         </n-space>
       </div>
     </center-box>
@@ -50,19 +50,19 @@ export default defineComponent({
       set(inputValue: boolean) {
         const myself = this;
         myself.store.commit("setCookie", {
-          isDevelopmentMode: inputValue ? myself.isDevelopmentMode : undefined
+          developmentModeFlag: inputValue ? myself.developmentModeFlag : undefined
         });
         myself.keepDebugState = inputValue;
       }
     },
-    isDevelopmentMode: {
+    developmentModeFlag: {
       get(): boolean {
-        return this.store.state.isDevelopmentMode;
+        return this.store.state.developmentModeFlag;
       },
       set(inputValue: boolean) {
         this.store.commit("setDevMode", inputValue);
         if (this.keepDebugState) {
-          this.store.commit("setCookie", { isDevelopmentMode: inputValue });
+          this.store.commit("setCookie", { developmentModeFlag: inputValue });
         }
       }
     }
@@ -72,7 +72,7 @@ export default defineComponent({
   created() {},
   beforeMount() {
     const myself = this;
-    myself.keepDebugState = "isDevelopmentMode" in myself.store.state.cookieManager.clientCookie;
+    myself.keepDebugState = "developmentModeFlag" in myself.store.state.cookieManager.clientCookie;
   },
   mounted() {},
   beforeUpdate() {},

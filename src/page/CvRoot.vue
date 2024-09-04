@@ -192,7 +192,7 @@ export default defineComponent({
     const paperSizeStandard: PaperSizeStandard = paperA4Standard.sizeInMillimetre as PaperSizeStandard;
 
     return {
-      debugCvBoxSize: store.state.isDevelopmentMode,
+      debugCvBoxSize: store.state.developmentModeFlag,
       templateRoot,
       t,
       store,
@@ -350,7 +350,7 @@ export default defineComponent({
       const myself = this;
       myself.isLoadCvDataFailed = false;
       myself.cvData = {};
-      getCurriculumVitaeData()
+      getCurriculumVitaeData(myself.store.state.loginManager)
         .then(
           (responseData) => {
             myself.cvData = responseData;

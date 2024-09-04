@@ -4,6 +4,17 @@ import { IJsonApiResponseData } from "@/model/JsonApiResponseData";
 export class LoginMananger {
   phoneNumber: string = "";
 
+  anonymousFlag: boolean = false;
+
+  loginAsAnonymous = () => {
+    const myself = this;
+
+    return new Promise<boolean>((resolve, reject) => {
+      myself.anonymousFlag = true;
+      resolve(true);
+    });
+  };
+
   loginViaSms = (phoneNumber: string, verificationCode: string) => {
     const myself = this;
     myself.phoneNumber = phoneNumber;
@@ -29,14 +40,22 @@ export class LoginMananger {
     });
   };
 
+  isAnonymous = () => {
+    return this.anonymousFlag;
+  };
+
   isAlreadyLogin = (): Promise<boolean> => {
     const myself = this;
 
     return new Promise<boolean>((resolve, reject) => {
-      axios.get("login/status").then(
-        (response) => resolve(response.data),
-        (reason) => reject(reason)
-      );
+      if (myself.anonymousFlag) {
+        resolve(true);
+      } else {
+        axios.get("login/status").then(
+          (response) => resolve(response.data),
+          (reason) => reject(reason)
+        );
+      }
     });
   };
 
@@ -44,10 +63,15 @@ export class LoginMananger {
     const myself = this;
 
     return new Promise<boolean>((resolve, reject) => {
-      axios.post("logout").then(
-        (response) => resolve(response.data),
-        (reason) => reject(reason)
-      );
+      if (myself.anonymousFlag) {
+        myself.anonymousFlag = false;
+        resolve(true);
+      } else {
+        axios.post("logout").then(
+          (response) => resolve(response.data),
+          (reason) => reject(reason)
+        );
+      }
     });
   };
 }
