@@ -178,7 +178,7 @@ import { IGenericJsonApiResponseData, RateLimitedApiResultPayload } from "@/mode
 import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import { getTextSize } from "@/components/xfl-common/ts/FontUtils";
 
-import { getPublicWebUiData } from "@/model/SecretDataApi";
+import { getPublicWebUiData } from "@/model/JsonDataApi";
 
 export default defineComponent({
   components: {

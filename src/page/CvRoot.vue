@@ -155,7 +155,7 @@ import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
 import { PaperSizeStandard } from "@/components/xfl-common/ts/PaperSizeStandard";
 import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import { CurriculumVitaeData } from "@/tsmod/CurriculumVitaeData";
-import { getCurriculumVitaeData } from "@/model/SecretDataApi";
+import { getCurriculumVitaeData } from "@/model/JsonDataApi";
 import CvChapter from "@/components/CvChapter.vue";
 import RecordItem from "@/components/RecordItem.vue";
 import CommunityBox from "@/components/CommunityBox.vue";
