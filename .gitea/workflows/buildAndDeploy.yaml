@@ -1,0 +1,35 @@
+name: Gitea Actions Demo
+run-name: ${{ gitea.actor }} is testing out Gitea Actions 🚀
+on: [push]
+
+jobs:
+  build-docker-image-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: List files in the repository
+        run: |
+          ls ${{ gitea.workspace }}
+
+      - name: Setup Nodejs environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check Nodejs environment information
+        run: |
+          echo "which npm: $(which npm)"
+          npm --version
+      - name: Deploy file to APP directly
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_SSH_HOST }}
+          username: ${{ secrets.REMOTE_SSH_USERNAME }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: |
+            pwd
+            ls -lah
+            docker_data_dir=$(docker inspect xfl-cv-javaweb -f '{{json .HostConfig.Binds}}' | jq -r '.' | grep '/app/config' | grep -oP '(?<=")[^"]*?(?=:)')
+            echo "$docker_data_dir"
+      - run: echo "🍏 This job's status is ${{ job.status }}."
