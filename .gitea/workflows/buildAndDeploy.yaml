@@ -23,10 +23,10 @@ jobs:
       - name: Deploy file to APP directly
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.REMOTE_SSH_HOST }}
-          username: ${{ secrets.REMOTE_SSH_USERNAME }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
-          port: ${{ secrets.REMOTE_SSH_PORT }}
+          host: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_HOST }}
+          username: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_KEY }}
+          key: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_PORT }}
+          port: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_USERNAME }}
           script: |
             pwd
             ls -lah
