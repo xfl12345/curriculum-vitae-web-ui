@@ -24,9 +24,9 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_HOST }}
-          username: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_KEY }}
-          key: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_PORT }}
-          port: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_USERNAME }}
+          username: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_USERNAME }}
+          key: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_KEY }}
+          port: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_PORT }}
           script: |
             pwd
             ls -lah
