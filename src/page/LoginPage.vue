@@ -78,8 +78,7 @@
                             // flexGrow: 0,
                             // flexShrink: 0,
                             // flexBasis: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
-                            miniWidth:
-                              theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
+                            minWidth: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
                           }"
                           @click.prevent="
                             () => {
