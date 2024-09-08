@@ -20,7 +20,9 @@ jobs:
           echo "which npm: $(which npm)"
           npm --version
       - name: Build
-        run: npm run build
+        run: |
+          npm install
+          npm run build
       - name: List artifacts in the repository
         run: |
           ls ${{ gitea.workspace }}/dist
