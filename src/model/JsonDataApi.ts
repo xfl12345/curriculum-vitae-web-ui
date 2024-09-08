@@ -1,12 +1,13 @@
 import { CurriculumVitaeData } from "@/tsmod/CurriculumVitaeData";
 import { PublicWebUiData } from "@/tsmod/PublicWebUiData";
 import axios from "axios";
+import { AxiosRequestConfig } from "axios";
 import { LoginMananger } from "@/model/LoginMananger";
 
 export const secretDataApiBasePath = "/static/secret/";
 export const publicDataApiBasePath = "/static/public/";
 
-function getData<T>(url: string, config?: axios.AxiosRequestConfig): Promise<Partial<T>> {
+function getData<T>(url: string, config?: AxiosRequestConfig): Promise<Partial<T>> {
   return new Promise<Partial<T>>((resolve: (cvData: Partial<T>) => void, reject: (reason: any) => void) => {
     axios.get(url, config).then((response) => {
       const responseData = response.data;
