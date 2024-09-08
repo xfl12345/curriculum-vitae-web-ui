@@ -1,6 +1,6 @@
 // https://eslint.org/docs/user-guide/configuring
 
-module.exports = {
+export default {
   parser: "vue-eslint-parser",
   parserOptions: {
     // parser: "@typescript-eslint/parser",
@@ -12,7 +12,7 @@ module.exports = {
       ts: "@typescript-eslint/parser",
       tsx: "@typescript-eslint/parser",
       // 模板中的脚本使用espree
-      "<template>": "espree",
+      "<template>": "espree"
     },
     warnOnUnsupportedTypeScriptVersion: false,
     // ecmaVersion: "latest",
@@ -23,11 +23,7 @@ module.exports = {
       jsx: true
     }
   },
-  plugins: [
-    "vue",
-    "prettier",
-    "@typescript-eslint"
-  ],
+  plugins: ["vue", "prettier", "@typescript-eslint"],
   env: {
     node: true,
     es6: true,
@@ -92,11 +88,7 @@ module.exports = {
     "import/no-extraneous-dependencies": [
       "error",
       {
-        devDependencies: [
-          "vite.config.ts",
-          "mock/**/*.mock.ts",
-          "**/*.test.tsx"
-        ]
+        devDependencies: ["vite.config.ts", "mock/**/*.mock.ts", "**/*.test.tsx"]
       }
     ]
   }
