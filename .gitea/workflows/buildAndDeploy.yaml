@@ -11,7 +11,6 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ gitea.workspace }}
-
       - name: Setup Nodejs environment
         uses: actions/setup-node@v4
         with:
@@ -20,16 +19,22 @@ jobs:
         run: |
           echo "which npm: $(which npm)"
           npm --version
-      - name: Deploy file to APP directly
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Build
+        run: npm run build
+      - name: List artifacts in the repository
+        run: |
+          ls ${{ gitea.workspace }}/dist
+      - uses: mdallasanta/ssh-scp-deploy@v1.2.0
         with:
-          host: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_HOST }}
-          username: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_USERNAME }}
-          key: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_KEY }}
-          port: ${{ secrets.DEFAULT_HOST_REMOTE_SSH_PORT }}
-          script: |
-            pwd
-            ls -lah
-            docker_data_dir=$(docker inspect xfl-cv-javaweb -f '{{json .HostConfig.Binds}}' | jq -r '.' | grep '/app/config' | grep -oP '(?<=")[^"]*?(?=:)')
-            echo "$docker_data_dir"
+          local: './dist'                                              # Local file path - REQUIRED false - DEFAULT ./
+          remote: ${{ secrets.DEPLOY_PATH }}                           # Remote file path - REQUIRED false - DEFAULT ~/
+          host: ${{secrets.DEFAULT_HOST_REMOTE_SSH_HOST}}              # Remote server address - REQUIRED true
+          port: ${{secrets.DEFAULT_HOST_REMOTE_SSH_PORT}}              # Remote server port - REQUIRED false - DEFAULT 22
+          user: ${{secrets.DEFAULT_HOST_REMOTE_SSH_USERNAME}}          # Remote server user - REQUIRED true
+          key: ${{secrets.DEFAULT_HOST_REMOTE_SSH_KEY}}                # Remote server private key - REQUIRED at least one of "password" or "key"
+          # password: ${{secrets.PASSWORD}}                              # User password - REQUIRED at least one of "password" or "key"
+          # pre_upload: echo "This will be executed before the upload!"  # Command to run via ssh before scp upload - REQUIRED false
+          # post_upload: echo "This will be executed after the upload!"  # Command to run via ssh after scp upload - REQUIRED false
+          ssh_options: -o StrictHostKeyChecking=no                     # A set of ssh_option separated by -o - REQUIRED false - DEFAULT -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+          scp_options: -v                                              # Flags to use during scp - REQUIRED false - DEFAULT ''
       - run: echo "🍏 This job's status is ${{ job.status }}."
