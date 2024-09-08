@@ -1,6 +1,6 @@
 // https://eslint.org/docs/user-guide/configuring
 
-export default {
+module.exports = {
   parser: "vue-eslint-parser",
   parserOptions: {
     // parser: "@typescript-eslint/parser",
