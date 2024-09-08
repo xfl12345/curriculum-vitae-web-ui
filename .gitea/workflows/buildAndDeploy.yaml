@@ -28,9 +28,10 @@ jobs:
       - name: List artifacts in the repository
         run: |
           ls ${{ gitea.workspace }}/dist
-      - uses: mdallasanta/ssh-scp-deploy@v1.2.0
+      - name: SSH remote deploy
+        uses: mdallasanta/ssh-scp-deploy@v1.2.0
         with:
-          local: './dist'                                              # Local file path - REQUIRED false - DEFAULT ./
+          local: ${{ gitea.workspace }}/dist                           # Local file path - REQUIRED false - DEFAULT ./
           remote: ${{ secrets.DEPLOY_PATH }}                           # Remote file path - REQUIRED false - DEFAULT ~/
           host: ${{secrets.DEFAULT_HOST_REMOTE_SSH_HOST}}              # Remote server address - REQUIRED true
           port: ${{secrets.DEFAULT_HOST_REMOTE_SSH_PORT}}              # Remote server port - REQUIRED false - DEFAULT 22
