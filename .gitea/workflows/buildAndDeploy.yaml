@@ -19,10 +19,12 @@ jobs:
         run: |
           echo "which npm: $(which npm)"
           npm --version
+      - name: Prepare dependencies for NPM native compile
+        run: apt update && apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+      - name: NPM install the dependencies of project
+        run: npm install
       - name: Build
-        run: |
-          npm install
-          npm run build
+        run: npm run build
       - name: List artifacts in the repository
         run: |
           ls ${{ gitea.workspace }}/dist
