@@ -97,14 +97,15 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, type PropType, ref } from "vue";
 import refreshIcon from "@/components/icon-park/refresh.svg";
 import closeIcon from "@/components/icon-park/close-one.svg";
-import { EnumSizingType } from "@/components/xfl-common/ts/EnumSizingType";
+import type { EnumSizingType } from "@/components/xfl-common/ts/EnumSizingType";
 import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import { TianaiTrackEvent } from "../ts/TianaiTrackEvent";
-import { ITianaiCaptchaClient, RequestResult, TianaiCaptchaClient } from "../ts/TianaiCaptchaClient";
+import { TianaiCaptchaClient } from "../ts/TianaiCaptchaClient";
+import type { ITianaiCaptchaClient, RequestResult } from "../ts/TianaiCaptchaClient";
 import CaptchaSlider from "./CaptchaSlider.vue";
 
 const defaultCssStyle: VuePartialCssProperties = {
@@ -279,9 +280,7 @@ export default defineComponent({
   created() {},
   beforeMount() {},
   mounted() {
-    const myself = this;
-
-    myself.refreshCaptcha();
+    this.refreshCaptcha();
   },
   beforeUpdate() {},
   updated() {},

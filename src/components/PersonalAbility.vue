@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, PropType, ref } from "vue";
+import { computed, type PropType, ref } from "vue";
 import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
 import RainbowProgressBar from "@/components/xfl-common/vue/RainbowProgressBar.vue";
 import { SkillDegree } from "@/tsmod/SkillDegree";

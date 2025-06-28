@@ -31,9 +31,9 @@
 
 <script lang="tsx">
 import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
+import { useGlobalStore } from "@/store";
 import { useI18n } from "vue-i18n";
-import { RouteRecord, useRouter } from "vue-router";
+import { type RouteRecord, useRouter } from "vue-router";
 import { isUndefinedOrNull } from "@/components/xfl-common/ts/IsUndefinedOrNull";
 import { isDefinedAndNotNull } from "@/components/xfl-common/ts/IsDefinedAndNotNull";
 import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
@@ -46,7 +46,7 @@ export default defineComponent({
     const templateRoot = ref<HTMLDivElement>();
 
     const router = useRouter();
-    const store = useStore();
+    const store = useGlobalStore();
     const { t } = useI18n();
     const routes = router.getRoutes().filter((item) => isDefinedAndNotNull(item.name));
 
@@ -64,7 +64,7 @@ export default defineComponent({
   },
   computed: {
     theFontSizeInPixel() {
-      return Math.ceil(this.store.getters.theFontSizeInPixel);
+      return Math.ceil(this.store.theFontSizeInPixel);
     },
     theFontSize() {
       return this.theFontSizeInPixel + "px";

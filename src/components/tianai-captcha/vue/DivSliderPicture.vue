@@ -38,9 +38,9 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, type PropType, ref } from "vue";
 import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import DivTrianglePicture from "./DivTrianglePicture.vue";
 
 const defaultCssStyle: VuePartialCssProperties = {};

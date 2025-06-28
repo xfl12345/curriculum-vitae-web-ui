@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, PropType, ref } from "vue";
+import { computed, type PropType, ref } from "vue";
 import tinygradient from "tinygradient";
 import ProgressBar from "./ProgressBar.vue";
-import { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
 
 const props = defineProps({
   theFontSizeInPixel: {

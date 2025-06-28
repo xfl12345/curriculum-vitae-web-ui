@@ -135,7 +135,7 @@
 
 <script lang="tsx">
 import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
+import { useGlobalStore } from "@/store";
 import { useRouter } from "vue-router";
 import tinygradient from "tinygradient";
 import CircleProgressBar from "@/components/xfl-common/vue/CircleProgressBar.vue";
@@ -146,7 +146,7 @@ import { applyNewFont2GlobalDom, SupportedFontFamilyDetector } from "@/component
 export default defineComponent({
   components: { SvgRightPicturePath, CenterBox, CircleProgressBar },
   setup(props, ctx) {
-    const store = useStore();
+    const store = useGlobalStore();
     const router = useRouter();
 
     const templateRoot = ref<HTMLDivElement>();
@@ -191,8 +191,8 @@ export default defineComponent({
     stateWindow() {
       const myself = this;
       return {
-        innerWidth: myself.store.state.uiCalculation.window.innerWidth,
-        innerHeight: myself.store.state.uiCalculation.window.innerHeight
+        innerWidth: myself.store.globalState.uiCalculation.window.innerWidth,
+        innerHeight: myself.store.globalState.uiCalculation.window.innerHeight
       };
     },
     circleProgressBarWidthInPixel() {
@@ -234,7 +234,7 @@ export default defineComponent({
     const myself = this;
     myself.exhibition = JSON.parse(myself.$route.query.exhibition as string) as boolean;
     if (!myself.exhibition) {
-      if (myself.store.state.browserInitiated) {
+      if (myself.store.globalState.browserInitiated) {
         myself.canMount = false;
         myself.router.push({ name: "cv" });
       }
@@ -252,7 +252,7 @@ export default defineComponent({
     setTimeout(() => {
       myself.checkItemIndex += 1;
 
-      const fontList = myself.store.state.diyFontFamilyList;
+      const fontList = myself.store.globalState.diyFontFamilyList;
       const detector = new SupportedFontFamilyDetector();
       detector.selectedFontCanvas = this.canvas4font!;
       // detector.testChar = "楷";
@@ -276,7 +276,7 @@ export default defineComponent({
             applyNewFont2GlobalDom(fontName, "url(static/font/FZ_KAITI_ZH_HANS.woff2)").then((result) => {
               myself.fontDetection.loadFontMessage = "下载成功，并已应用。正在检测能否渲染。";
               // console.log(result);
-              myself.store.commit("addFontFamily", fontName);
+              myself.store.addFontFamily(fontName);
               if (detector.isSupported(fontName)) {
                 myself.onAllDone();
               } else {
@@ -345,7 +345,7 @@ export default defineComponent({
     },
     onAllDone() {
       const myself = this;
-      myself.store.commit("setBrowserInitiatedFlag", true);
+      myself.store.setBrowserInitiatedFlag(true);
       myself.progress = myself.progressMax;
       if (!myself.exhibition) {
         setTimeout(myself.jumpTarget, 2300);

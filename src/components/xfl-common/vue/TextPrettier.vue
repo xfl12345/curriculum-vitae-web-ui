@@ -2,7 +2,7 @@
 import type { VNodeProps, PropType, VNode } from "vue";
 import { defineComponent, h } from "vue";
 import isChinese from "is-chinese";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 
 export default defineComponent({
   // name: "TextPrettier",
@@ -77,7 +77,7 @@ export default defineComponent({
       const itemCount = theInputValue!.length;
       const theChildrenVnode: VNode[] = [];
 
-      let isPreviousCharacterChinese: Boolean = false;
+      let isPreviousCharacterChinese: boolean = false;
       let currentCharacter;
       let currentPhase: string[] = [];
 

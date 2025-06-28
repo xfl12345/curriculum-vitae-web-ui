@@ -20,7 +20,7 @@
 
 <script setup lang="tsx">
 import { computed, ref } from "vue";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
 import CardView from "@/components/CardView.vue";
 

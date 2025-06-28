@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <vue-qr
+      <!-- <vue-qr
         ref="qrCodeCurriculumVitaeSourceCode"
         color-light="orange"
         color-dark="#0057ff"
@@ -62,112 +62,66 @@
         :margin="0"
         :text="curriculumVitaeSourceCodeUrl"
         @click="openUrl(curriculumVitaeSourceCodeUrl)"
-      />
+      /> -->
     </div>
   </div>
 </template>
 
-<script lang="tsx">
-import { computed, defineComponent, PropType, ref } from "vue";
-import VueQr from "vue-qr/src/packages/vue-qr.vue";
+<script setup lang="tsx">
+import { reactive, ref, computed, watch } from "vue";
 import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
 import UrlItem from "@/components/UrlItem.vue";
 
-export default defineComponent({
-  components: {
-    UrlItem,
-    TextPrettier,
-    VueQr
-  },
-  props: {
-    theFontSizeInPixel: {
-      type: Number,
-      default: 24
-    },
-    communityUrlList: {
-      type: Array as PropType<string[]>,
-      default: (): string[] => []
-    },
-    wechatUrl: {
-      type: String,
-      default: ""
-    },
-    weChatHeadPhoto: {
-      type: String,
-      default: ""
-    },
-    curriculumVitaeSourceCodeUrl: {
-      type: String,
-      default: ""
-    }
-  },
-  setup() {
-    const templateRoot = ref<HTMLDivElement>();
-    const qrCodeLeftBox = ref<HTMLDivElement>();
-    const qrCodeWeChat = ref<HTMLDivElement>();
-    const qrCodeCurriculumVitaeSourceCode = ref<HTMLDivElement>();
+const props = withDefaults(
+  defineProps<{
+    theFontSizeInPixel?: number;
+    communityUrlList?: string[];
+    wechatUrl?: string;
+    weChatHeadPhoto?: string;
+    curriculumVitaeSourceCodeUrl?: string;
+  }>(),
+  {
+    theFontSizeInPixel: 16,
+    communityUrlList: () => [],
+    wechatUrl: "",
+    weChatHeadPhoto: "",
+    curriculumVitaeSourceCodeUrl: ""
+  }
+);
 
-    return {
-      templateRoot,
-      qrCodeLeftBox,
-      qrCodeWeChat,
-      qrCodeCurriculumVitaeSourceCode
-    };
-  },
-  data() {
-    let qrCodeRightBoxTimeOut: any;
-    return {
-      isQrCodeRightBoxUiCanLoad: false,
-      isQrCodeLeftBoxUiLoaded: false,
-      qrCodeLeftBoxHeightInPixel: 0,
-      qrCodeRightBoxTimeOut
-    };
-  },
-  computed: {
-    qrCodeRightBoxHeightInPixel() {
-      const myself = this;
-      // console.log("resizeQrCodeRightBoxHeight", myself.qrCodeLeftBoxHeightInPixel);
-      return myself.qrCodeLeftBoxHeightInPixel;
-    },
-    qrCodeRightBoxHeight() {
-      return this.qrCodeRightBoxHeightInPixel + "px";
-    },
-    theFontSize() {
-      return this.theFontSizeInPixel + "px";
-    },
-    fingerEmojiFontSizeInPixel() {
-      return Math.ceil((this.qrCodeRightBoxHeightInPixel * 3) / 8);
-    },
-    fingerEmojiFontSize() {
-      return this.fingerEmojiFontSizeInPixel + "px";
-      // return this.qrCodeRightBoxHeightInPixel / 5 + "px";
-    },
-    funnyWelcomeBoxFontSize() {
-      return Math.ceil(this.fingerEmojiFontSizeInPixel * 0.6) + "px";
-    }
-  },
-  watch: {
-    theFontSizeInPixel(newValue, oldValue) {
-      if (newValue !== oldValue) {
-        this.isQrCodeRightBoxUiCanLoad = false;
-      }
-    }
-  },
-  mounted() {
-    const myself = this;
-    myself.qrCodeLeftBoxHeightInPixel = this.qrCodeLeftBox!.offsetHeight;
-    myself.isQrCodeLeftBoxUiLoaded = true;
-  },
-  methods: {
-    openUrl(url: string) {
-      window.open(url);
-    },
-    qrCodeLeftBoxResize(widthAndHeight: any) {
-      const myself = this;
-      myself.isQrCodeRightBoxUiCanLoad = false;
-      myself.qrCodeLeftBoxHeightInPixel = widthAndHeight.height;
-      myself.isQrCodeRightBoxUiCanLoad = true;
+const templateRoot = ref<HTMLDivElement>();
+const qrCodeLeftBox = ref<HTMLDivElement>();
+const qrCodeWeChat = ref<HTMLDivElement>();
+const qrCodeCurriculumVitaeSourceCode = ref<HTMLDivElement>();
+
+const state = reactive({
+  isQrCodeRightBoxUiCanLoad: false,
+  isQrCodeLeftBoxUiLoaded: false,
+  qrCodeLeftBoxHeightInPixel: 0
+});
+
+const qrCodeRightBoxHeightInPixel = computed(() => state.qrCodeLeftBoxHeightInPixel);
+const qrCodeRightBoxHeight = computed(() => qrCodeRightBoxHeightInPixel.value + "px");
+const theFontSize = computed(() => props.theFontSizeInPixel + "px");
+const fingerEmojiFontSizeInPixel = computed(() => Math.ceil((qrCodeRightBoxHeightInPixel.value * 3) / 8));
+const fingerEmojiFontSize = computed(() => fingerEmojiFontSizeInPixel.value + "px");
+const funnyWelcomeBoxFontSize = computed(() => Math.ceil(fingerEmojiFontSizeInPixel.value * 0.6) + "px");
+
+watch(
+  () => props.theFontSizeInPixel,
+  (theNew, theOld) => {
+    if (theNew !== theOld) {
+      state.isQrCodeRightBoxUiCanLoad = false;
     }
   }
-});
+);
+
+const openUrl = window.open;
+
+function qrCodeLeftBoxResize(widthAndHeight: any) {
+  const myself = state;
+  myself.isQrCodeRightBoxUiCanLoad = false;
+  myself.qrCodeLeftBoxHeightInPixel = widthAndHeight.height;
+  myself.isQrCodeRightBoxUiCanLoad = true;
+}
 </script>

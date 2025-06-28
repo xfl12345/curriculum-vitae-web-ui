@@ -9,9 +9,9 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import { EnumDirection } from "../ts/Direction";
+import { defineComponent, type PropType, ref } from "vue";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { EnumDirection } from "../ts/Direction";
 
 export default defineComponent({
   components: {},

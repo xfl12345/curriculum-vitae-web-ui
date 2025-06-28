@@ -77,9 +77,9 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
-import { EnumSizingType } from "../ts/EnumSizingType";
-import { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from "vue";
+import type { EnumSizingType } from "../ts/EnumSizingType";
+import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
 
 // source code URL=https://github.com/mkolsv/vue3-m-circle-progress-bar/blob/main/src/CircleProgressBar.vue
 // 学习：https://www.cnblogs.com/daisygogogo/p/11044353.html

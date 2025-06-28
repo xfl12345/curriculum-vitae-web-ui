@@ -14,9 +14,9 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, type PropType, ref } from "vue";
 import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 
 const defaultCssStyle: VuePartialCssProperties = {
   // backgroundColor: "#4FC632"

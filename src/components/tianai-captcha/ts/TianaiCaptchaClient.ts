@@ -1,4 +1,5 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 import { ImageCaptchaTrack } from "./ImageCaptchaTrack";
 
 export interface RequestResult {
@@ -108,12 +109,10 @@ export class TianaiCaptchaClient implements ITianaiCaptchaClient {
     });
   };
 
-  // eslint-disable-next-line class-methods-use-this
   getReasonInText = (error: AxiosError) =>
     "请求失败。原因未知。代码：" +
     (typeof error.response !== "undefined" ? error.response.statusText : error.code);
 
-  // eslint-disable-next-line class-methods-use-this
   getRequestResult = (response: AxiosResponse<any, any>) => {
     return {
       success: response.status >= 200 && response.status < 300 && response.data,
@@ -121,7 +120,6 @@ export class TianaiCaptchaClient implements ITianaiCaptchaClient {
     };
   };
 
-  // eslint-disable-next-line class-methods-use-this
   verificationPayloadSupplier = () => {
     return new Promise<any>((resolve, reject) => {
       resolve({});

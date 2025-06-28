@@ -6,7 +6,9 @@ export interface IGenericJsonApiResponseData<T> {
   data: T;
 }
 
-export interface IJsonApiResponseData extends IGenericJsonApiResponseData<any> {}
+export type IJsonApiResponseData = IGenericJsonApiResponseData<
+  Record<string, object> | boolean | string | number
+>;
 
 export interface RateLimitedApiResultPayload {
   coolDownRemainder: number;

@@ -163,18 +163,18 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useGlobalStore } from "@/store";
 import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
 import XflsSingleLineInput from "@/components/xfl-common/vue/XflsSingleLineInput.vue";
 import CaptchaBoxTypeRotate from "@/components/tianai-captcha/vue/CaptchaBoxTypeRotate.vue";
 import { XFLsCvCaptchaClient } from "@/model/XFLsCvCaptchaClient";
 import { CountDownHelper } from "@/components/xfl-common/ts/CountDownHelper";
-import { RequestResult } from "@/components/tianai-captcha/ts/TianaiCaptchaClient";
-import { IGenericJsonApiResponseData, RateLimitedApiResultPayload } from "@/model/JsonApiResponseData";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { RequestResult } from "@/components/tianai-captcha/ts/TianaiCaptchaClient";
+import type { IGenericJsonApiResponseData, RateLimitedApiResultPayload } from "@/model/JsonApiResponseData";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import { getTextSize } from "@/components/xfl-common/ts/FontUtils";
 
 import { getPublicWebUiData } from "@/model/JsonDataApi";
@@ -192,7 +192,7 @@ export default defineComponent({
     const inputVerificationCode = ref<InstanceType<typeof XflsSingleLineInput>>();
 
     const router = useRouter();
-    const store = useStore();
+    const store = useGlobalStore();
     const { t } = useI18n();
     return {
       templateRoot,
@@ -228,10 +228,10 @@ export default defineComponent({
   },
   computed: {
     theRootWidth(): number {
-      return this.store.state.uiCalculation.document.body.clientWidth;
+      return this.store.globalState.uiCalculation.document.body.clientWidth;
     },
     theRootHeight(): number {
-      return this.store.state.uiCalculation.window.innerHeight;
+      return this.store.globalState.uiCalculation.window.innerHeight;
     },
     theCenterBoxMinWidth(): number {
       const myself = this;
@@ -251,7 +251,7 @@ export default defineComponent({
     },
     rootStyle(): VuePartialCssProperties {
       const myself = this;
-      const uiCalculation = myself.store.state.uiCalculation;
+      const uiCalculation = myself.store.globalState.uiCalculation;
       return {
         // width: uiCalculation.window.screen.availWidth + "px",
         // height: uiCalculation.window.screen.availHeight + "px",
@@ -275,7 +275,7 @@ export default defineComponent({
       myself.extraTextOfChinaICP = publicWebUiData.textOfChinaICP;
       myself.theBackGroundImage = publicWebUiData.backgroundPathOfIndexPage;
     });
-    myself.store.state.loginManager.isAlreadyLogin().then((result: boolean) => {
+    myself.store.globalState.loginManager.isAlreadyLogin().then((result: boolean) => {
       myself.signedIn = result;
     });
   },
@@ -305,7 +305,7 @@ export default defineComponent({
     },
     getTheFontSizeInPixel(): number {
       const myself = this;
-      const globalFontSize = myself.store.getters.theFontSizeInPixel;
+      const globalFontSize = myself.store.theFontSizeInPixel;
       let fontSize = globalFontSize;
       if (myself.getCenterBoxMinWidth(globalFontSize) > myself.theRootWidth) {
         do {
@@ -330,7 +330,7 @@ export default defineComponent({
     },
     onClickLoginButton() {
       const myself = this;
-      myself.store.state.loginManager
+      myself.store.globalState.loginManager
         .loginViaSms(myself.phoneNumber, myself.verificationCode)
         .then((result: any) => {
           myself.signedIn = result.success;
@@ -342,7 +342,7 @@ export default defineComponent({
     },
     onClickAnonymousEntryButton() {
       const myself = this;
-      myself.store.state.loginManager.loginAsAnonymous().then((result: any) => {
+      myself.store.globalState.loginManager.loginAsAnonymous().then((result: any) => {
         myself.signedIn = result;
         myself.loginMessage = "";
         myself.jump2CvPage();
@@ -350,7 +350,7 @@ export default defineComponent({
     },
     onClickLogoutButton() {
       const myself = this;
-      myself.store.state.loginManager.logout().then((result: boolean) => {
+      myself.store.globalState.loginManager.logout().then((result: boolean) => {
         myself.signedIn = !result;
         myself.loginMessage = "";
       });

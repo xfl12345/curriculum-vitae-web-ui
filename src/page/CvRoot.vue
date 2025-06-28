@@ -136,7 +136,7 @@
     />
     <load-cv-data-failed-message-box
       v-if="isLoadCvDataFailed"
-      :the-font-size-in-pixel="store.getters.theFontSize"
+      :the-font-size-in-pixel="store.theFontSize"
       :message="loadCvDataFailedMessage"
       @jump2-login-page="jump2LoginPage"
       @refresh-cv-data="refreshCvData"
@@ -147,13 +147,13 @@
 <script lang="tsx">
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useStore } from "vuex";
+import { useGlobalStore } from "@/store";
 import { useRouter } from "vue-router";
 import { v1 as uuidv1 } from "uuid";
 import { paperA4Standard } from "@/assets/json/common.json";
 import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import { PaperSizeStandard } from "@/components/xfl-common/ts/PaperSizeStandard";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { PaperSizeStandard } from "@/components/xfl-common/ts/PaperSizeStandard";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import { CurriculumVitaeData } from "@/tsmod/CurriculumVitaeData";
 import { getCurriculumVitaeData } from "@/model/JsonDataApi";
 import CvChapter from "@/components/CvChapter.vue";
@@ -182,7 +182,7 @@ export default defineComponent({
   },
   setup() {
     const { t } = useI18n();
-    const store = useStore();
+    const store = useGlobalStore();
     const router = useRouter();
 
     const templateRoot = ref<HTMLDivElement>();
@@ -192,7 +192,7 @@ export default defineComponent({
     const paperSizeStandard: PaperSizeStandard = paperA4Standard.sizeInMillimetre as PaperSizeStandard;
 
     return {
-      debugCvBoxSize: store.state.developmentModeFlag,
+      debugCvBoxSize: store.globalState.developmentModeFlag,
       templateRoot,
       t,
       store,
@@ -249,8 +249,8 @@ export default defineComponent({
       const myself = this;
       const theStyle = {} as VuePartialCssProperties;
       if (
-        myself.cvBoxWidthInPixel < myself.store.state.uiCalculation.window.screen.availWidth &&
-        myself.cvBoxWidthInPixel < myself.store.state.uiCalculation.window.innerWidth &&
+        myself.cvBoxWidthInPixel < myself.store.globalState.uiCalculation.window.screen.availWidth &&
+        myself.cvBoxWidthInPixel < myself.store.globalState.uiCalculation.window.innerWidth &&
         myself.isNotInAdjustingFontSize
       ) {
         theStyle.justifyContent = "center";
@@ -285,7 +285,7 @@ export default defineComponent({
   },
   created() {
     const myself = this;
-    myself.rootScale = myself.store.state.uiCalculation.rootScale;
+    myself.rootScale = myself.store.globalState.uiCalculation.rootScale;
 
     myself.cvPageFontSizeHelper = new CvPageFontSizeHelper(myself, {
       getCvBoxHeightInPixel: () => myself.cvBoxHeightInPixel,
@@ -310,7 +310,7 @@ export default defineComponent({
   },
   beforeMount() {
     const myself = this;
-    const window = myself.store.state.uiCalculation.window;
+    const window = myself.store.globalState.uiCalculation.window;
     myself.rootScale = Math.floor(window.innerWidth / myself.paperSizeStandard.width);
     if ((myself.rootScale + 0.5) * myself.paperSizeStandard.width <= window.innerWidth) {
       myself.rootScale += 0.5;
@@ -319,10 +319,10 @@ export default defineComponent({
       myself.rootScale = 5;
     }
 
-    myself.store.commit("setRootScale", myself.rootScale);
+    myself.store.setRootScale(myself.rootScale);
     myself.widthAndHeight.width = myself.cvBoxWidthInPixel;
     myself.widthAndHeight.height = myself.cvBoxHeightInPixel;
-    myself.store.state.loginManager.isAlreadyLogin().then((result: boolean) => {
+    myself.store.globalState.loginManager.isAlreadyLogin().then((result: boolean) => {
       if (!result) {
         myself.jump2LoginPage(); // 没登录
       } else if (!myself.isCvDataLoaded) {
@@ -350,7 +350,7 @@ export default defineComponent({
       const myself = this;
       myself.isLoadCvDataFailed = false;
       myself.cvData = {};
-      getCurriculumVitaeData(myself.store.state.loginManager)
+      getCurriculumVitaeData(myself.store.globalState.loginManager)
         .then(
           (responseData) => {
             myself.cvData = responseData;
@@ -386,7 +386,7 @@ export default defineComponent({
     },
     resetRootScale() {
       const myself = this;
-      myself.rootScale = myself.store.state.uiCalculation.rootScale;
+      myself.rootScale = myself.store.globalState.uiCalculation.rootScale;
     },
     onCvBoxMounted() {
       this.cvBoxMounted = true;

@@ -1,77 +1,45 @@
 import axios from "axios";
-import { IJsonApiResponseData } from "@/model/JsonApiResponseData";
+import type { IJsonApiResponseData } from "@/model/JsonApiResponseData";
 
 export class LoginMananger {
   phoneNumber: string = "";
 
   anonymousFlag: boolean = false;
 
-  loginAsAnonymous = () => {
-    const myself = this;
+  async loginAsAnonymous(): Promise<boolean> {
+    this.anonymousFlag = true;
+    return true;
+  }
 
-    return new Promise<boolean>((resolve, reject) => {
-      myself.anonymousFlag = true;
-      resolve(true);
-    });
-  };
-
-  loginViaSms = (phoneNumber: string, verificationCode: string) => {
-    const myself = this;
-    myself.phoneNumber = phoneNumber;
-
-    return new Promise<IJsonApiResponseData>((resolve, reject) => {
-      axios
-        .post(
-          "login",
-          {
-            phoneNumber,
-            verificationCode
-          },
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            }
+  async loginViaSms(phoneNumber: string, verificationCode: string): Promise<IJsonApiResponseData> {
+    this.phoneNumber = phoneNumber;
+    return (
+      await axios.post<IJsonApiResponseData>(
+        "login",
+        {
+          phoneNumber,
+          verificationCode
+        },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
           }
-        )
-        .then(
-          (response) => resolve(response.data),
-          (reason) => reject(reason)
-        );
-    });
-  };
+        }
+      )
+    ).data;
+  }
 
-  isAnonymous = () => {
-    return this.anonymousFlag;
-  };
+  isAnonymous = () => this.anonymousFlag;
 
-  isAlreadyLogin = (): Promise<boolean> => {
-    const myself = this;
+  isAlreadyLogin = async (): Promise<boolean> =>
+    this.anonymousFlag ? true : (await axios.get("login/status")).data;
 
-    return new Promise<boolean>((resolve, reject) => {
-      if (myself.anonymousFlag) {
-        resolve(true);
-      } else {
-        axios.get("login/status").then(
-          (response) => resolve(response.data),
-          (reason) => reject(reason)
-        );
-      }
-    });
-  };
-
-  logout = () => {
-    const myself = this;
-
-    return new Promise<boolean>((resolve, reject) => {
-      if (myself.anonymousFlag) {
-        myself.anonymousFlag = false;
-        resolve(true);
-      } else {
-        axios.post("logout").then(
-          (response) => resolve(response.data),
-          (reason) => reject(reason)
-        );
-      }
-    });
+  logout = async () => {
+    if (this.anonymousFlag) {
+      this.anonymousFlag = false;
+      return true;
+    } else {
+      return (await axios.post("logout")).data;
+    }
   };
 }

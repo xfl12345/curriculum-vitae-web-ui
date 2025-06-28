@@ -19,7 +19,7 @@
 <script lang="tsx">
 import { defineComponent, ref } from "vue";
 import "vxe-table/lib/style.css";
-import { VxeGrid, VxePager, VxeGridInstance, VxeGridProps } from "vxe-table";
+import { VxeGrid, VxePager, type VxeGridInstance, type VxeGridProps } from "vxe-table";
 
 export default defineComponent({
   components: { VxeGrid, VxePager },

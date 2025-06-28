@@ -1,6 +1,7 @@
 import { CurriculumVitaeData } from "@/tsmod/CurriculumVitaeData";
-import { PublicWebUiData } from "@/tsmod/PublicWebUiData";
-import axios, { AxiosRequestConfig } from "axios";
+import type { PublicWebUiData } from "@/tsmod/PublicWebUiData";
+import axios from "axios";
+import type { AxiosRequestConfig } from "axios";
 import { LoginMananger } from "@/model/LoginMananger";
 
 export const secretDataApiBasePath = "/static/secret/";

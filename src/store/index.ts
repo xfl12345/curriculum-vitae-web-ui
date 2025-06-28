@@ -1,73 +1,67 @@
 // noinspection JSConstantReassignment
 
-import { createStore } from "vuex";
+import { defineStore } from "pinia";
 import type { Buildable } from "ts-essentials";
 // import { ResizeObserver } from "resize-observer";
 import { getBrowserFirstDefaultFontFamily, getTextSize } from "@/components/xfl-common/ts/FontUtils";
 import { ClientCookieManager } from "@/components/xfl-common/ts/ClientCookieManager";
 import { LoginMananger } from "@/model/LoginMananger";
-import { StringKeyMapType } from "@/components/xfl-common/ts/StringMapType";
+import type { StringKeyMapType } from "@/components/xfl-common/ts/StringMapType";
+import { computed } from "vue";
 
 const env = import.meta.env ?? ({} as any);
 
-const store = createStore({
-  state: {
-    developmentModeFlag: JSON.parse(env.VITE_ENABLE_DEV_MODE ?? "false"),
-    uiCalculation: {
-      rootScale: 8,
-      theGlobalDefaultFontSizeInPixel: Math.ceil(getTextSize("xx-large")),
-      updateBrowserSelfValue: true,
-      document: {
-        documentElement: {
-          offsetHeight: document.documentElement.offsetHeight,
-          offsetWidth: document.documentElement.offsetWidth
+export const useGlobalStore = defineStore("globalStore", {
+  state: () => {
+    const globalState = {
+      developmentModeFlag: JSON.parse(env.VITE_ENABLE_DEV_MODE ?? "false"),
+      uiCalculation: {
+        rootScale: 8,
+        theGlobalDefaultFontSizeInPixel: Math.ceil(getTextSize("xx-large")),
+        updateBrowserSelfValue: true,
+        document: {
+          documentElement: {
+            offsetHeight: document.documentElement.offsetHeight,
+            offsetWidth: document.documentElement.offsetWidth
+          },
+          body: {
+            scrollWidth: document.body.scrollWidth,
+            scrollHeight: document.body.scrollHeight,
+            clientWidth: document.body.clientWidth,
+            clientHeight: document.body.clientHeight
+          }
         },
-        body: {
-          scrollWidth: document.body.scrollWidth,
-          scrollHeight: document.body.scrollHeight,
-          clientWidth: document.body.clientWidth,
-          clientHeight: document.body.clientHeight
+        window: {
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+          screen: {
+            availWidth: window.screen.availWidth,
+            availHeight: window.screen.availHeight
+          }
         }
       },
-      window: {
-        innerWidth: window.innerWidth,
-        innerHeight: window.innerHeight,
-        screen: {
-          availWidth: window.screen.availWidth,
-          availHeight: window.screen.availHeight
-        }
-      }
-    },
-    browserDefaultFontFamily: getBrowserFirstDefaultFontFamily(),
-    browserInitiated: JSON.parse(env.VITE_DISABLE_BROWSER_INITIALIZATION ?? "false"),
-    // browserInitiated: false,
-    cookieManager: new ClientCookieManager(),
-    loginManager: new LoginMananger(),
-    diyDefaultFontFamilyList: [
-      "Microsoft YaHei UI",
-      ...document.defaultView.getComputedStyle(document.body, "").fontFamily.split(",")
-    ],
-    diyFontFamilyList: ["楷体", "KaiTi", "华文楷体", "STKaiti"]
-  },
-  getters: {
-    theFontSizeInPixel(state) {
-      return state.uiCalculation.theGlobalDefaultFontSizeInPixel;
-    },
-    theFontSize(state, getters) {
-      return getters.theFontSizeInPixel + "px";
-    }
-  },
-  mutations: {
-    setRootScale(state, rootScale) {
+      browserDefaultFontFamily: getBrowserFirstDefaultFontFamily(),
+      browserInitiated: JSON.parse(env.VITE_DISABLE_BROWSER_INITIALIZATION ?? "false"),
+      // browserInitiated: false,
+      cookieManager: new ClientCookieManager(),
+      loginManager: new LoginMananger(),
+      diyDefaultFontFamilyList: [
+        "Microsoft YaHei UI",
+        ...document.defaultView!.getComputedStyle(document.body, "").fontFamily.split(",")
+      ],
+      diyFontFamilyList: ["楷体", "KaiTi", "华文楷体", "STKaiti"]
+    };
+
+    function setRootScale(rootScale) {
       console.log("setRootScale", rootScale);
-      state.uiCalculation.rootScale = rootScale;
-    },
-    addFontFamily(state, fontName) {
-      state.diyFontFamilyList = [fontName, ...state.diyFontFamilyList];
-    },
-    updateGlobalUiCalculationData(state) {
-      const stateDocument: Buildable<Document> = state.uiCalculation.document;
-      const stateWindow: Buildable<Window> = state.uiCalculation.window;
+      globalState.uiCalculation.rootScale = rootScale;
+    }
+    function addFontFamily(fontName) {
+      globalState.diyFontFamilyList = [fontName, ...globalState.diyFontFamilyList];
+    }
+    function updateGlobalUiCalculationData() {
+      const stateDocument: Buildable<Document> = globalState.uiCalculation.document;
+      const stateWindow: Buildable<Window> = globalState.uiCalculation.window;
       stateDocument.documentElement.offsetHeight = document.documentElement.offsetHeight;
       stateDocument.documentElement.offsetWidth = document.documentElement.offsetWidth;
       stateDocument.body.scrollWidth = document.body.scrollWidth;
@@ -78,68 +72,39 @@ const store = createStore({
       stateWindow.innerHeight = window.innerHeight;
       stateWindow.screen.availWidth = window.screen.availWidth;
       stateWindow.screen.availHeight = window.screen.availHeight;
-    },
-    setUpdateBrowserSelfValue(state, flag: boolean) {
-      state.uiCalculation.updateBrowserSelfValue = flag;
-    },
-    setBrowserInitiatedFlag(state, flag: boolean) {
-      state.browserInitiated = flag;
-    },
-    setCookie(state, theDict: StringKeyMapType) {
-      Object.keys(theDict).forEach((key) => {
-        state.cookieManager.clientCookie[key] = theDict[key];
-      });
-      console.log(JSON.stringify(state.cookieManager.clientCookie));
-      state.cookieManager.saveCookie();
-    },
-    setDevMode(state, flag: boolean) {
-      state.developmentModeFlag = flag;
     }
-  },
+    function setUpdateBrowserSelfValue(flag: boolean) {
+      globalState.uiCalculation.updateBrowserSelfValue = flag;
+    }
+    function setBrowserInitiatedFlag(flag: boolean) {
+      globalState.browserInitiated = flag;
+    }
+    function setCookie(theDict: StringKeyMapType) {
+      Object.keys(theDict).forEach((key) => {
+        globalState.cookieManager.clientCookie[key] = theDict[key];
+      });
+      console.log(JSON.stringify(globalState.cookieManager.clientCookie));
+      globalState.cookieManager.saveCookie();
+    }
+    function setDevMode(flag: boolean) {
+      globalState.developmentModeFlag = flag;
+    }
 
-  actions: {},
-  modules: {}
-});
+    const theFontSizeInPixel = computed(() => globalState.uiCalculation.theGlobalDefaultFontSizeInPixel);
 
-const cookieManager = store.state.cookieManager;
-cookieManager.reloadCookie();
-if (
-  "uiCalculation" in cookieManager.clientCookie &&
-  "rootScale" in cookieManager.clientCookie.uiCalculation
-) {
-  store.commit("setRootScale", cookieManager.clientCookie.uiCalculation.rootScale);
-}
-if ("developmentModeFlag" in cookieManager.clientCookie) {
-  store.commit("setDevMode", cookieManager.clientCookie.developmentModeFlag);
-}
-console.log(JSON.stringify(store.state.cookieManager));
+    const theFontSize = computed(() => theFontSizeInPixel.value + "px");
 
-// const windowInAnyType = window as any;
-// windowInAnyType.vuexStoreSetCookie = (cookie: any) => {
-//   store.commit("setCookie", cookie);
-// };
-// windowInAnyType.ssstate = store;
-
-let updateGlobalUiCalculationDataToken = 0;
-
-const debounceTimer = setInterval(() => {
-  if (store.state.uiCalculation.updateBrowserSelfValue && updateGlobalUiCalculationDataToken > 0) {
-    store.commit("updateGlobalUiCalculationData");
-    updateGlobalUiCalculationDataToken >>= 2; // 直接除以 4
+    return {
+      globalState,
+      setRootScale,
+      addFontFamily,
+      updateGlobalUiCalculationData,
+      setUpdateBrowserSelfValue,
+      setBrowserInitiatedFlag,
+      setCookie,
+      setDevMode,
+      theFontSizeInPixel,
+      theFontSize
+    };
   }
-}, 100); // 每 100ms 触发一次，防抖
-
-const rootNodeResizeObserver = new ResizeObserver((entries, observer) => {
-  updateGlobalUiCalculationDataToken += 1;
 });
-
-window.addEventListener("load", (event) => {
-  rootNodeResizeObserver.observe(document.documentElement);
-});
-window.addEventListener("close", (event) => {
-  rootNodeResizeObserver.unobserve(document.documentElement);
-  store.state.cookieManager.clientCookie.uiCalculation.rootScale = store.state.uiCalculation.rootScale;
-  store.state.cookieManager.saveCookie();
-});
-
-export default store;

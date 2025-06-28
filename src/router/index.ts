@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHashHistory, type RouteRecordRaw } from "vue-router";
 import HelloWorld from "@/page/HelloWorld.vue";
 import CvRoot from "@/page/CvRoot.vue";
 import NotFoundPage from "@/page/NotFound.vue";

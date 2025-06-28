@@ -44,7 +44,7 @@
 import { defineComponent, ref } from "vue";
 import { Clipboard } from "v-clipboard";
 import axios from "axios";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 
 export default defineComponent({
   setup() {

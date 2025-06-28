@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, PropType, ref } from "vue";
+import { computed, type PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { KeyValuePair } from "@/tsmod/KeyValuePair";
-import { BasicInformation, EmptyBasicInformation } from "@/tsmod/CurriculumVitaeData";
+import { type BasicInformation, EmptyBasicInformation } from "@/tsmod/CurriculumVitaeData";
 import BasicInfoPair from "@/components/BasicInfoPair.vue";
 
 const templateRoot = ref<HTMLDivElement>();
@@ -109,7 +109,7 @@ const group1ItemKeyList = [
 const group2ItemKeyList = ["nation", "stature", "schooling", "lastInstitute", "nativePlace"];
 
 const myCache = computed(() => {
-  const theMap = new Map() as Map<String, any>;
+  const theMap = new Map() as Map<string, any>;
   const putInCache = (value: string, index: number, array: any) => {
     theMap.set(
       value,

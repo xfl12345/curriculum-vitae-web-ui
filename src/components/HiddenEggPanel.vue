@@ -117,9 +117,9 @@
 
 <script lang="tsx">
 import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
+import { useGlobalStore } from "@/store";
 import { NConfigProvider, NGlobalStyle, NSlider, NSpace } from "naive-ui";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 
 // noinspection JSSuspiciousNameCombination
 export default defineComponent({
@@ -141,7 +141,7 @@ export default defineComponent({
   },
   emits: ["update:rootScale", "update:isPanelOpened", "jump2IndexPage", "resetRootScale", "refreshCvData"],
   setup(props, ctx) {
-    const store = useStore();
+    const store = useGlobalStore();
     const templateRoot = ref<HTMLDivElement>();
 
     return {
@@ -154,7 +154,7 @@ export default defineComponent({
   },
   computed: {
     theFontSizeInPixel() {
-      return this.store.getters.theFontSizeInPixel;
+      return this.store.theFontSizeInPixel;
     },
     theFontSize() {
       return this.theFontSizeInPixel + "px";
@@ -178,8 +178,8 @@ export default defineComponent({
     uiCalculation() {
       const myself = this;
       const fullPage = {
-        width: myself.store.state.uiCalculation.document.body.scrollWidth + "px",
-        height: myself.store.state.uiCalculation.document.body.scrollHeight + "px"
+        width: myself.store.globalState.uiCalculation.document.body.scrollWidth + "px",
+        height: myself.store.globalState.uiCalculation.document.body.scrollHeight + "px"
       };
 
       return {

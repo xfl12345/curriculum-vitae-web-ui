@@ -19,7 +19,7 @@
 
 <script lang="tsx">
 import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
+import { useGlobalStore } from "@/store";
 import { NSpace, NSwitch } from "naive-ui";
 import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
 
@@ -29,7 +29,7 @@ export default defineComponent({
   emits: [],
   setup(props, ctx) {
     const templateRoot = ref<HTMLDivElement>();
-    const store = useStore();
+    const store = useGlobalStore();
 
     return {
       templateRoot,
@@ -49,7 +49,7 @@ export default defineComponent({
       },
       set(inputValue: boolean) {
         const myself = this;
-        myself.store.commit("setCookie", {
+        myself.store.setCookie({
           developmentModeFlag: inputValue ? myself.developmentModeFlag : undefined
         });
         myself.keepDebugState = inputValue;
@@ -57,12 +57,12 @@ export default defineComponent({
     },
     developmentModeFlag: {
       get(): boolean {
-        return this.store.state.developmentModeFlag;
+        return this.store.globalState.developmentModeFlag;
       },
       set(inputValue: boolean) {
-        this.store.commit("setDevMode", inputValue);
+        this.store.setDevMode(inputValue);
         if (this.keepDebugState) {
-          this.store.commit("setCookie", { developmentModeFlag: inputValue });
+          this.store.setCookie({ developmentModeFlag: inputValue });
         }
       }
     }
@@ -72,7 +72,7 @@ export default defineComponent({
   created() {},
   beforeMount() {
     const myself = this;
-    myself.keepDebugState = "developmentModeFlag" in myself.store.state.cookieManager.clientCookie;
+    myself.keepDebugState = "developmentModeFlag" in myself.store.globalState.cookieManager.clientCookie;
   },
   mounted() {},
   beforeUpdate() {},

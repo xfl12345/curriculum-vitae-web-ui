@@ -81,7 +81,7 @@ import { Clipboard } from "v-clipboard";
 import { KeyValuePair } from "@/tsmod/KeyValuePair";
 import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
 import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 
 export default defineComponent({
   components: { TextPrettier, CenterBox, CopyOne },

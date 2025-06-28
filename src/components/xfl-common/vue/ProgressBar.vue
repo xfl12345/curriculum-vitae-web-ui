@@ -32,8 +32,8 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, ref, PropType } from "vue";
-import { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import { computed, ref, type PropType } from "vue";
+import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
 import CenterBox from "./CenterBox.vue";
 
 const props = defineProps({

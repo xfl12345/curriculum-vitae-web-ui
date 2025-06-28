@@ -3,9 +3,9 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, type PropType, ref } from "vue";
 import { cssMixer } from "../ts/CssMixer";
-import { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
 
 type Point = {
   x: number;

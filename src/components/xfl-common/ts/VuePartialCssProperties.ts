@@ -1,3 +1,3 @@
-import { CSSProperties } from "vue";
+import type { CSSProperties } from "vue";
 
-export interface VuePartialCssProperties extends Partial<CSSProperties> {}
+export type VuePartialCssProperties = Partial<CSSProperties>;

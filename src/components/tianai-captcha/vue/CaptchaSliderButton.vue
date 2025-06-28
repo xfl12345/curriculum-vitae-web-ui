@@ -64,11 +64,11 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, PropType, ref } from "vue";
+import { defineComponent, type PropType, ref } from "vue";
 import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
 import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
-import { EnumSizingType } from "@/components/xfl-common/ts/EnumSizingType";
-import { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import type { EnumSizingType } from "@/components/xfl-common/ts/EnumSizingType";
+import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
 import DivVerticalEquidistantLine from "./DivVerticalEquidistantLine.vue";
 import DivSliderPicture from "./DivSliderPicture.vue";
 

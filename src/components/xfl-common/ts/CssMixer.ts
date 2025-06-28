@@ -1,4 +1,4 @@
-import { VuePartialCssProperties } from "./VuePartialCssProperties";
+import type { VuePartialCssProperties } from "./VuePartialCssProperties";
 
 export const cssMixer = (
   defaultCssStyle: VuePartialCssProperties,
