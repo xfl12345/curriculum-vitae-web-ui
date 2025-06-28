@@ -1,13 +1,13 @@
-import { defineMock } from "vite-plugin-mock-dev-server";
+import { defineMock } from 'vite-plugin-mock-dev-server'
 
 export default [
   defineMock({
-    url: "/login/status",
+    url: '/login/status',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    type: "json",
+    type: 'json',
     status: 200,
-    body: "true"
-  })
-];
+    body: 'true',
+  }),
+]

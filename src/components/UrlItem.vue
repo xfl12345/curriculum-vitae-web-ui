@@ -9,7 +9,7 @@
       :style="{
         padding: '0 ' + iconBoxHorizontalPadding,
         // lineHeight: theFontSize,
-        fontSize: Math.floor(theFontSizeInPixel * 0.5) + 'px'
+        fontSize: Math.floor(theFontSizeInPixel * 0.5) + 'px',
       }"
       >💥</span
     >
@@ -25,7 +25,7 @@
         :props-css-style="{
           verticalAlign: 'inherit',
           lineHeight: 'inherit',
-          fontSize: 'inherit'
+          fontSize: 'inherit',
         }"
       />
     </a>
@@ -33,47 +33,47 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, onMounted, type PropType, ref } from "vue";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
+import { computed, onMounted, type PropType, ref } from 'vue'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
 
-const templateRoot = ref<HTMLDivElement>();
+const templateRoot = ref<HTMLDivElement>()
 
 const props = defineProps({
   theFontSizeInPixel: {
     type: Number,
-    default: 24
+    default: 24,
   },
   theUrl: {
     type: String,
-    default: ""
+    default: '',
   },
   useFontSizeAsHeight: {
     type: Boolean,
-    default: false
+    default: false,
   },
   propsCssStyle: {
     type: Object as PropType<VuePartialCssProperties>,
     default: (): VuePartialCssProperties => {
-      return {};
-    }
-  }
-});
+      return {}
+    },
+  },
+})
 
-const iconBoxHorizontalPadding = computed(() => props.theFontSizeInPixel / 4 + "px");
+const iconBoxHorizontalPadding = computed(() => props.theFontSizeInPixel / 4 + 'px')
 
-const theFontSize = computed(() => props.theFontSizeInPixel + "px");
+const theFontSize = computed(() => props.theFontSizeInPixel + 'px')
 
 const rootHeightStyle = computed(() => {
   return (
     props.useFontSizeAsHeight
       ? {
           height: theFontSize.value,
-          lineHeight: theFontSize.value
+          lineHeight: theFontSize.value,
         }
       : {}
-  ) as VuePartialCssProperties;
-});
+  ) as VuePartialCssProperties
+})
 </script>
 
 <style scoped>

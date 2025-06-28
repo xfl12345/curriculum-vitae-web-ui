@@ -10,66 +10,66 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import { cssMixer } from "../ts/CssMixer";
-import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from 'vue'
+import { cssMixer } from '../ts/CssMixer'
+import type { VuePartialCssProperties } from '../ts/VuePartialCssProperties'
 
 const defaultCssStyle: VuePartialCssProperties = {
-  backgroundColor: "blue"
-};
+  backgroundColor: 'blue',
+}
 
 export default defineComponent({
   components: {},
   props: {
     theFontSizeInPixel: {
       type: Number,
-      default: 24
+      default: 24,
     },
     checkIcon: {
       type: String,
-      default: ""
+      default: '',
     },
     uncheckIcon: {
       type: String,
-      default: ""
+      default: '',
     },
     theLable: {
       type: String,
-      default: ""
+      default: '',
     },
     propsCssStyle4CheckBox: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
-    }
+      default: (): VuePartialCssProperties => defaultCssStyle,
+    },
   },
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
     return {
-      checked: false
-    };
+      checked: false,
+    }
   },
   computed: {
     theFontSize(): string {
-      return this.theFontSizeInPixel + "px";
+      return this.theFontSizeInPixel + 'px'
     },
     theCheckBoxStyle(): VuePartialCssProperties {
-      const myself = this;
-      return cssMixer(defaultCssStyle, myself.propsCssStyle4CheckBox);
+      const myself = this
+      return cssMixer(defaultCssStyle, myself.propsCssStyle4CheckBox)
     },
     theCheckBoxIconStyle(): VuePartialCssProperties {
-      const myself = this;
+      const myself = this
       return {
         // backgroundImage:
         // TODO 继续实现“记住我”功能
-      };
-    }
-  }
-});
+      }
+    },
+  },
+})
 </script>

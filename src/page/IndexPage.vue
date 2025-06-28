@@ -12,14 +12,14 @@
           :style="{
             padding: cardPadding,
             borderRadius: cardHeight,
-            height: cardHeight
+            height: cardHeight,
           }"
           @click="jumpPage(String(item.name))"
         >
           <center-box>
             <div :style="{ lineHeight: theFontSize }">
               <span style="vertical-align: top; white-space: nowrap">{{
-                t("routerName." + String(item.name))
+                t('routerName.' + String(item.name))
               }}</span>
             </div>
           </center-box>
@@ -30,63 +30,63 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useGlobalStore } from "@/store";
-import { useI18n } from "vue-i18n";
-import { type RouteRecord, useRouter } from "vue-router";
-import { isUndefinedOrNull } from "@/components/xfl-common/ts/IsUndefinedOrNull";
-import { isDefinedAndNotNull } from "@/components/xfl-common/ts/IsDefinedAndNotNull";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
+import { defineComponent, ref } from 'vue'
+import { useGlobalStore } from '@/store'
+import { useI18n } from 'vue-i18n'
+import { type RouteRecord, useRouter } from 'vue-router'
+import { isUndefinedOrNull } from '@/components/xfl-common/ts/IsUndefinedOrNull'
+import { isDefinedAndNotNull } from '@/components/xfl-common/ts/IsDefinedAndNotNull'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
 
 export default defineComponent({
   components: { CenterBox },
   props: {},
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
-    const router = useRouter();
-    const store = useGlobalStore();
-    const { t } = useI18n();
-    const routes = router.getRoutes().filter((item) => isDefinedAndNotNull(item.name));
+    const router = useRouter()
+    const store = useGlobalStore()
+    const { t } = useI18n()
+    const routes = router.getRoutes().filter((item) => isDefinedAndNotNull(item.name))
 
     return {
       templateRoot,
       router,
       store,
-      t
-    };
+      t,
+    }
   },
   data() {
     return {
-      cardPaddingInPixel: 10
-    };
+      cardPaddingInPixel: 10,
+    }
   },
   computed: {
     theFontSizeInPixel() {
-      return Math.ceil(this.store.theFontSizeInPixel);
+      return Math.ceil(this.store.theFontSizeInPixel)
     },
     theFontSize() {
-      return this.theFontSizeInPixel + "px";
+      return this.theFontSizeInPixel + 'px'
     },
     cardPadding() {
-      return this.cardPaddingInPixel + "px";
+      return this.cardPaddingInPixel + 'px'
     },
     cardHeightInPixel() {
-      const myself = this;
-      return Math.ceil(myself.theFontSizeInPixel) + 2 * myself.cardPaddingInPixel;
+      const myself = this
+      return Math.ceil(myself.theFontSizeInPixel) + 2 * myself.cardPaddingInPixel
     },
     cardHeight() {
-      return this.cardHeightInPixel + "px";
+      return this.cardHeightInPixel + 'px'
     },
     pageMinHeight() {
-      const myself = this;
-      return myself.cardHeightInPixel * myself.routes.length * 2 + "px";
+      const myself = this
+      return myself.cardHeightInPixel * myself.routes.length * 2 + 'px'
     },
     routes(): RouteRecord[] {
-      const myself = this;
-      return myself.router.getRoutes().filter((item) => isDefinedAndNotNull(item.name));
-    }
+      const myself = this
+      return myself.router.getRoutes().filter((item) => isDefinedAndNotNull(item.name))
+    },
   },
   watch: {},
   beforeCreate() {},
@@ -103,15 +103,15 @@ export default defineComponent({
     isDefinedAndNotNull,
     isUndefinedOrNull,
     jumpPage(name: string) {
-      const myself = this;
-      if (name === "firstTimeLoadingPage") {
-        myself.router.push({ name, query: { exhibition: "true" } });
+      const myself = this
+      if (name === 'firstTimeLoadingPage') {
+        myself.router.push({ name, query: { exhibition: 'true' } })
       } else {
-        myself.router.push({ name });
+        myself.router.push({ name })
       }
-    }
-  }
-});
+    },
+  },
+})
 </script>
 
 <style scoped>

@@ -33,24 +33,24 @@
 </template>
 
 <script setup lang="tsx">
-import { ref } from "vue";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
+import { ref } from 'vue'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
 
 defineProps({
   theFontSizeInPixel: {
     type: Number,
-    default: 24
+    default: 24,
   },
   theTitle: {
     type: String,
-    default: ""
+    default: '',
   },
   theSlogan: {
     type: String,
-    default: ""
-  }
-});
+    default: '',
+  },
+})
 
-const templateRoot = ref<HTMLDivElement>();
+const templateRoot = ref<HTMLDivElement>()
 </script>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted } from 'vue'
 
-const emit = defineEmits(["mounted"]);
+const emit = defineEmits(['mounted'])
 onMounted(() => {
-  emit("mounted");
-});
+  emit('mounted')
+})
 </script>
 
 <template>

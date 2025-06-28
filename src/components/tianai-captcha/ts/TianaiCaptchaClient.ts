@@ -1,128 +1,128 @@
-import axios from "axios";
-import type { AxiosError, AxiosResponse } from "axios";
-import { ImageCaptchaTrack } from "./ImageCaptchaTrack";
+import axios from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
+import { ImageCaptchaTrack } from './ImageCaptchaTrack'
 
 export interface RequestResult {
-  success: boolean;
+  success: boolean
 
-  payload: any;
+  payload: any
 }
 
 export interface ITianaiCaptchaClient {
-  backgroundImage: string;
+  backgroundImage: string
 
-  sliderImage: string;
+  sliderImage: string
 
-  captchaType: string;
+  captchaType: string
 
-  getCurrentCaptchaId: () => string;
+  getCurrentCaptchaId: () => string
 
-  getSucceedVerificationIdList: () => string[];
+  getSucceedVerificationIdList: () => string[]
 
-  clearSucceedVerificationIdList: () => void;
+  clearSucceedVerificationIdList: () => void
 
-  refresh: () => Promise<RequestResult>;
+  refresh: () => Promise<RequestResult>
 
-  validate: (data: ImageCaptchaTrack) => Promise<RequestResult>;
+  validate: (data: ImageCaptchaTrack) => Promise<RequestResult>
 
-  recheckCaptchaIdStatus: (captchaId: string) => Promise<boolean>;
+  recheckCaptchaIdStatus: (captchaId: string) => Promise<boolean>
 
-  getReasonInText: (error: AxiosError) => string;
+  getReasonInText: (error: AxiosError) => string
 
-  getRequestResult: (response: AxiosResponse) => RequestResult;
+  getRequestResult: (response: AxiosResponse) => RequestResult
 
-  verificationPayloadSupplier: () => Promise<any>;
+  verificationPayloadSupplier: () => Promise<any>
 }
 
 export class TianaiCaptchaClient implements ITianaiCaptchaClient {
-  currentCaptchaId: string = "";
+  currentCaptchaId: string = ''
 
-  succeedVerificationIds: Map<string, string> = new Map<string, string>();
+  succeedVerificationIds: Map<string, string> = new Map<string, string>()
 
-  backgroundImage: string = "";
+  backgroundImage: string = ''
 
-  sliderImage: string = "";
+  sliderImage: string = ''
 
-  captchaType: string = "ROTATE";
+  captchaType: string = 'ROTATE'
 
   backendRequestPath = {
-    refresh: "gen",
-    validate: "check",
-    recheckCaptchaIdStatus: "check2"
-  };
+    refresh: 'gen',
+    validate: 'check',
+    recheckCaptchaIdStatus: 'check2',
+  }
 
-  getCurrentCaptchaId = () => this.currentCaptchaId;
+  getCurrentCaptchaId = () => this.currentCaptchaId
 
-  getSucceedVerificationIdList = () => Array.from(this.succeedVerificationIds.values());
+  getSucceedVerificationIdList = () => Array.from(this.succeedVerificationIds.values())
 
-  clearSucceedVerificationIdList = () => this.succeedVerificationIds.clear();
+  clearSucceedVerificationIdList = () => this.succeedVerificationIds.clear()
 
   refresh = () => {
-    const myself = this;
+    const myself = this
     return new Promise<RequestResult>((resolve, reject) => {
-      axios.get(myself.backendRequestPath.refresh + "?type=" + myself.captchaType).then((response) => {
-        const data = response.data;
-        myself.currentCaptchaId = data.id;
-        myself.backgroundImage = data.captcha.backgroundImage;
-        myself.sliderImage = data.captcha.sliderImage;
+      axios.get(myself.backendRequestPath.refresh + '?type=' + myself.captchaType).then((response) => {
+        const data = response.data
+        myself.currentCaptchaId = data.id
+        myself.backgroundImage = data.captcha.backgroundImage
+        myself.sliderImage = data.captcha.sliderImage
         resolve({
           success: true,
-          payload: response.data
-        });
-      }, reject);
-    });
-  };
+          payload: response.data,
+        })
+      }, reject)
+    })
+  }
 
   validate = (data: ImageCaptchaTrack) => {
-    const myself = this;
-    const captchaId = myself.currentCaptchaId;
+    const myself = this
+    const captchaId = myself.currentCaptchaId
     return myself.verificationPayloadSupplier().then((payload) => {
-      data.data = payload;
+      data.data = payload
       return new Promise<RequestResult>((resolve, reject) => {
         axios
-          .post(myself.backendRequestPath.validate + "?id=" + captchaId, data, {
+          .post(myself.backendRequestPath.validate + '?id=' + captchaId, data, {
             headers: {
-              "Content-Type": "application/json"
-            }
+              'Content-Type': 'application/json',
+            },
           })
           .then((response) => {
-            const requestResult: RequestResult = myself.getRequestResult(response);
+            const requestResult: RequestResult = myself.getRequestResult(response)
             if (requestResult.success) {
-              myself.succeedVerificationIds.set(captchaId, captchaId);
+              myself.succeedVerificationIds.set(captchaId, captchaId)
             }
-            resolve(requestResult);
-          }, reject);
-      });
-    });
-  };
+            resolve(requestResult)
+          }, reject)
+      })
+    })
+  }
 
   recheckCaptchaIdStatus = (captchaId: string) => {
-    const myself = this;
+    const myself = this
     return new Promise<boolean>((resolve, reject) => {
-      axios.get(myself.backendRequestPath.recheckCaptchaIdStatus + "?id=" + captchaId).then((response) => {
-        const isPassed = response.data;
+      axios.get(myself.backendRequestPath.recheckCaptchaIdStatus + '?id=' + captchaId).then((response) => {
+        const isPassed = response.data
         if (!isPassed) {
-          myself.succeedVerificationIds.delete(captchaId);
+          myself.succeedVerificationIds.delete(captchaId)
         }
-        resolve(isPassed);
-      }, reject);
-    });
-  };
+        resolve(isPassed)
+      }, reject)
+    })
+  }
 
   getReasonInText = (error: AxiosError) =>
-    "请求失败。原因未知。代码：" +
-    (typeof error.response !== "undefined" ? error.response.statusText : error.code);
+    '请求失败。原因未知。代码：' +
+    (typeof error.response !== 'undefined' ? error.response.statusText : error.code)
 
   getRequestResult = (response: AxiosResponse<any, any>) => {
     return {
       success: response.status >= 200 && response.status < 300 && response.data,
-      payload: response.data
-    };
-  };
+      payload: response.data,
+    }
+  }
 
   verificationPayloadSupplier = () => {
     return new Promise<any>((resolve, reject) => {
-      resolve({});
-    });
-  };
+      resolve({})
+    })
+  }
 }

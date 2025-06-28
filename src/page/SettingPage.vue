@@ -18,61 +18,61 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useGlobalStore } from "@/store";
-import { NSpace, NSwitch } from "naive-ui";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
+import { defineComponent, ref } from 'vue'
+import { useGlobalStore } from '@/store'
+import { NSpace, NSwitch } from 'naive-ui'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
 
 export default defineComponent({
   components: { CenterBox, NSpace, NSwitch },
   props: {},
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
-    const store = useGlobalStore();
+    const templateRoot = ref<HTMLDivElement>()
+    const store = useGlobalStore()
 
     return {
       templateRoot,
-      store
-    };
+      store,
+    }
   },
   data() {
-    const webSocketClient: any = null;
+    const webSocketClient: any = null
     return {
-      keepDebugState: false
-    };
+      keepDebugState: false,
+    }
   },
   computed: {
     modelKeepDebugState: {
       get(): boolean {
-        return this.keepDebugState;
+        return this.keepDebugState
       },
       set(inputValue: boolean) {
-        const myself = this;
+        const myself = this
         myself.store.setCookie({
-          developmentModeFlag: inputValue ? myself.developmentModeFlag : undefined
-        });
-        myself.keepDebugState = inputValue;
-      }
+          developmentModeFlag: inputValue ? myself.developmentModeFlag : undefined,
+        })
+        myself.keepDebugState = inputValue
+      },
     },
     developmentModeFlag: {
       get(): boolean {
-        return this.store.globalState.developmentModeFlag;
+        return this.store.globalState.developmentModeFlag
       },
       set(inputValue: boolean) {
-        this.store.setDevMode(inputValue);
+        this.store.setDevMode(inputValue)
         if (this.keepDebugState) {
-          this.store.setCookie({ developmentModeFlag: inputValue });
+          this.store.setCookie({ developmentModeFlag: inputValue })
         }
-      }
-    }
+      },
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {
-    const myself = this;
-    myself.keepDebugState = "developmentModeFlag" in myself.store.globalState.cookieManager.clientCookie;
+    const myself = this
+    myself.keepDebugState = 'developmentModeFlag' in myself.store.globalState.cookieManager.clientCookie
   },
   mounted() {},
   beforeUpdate() {},
@@ -81,6 +81,6 @@ export default defineComponent({
   deactivated() {},
   beforeUnmount() {},
   unmounted() {},
-  methods: {}
-});
+  methods: {},
+})
 </script>

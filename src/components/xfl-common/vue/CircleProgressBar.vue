@@ -56,7 +56,7 @@
         height: innerBoxWidth,
         top: strokeWidth,
         left: strokeWidth,
-        border: innerBoxBorder
+        border: innerBoxBorder,
       }"
     >
       <slot
@@ -67,7 +67,7 @@
         <div style="height: 100%; width: 100%; display: flex; justify-content: center">
           <div style="display: flex; flex-direction: column; justify-content: center">
             <span :style="{ fontSize: innerBoxWidthInPixel / 5 + 'px' }">
-              {{ percentage + "%" }}
+              {{ percentage + '%' }}
             </span>
           </div>
         </div>
@@ -77,9 +77,9 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import type { EnumSizingType } from "../ts/EnumSizingType";
-import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from 'vue'
+import type { EnumSizingType } from '../ts/EnumSizingType'
+import type { VuePartialCssProperties } from '../ts/VuePartialCssProperties'
 
 // source code URL=https://github.com/mkolsv/vue3-m-circle-progress-bar/blob/main/src/CircleProgressBar.vue
 // 学习：https://www.cnblogs.com/daisygogogo/p/11044353.html
@@ -88,196 +88,196 @@ export default defineComponent({
   props: {
     progressMax: {
       type: Number,
-      required: true
+      required: true,
     },
     progress: {
       type: Number,
-      required: true
+      required: true,
     },
     sizingType: {
       type: String as PropType<EnumSizingType>,
-      default: "border"
+      default: 'border',
     },
     domSquareBoxWidth: {
       type: Number,
-      default: 104
+      default: 104,
     },
     propsRadius: {
       type: Number,
-      default: 49
+      default: 49,
     },
     colorFilled: {
       type: Array as PropType<string[]>,
       default: () => [
-        "#ff0000",
-        "#ff2600",
-        "#ff4d00",
-        "#ff7300",
-        "#ff9900",
-        "#ffbf00",
-        "#ffe500",
-        "#f2ff00",
-        "#ccff00",
-        "#a6ff00",
-        "#80ff00",
-        "#59ff00",
-        "#33ff00",
-        "#0dff00",
-        "#00ff19",
-        "#00ff40",
-        "#00ff66",
-        "#00ff8c",
-        "#00ffb3",
-        "#00ffd9",
-        "#00ffff"
-      ]
+        '#ff0000',
+        '#ff2600',
+        '#ff4d00',
+        '#ff7300',
+        '#ff9900',
+        '#ffbf00',
+        '#ffe500',
+        '#f2ff00',
+        '#ccff00',
+        '#a6ff00',
+        '#80ff00',
+        '#59ff00',
+        '#33ff00',
+        '#0dff00',
+        '#00ff19',
+        '#00ff40',
+        '#00ff66',
+        '#00ff8c',
+        '#00ffb3',
+        '#00ffd9',
+        '#00ffff',
+      ],
     },
     colorUnfilled: {
       type: String,
-      default: "#3BB44A"
+      default: '#3BB44A',
     },
     isShowPercentage: {
       type: Boolean,
-      default: true
+      default: true,
     },
     rounded: {
       type: Boolean,
-      default: true
+      default: true,
     },
     transitionDurationInSeconds: {
       type: Number,
-      default: 0.5
+      default: 0.5,
     },
     strokeWidthInPixel: {
       type: Number,
-      default: 6
+      default: 6,
     },
     propsInnerBoxBorder: {
       type: String,
-      default: ""
-    }
+      default: '',
+    },
   },
-  emits: ["reached"],
+  emits: ['reached'],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
-    const fillingCircle = ref<SVGCircleElement>();
+    const templateRoot = ref<HTMLDivElement>()
+    const fillingCircle = ref<SVGCircleElement>()
 
     return {
       templateRoot,
-      fillingCircle
-    };
+      fillingCircle,
+    }
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     boxWidthInPixel() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
-          result = myself.propsRadius! * 2 + myself.strokeWidthInPixel;
-          break;
+        case 'content': {
+          result = myself.propsRadius! * 2 + myself.strokeWidthInPixel
+          break
         }
-        case "border":
+        case 'border':
         default: {
-          result = myself.domSquareBoxWidth;
-          break;
+          result = myself.domSquareBoxWidth
+          break
         }
       }
 
-      return result;
+      return result
     },
     boxWidth() {
-      return this.boxWidthInPixel + "px";
+      return this.boxWidthInPixel + 'px'
     },
     radius() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
-          result = myself.propsRadius;
-          break;
+        case 'content': {
+          result = myself.propsRadius
+          break
         }
-        case "border":
+        case 'border':
         default: {
-          result = myself.boxWidthInPixel / 2 - myself.strokeWidthInPixel * 0.5;
-          break;
+          result = myself.boxWidthInPixel / 2 - myself.strokeWidthInPixel * 0.5
+          break
         }
       }
 
-      return result;
+      return result
     },
     centerOffset() {
-      return this.boxWidthInPixel / 2;
+      return this.boxWidthInPixel / 2
     },
     innerBoxWidthInPixel() {
-      return this.radius * 2 - this.strokeWidthInPixel;
+      return this.radius * 2 - this.strokeWidthInPixel
     },
     innerBoxWidth() {
-      return this.innerBoxWidthInPixel + "px";
+      return this.innerBoxWidthInPixel + 'px'
     },
     strokeWidth() {
-      return this.strokeWidthInPixel + "px";
+      return this.strokeWidthInPixel + 'px'
     },
     isLimitReached() {
-      return this.progressMax <= this.progress;
+      return this.progressMax <= this.progress
     },
     strokeColor() {
-      const myself = this;
-      let stroke: string;
+      const myself = this
+      let stroke: string
       if (myself.isLimitReached) {
-        stroke = myself.colorFilled[myself.colorFilled.length - 1] as string;
+        stroke = myself.colorFilled[myself.colorFilled.length - 1] as string
       } else {
         const strokeColorIndex = Math.floor(
           (myself.progress / myself.progressMax) * (myself.colorFilled.length - 1)
-        );
-        stroke = myself.colorFilled[strokeColorIndex] as string;
+        )
+        stroke = myself.colorFilled[strokeColorIndex] as string
       }
-      return stroke;
+      return stroke
     },
     fillingCircleStyles(): VuePartialCssProperties {
-      const myself = this;
+      const myself = this
       return {
-        transitionDuration: myself.transitionDurationInSeconds + "s",
+        transitionDuration: myself.transitionDurationInSeconds + 's',
         stroke: myself.strokeColor,
-        strokeDashoffset: myself.dashOffset + "",
-        strokeDasharray: myself.dashArray + "",
-        strokeLinecap: myself.rounded ? "round" : undefined,
+        strokeDashoffset: myself.dashOffset + '',
+        strokeDasharray: myself.dashArray + '',
+        strokeLinecap: myself.rounded ? 'round' : undefined,
         strokeWidth: myself.strokeWidth,
-        transformOrigin: myself.centerOffset + "px " + myself.centerOffset + "px"
-      };
+        transformOrigin: myself.centerOffset + 'px ' + myself.centerOffset + 'px',
+      }
     },
     currentFormatted() {
-      return this.isLimitReached ? this.progressMax : this.progress;
+      return this.isLimitReached ? this.progressMax : this.progress
     },
     dashArray() {
-      return this.radius * Math.PI * 2;
+      return this.radius * Math.PI * 2
     },
     dashOffset() {
-      const myself = this;
-      return myself.dashArray - (myself.dashArray * myself.currentFormatted) / myself.progressMax;
+      const myself = this
+      return myself.dashArray - (myself.dashArray * myself.currentFormatted) / myself.progressMax
     },
     percentage() {
-      return Math.floor((this.progress / this.progressMax) * 100);
+      return Math.floor((this.progress / this.progressMax) * 100)
     },
     innerBoxBorder() {
-      const myself = this;
-      const halfOfStrokeWidthInPixel = myself.strokeWidthInPixel / 6;
-      const borderWidth = halfOfStrokeWidthInPixel >= 1 ? halfOfStrokeWidthInPixel : 1;
-      return myself.propsInnerBoxBorder === ""
-        ? borderWidth + "px solid " + myself.strokeColor
-        : myself.propsInnerBoxBorder;
-    }
+      const myself = this
+      const halfOfStrokeWidthInPixel = myself.strokeWidthInPixel / 6
+      const borderWidth = halfOfStrokeWidthInPixel >= 1 ? halfOfStrokeWidthInPixel : 1
+      return myself.propsInnerBoxBorder === ''
+        ? borderWidth + 'px solid ' + myself.strokeColor
+        : myself.propsInnerBoxBorder
+    },
   },
   watch: {
     isLimitReached(newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.$emit("reached", newValue);
+        this.$emit('reached', newValue)
       }
-    }
+    },
   },
   beforeCreate() {},
   created() {},
@@ -289,6 +289,6 @@ export default defineComponent({
   deactivated() {},
   beforeUnmount() {},
   unmounted() {},
-  methods: {}
-});
+  methods: {},
+})
 </script>

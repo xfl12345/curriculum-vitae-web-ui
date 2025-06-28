@@ -54,7 +54,7 @@
                   fontSize: theFontSizeInPixel * 0.8 + 'px',
                   borderRadius: theFontSizeInPixel + 'px',
                   paddingLeft: theFontSizeInPixel / 2 + 'px',
-                  paddingRight: theFontSizeInPixel / 2 + 'px'
+                  paddingRight: theFontSizeInPixel / 2 + 'px',
                 }"
               >
                 复制成功
@@ -75,13 +75,13 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { CopyOne } from "@icon-park/vue-next";
-import { Clipboard } from "v-clipboard";
-import { KeyValuePair } from "@/tsmod/KeyValuePair";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import { defineComponent, ref } from 'vue'
+import { CopyOne } from '@icon-park/vue-next'
+import { Clipboard } from 'v-clipboard'
+import { KeyValuePair } from '@/tsmod/KeyValuePair'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
 
 export default defineComponent({
   components: { TextPrettier, CenterBox, CopyOne },
@@ -89,28 +89,28 @@ export default defineComponent({
     keyValuePair: {
       type: KeyValuePair,
       default: () => {
-        return KeyValuePair.createBlankInstance();
-      }
+        return KeyValuePair.createBlankInstance()
+      },
     },
     theMaxFontCount: {
       type: Number,
-      default: 4
+      default: 4,
     },
     theFontSizeInPixel: {
       type: Number,
-      default: 24
+      default: 24,
     },
     fixedKeyRootBoxWidth: {
       type: String,
-      default: "auto"
-    }
+      default: 'auto',
+    },
   },
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
-    const valueBox = ref<HTMLDivElement>();
-    const rootBoxOfKey = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
+    const valueBox = ref<HTMLDivElement>()
+    const rootBoxOfKey = ref<HTMLDivElement>()
 
-    return { templateRoot, valueBox, rootBoxOfKey };
+    return { templateRoot, valueBox, rootBoxOfKey }
   },
   data() {
     return {
@@ -118,92 +118,92 @@ export default defineComponent({
       isPreRemoveCopyIcon: false,
       copyActionFeedback: {
         activated: false,
-        succeed: false
+        succeed: false,
       },
       mouseEventRecord: {
         keyDown: {
           x: 0,
-          y: 0
-        }
-      }
-    };
+          y: 0,
+        },
+      },
+    }
   },
   computed: {
     theWidthOfTheBoxOfKey(): string {
-      const pixel = this.theFontSizeInPixel * this.theMaxFontCount;
-      return pixel + "px";
+      const pixel = this.theFontSizeInPixel * this.theMaxFontCount
+      return pixel + 'px'
     },
     displayValueBackgroundColor() {
       if (this.isShowCopyIcon || this.copyActionFeedback.activated) {
         if (this.copyActionFeedback.activated) {
-          return this.copyActionFeedback.succeed ? "aqua" : "red";
+          return this.copyActionFeedback.succeed ? 'aqua' : 'red'
         }
 
-        return "yellow";
+        return 'yellow'
       }
 
-      return undefined;
+      return undefined
     },
     rootBoxStyleOfKey(): VuePartialCssProperties {
-      const myself = this;
+      const myself = this
       return (
-        myself.fixedKeyRootBoxWidth === "auto"
+        myself.fixedKeyRootBoxWidth === 'auto'
           ? {
               flexGrow: 2,
-              flexBasis: 0
+              flexBasis: 0,
             }
           : { width: myself.fixedKeyRootBoxWidth }
-      ) as VuePartialCssProperties;
-    }
+      ) as VuePartialCssProperties
+    },
   },
   methods: {
     preRemoveCopyIcon() {
-      const myself = this;
-      myself.isPreRemoveCopyIcon = true;
+      const myself = this
+      myself.isPreRemoveCopyIcon = true
       setTimeout(() => {
         if (myself.isPreRemoveCopyIcon) {
-          myself.isShowCopyIcon = false;
-          myself.isPreRemoveCopyIcon = false;
+          myself.isShowCopyIcon = false
+          myself.isPreRemoveCopyIcon = false
         }
-      }, 100);
+      }, 100)
     },
     showCopyIcon() {
-      const myself = this;
-      myself.isPreRemoveCopyIcon = false;
-      myself.isShowCopyIcon = true;
+      const myself = this
+      myself.isPreRemoveCopyIcon = false
+      myself.isShowCopyIcon = true
     },
     copyValue2ClipBoard() {
-      const myself = this;
-      const timeout = 3000;
+      const myself = this
+      const timeout = 3000
       Clipboard.copy(myself.keyValuePair!.theCopyValue).then(
         (value) => {
-          myself.copyActionFeedback.succeed = true;
-          myself.copyActionFeedback.activated = true;
+          myself.copyActionFeedback.succeed = true
+          myself.copyActionFeedback.activated = true
           setTimeout(() => {
-            myself.copyActionFeedback.activated = false;
-          }, timeout);
+            myself.copyActionFeedback.activated = false
+          }, timeout)
         },
         (reason) => {
-          myself.copyActionFeedback.succeed = false;
-          myself.copyActionFeedback.activated = true;
+          myself.copyActionFeedback.succeed = false
+          myself.copyActionFeedback.activated = true
           setTimeout(() => {
-            myself.copyActionFeedback.activated = false;
-          }, timeout);
+            myself.copyActionFeedback.activated = false
+          }, timeout)
         }
-      );
+      )
     },
     mouseDownHandler(event: MouseEvent) {
-      this.mouseEventRecord.keyDown.x = event.x;
-      this.mouseEventRecord.keyDown.y = event.y;
+      this.mouseEventRecord.keyDown.x = event.x
+      this.mouseEventRecord.keyDown.y = event.y
     },
     mouseUpHandler(event: MouseEvent) {
-      const myself = this;
-      const keyDown = myself.mouseEventRecord.keyDown;
-      const tolerance = myself.theFontSizeInPixel / 4;
+      const myself = this
+      const keyDown = myself.mouseEventRecord.keyDown
+      const tolerance = myself.theFontSizeInPixel / 4
       if (Math.abs(event.x - keyDown.x) <= tolerance && Math.abs(event.y - keyDown.y) <= tolerance) {
-        myself.copyValue2ClipBoard();
+        myself.copyValue2ClipBoard()
       }
-    }
-  }
-});
+    },
+  },
+})
 </script>

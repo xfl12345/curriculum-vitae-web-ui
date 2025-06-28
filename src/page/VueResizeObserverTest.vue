@@ -5,24 +5,24 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from 'vue'
 
-const templateRoot = ref<HTMLDivElement>();
+const templateRoot = ref<HTMLDivElement>()
 
-const width = ref(0);
-const height = ref(0);
-const theSwitch = ref(false);
+const width = ref(0)
+const height = ref(0)
+const theSwitch = ref(false)
 
 const onResize = (obj: any) => {
-  console.log(obj);
-  width.value = obj.width;
-  height.value = obj.height;
-};
+  console.log(obj)
+  width.value = obj.width
+  height.value = obj.height
+}
 
 onMounted(() => {
-  width.value = templateRoot.value!.offsetWidth;
-  height.value = templateRoot.value!.offsetHeight;
-});
+  width.value = templateRoot.value!.offsetWidth
+  height.value = templateRoot.value!.offsetHeight
+})
 </script>
 
 <style scoped>

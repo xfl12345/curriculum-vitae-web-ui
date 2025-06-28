@@ -14,97 +14,97 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from 'vue'
+import { cssMixer } from '@/components/xfl-common/ts/CssMixer'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
 
 const defaultCssStyle: VuePartialCssProperties = {
   // backgroundColor: "#4FC632"
-  backgroundColor: "#03DE00"
+  backgroundColor: '#03DE00',
   // backgroundColor: "lawngreen"
   // backgroundColor: "limegreen"
-};
+}
 
 export default defineComponent({
   components: {},
   props: {
     boxWidthInPixel: {
       type: Number,
-      default: 22
+      default: 22,
     },
     boxHeightInPixel: {
       type: Number,
-      default: 22
+      default: 22,
     },
     count: {
       type: Number,
-      default: 3
+      default: 3,
     },
     deepInPixel: {
       type: Number,
-      default: -1
+      default: -1,
     },
     useDefaultShadowStyle: {
       type: Boolean,
-      default: true
+      default: true,
     },
     round: {
       type: Boolean,
-      default: true
+      default: true,
     },
     propsCssStyle: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
-    }
+      default: (): VuePartialCssProperties => defaultCssStyle,
+    },
   },
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     boxWidth() {
-      return this.boxWidthInPixel + "px";
+      return this.boxWidthInPixel + 'px'
     },
     boxHeight() {
-      return this.boxHeightInPixel + "px";
+      return this.boxHeightInPixel + 'px'
     },
     verticalMarginInPixel() {
-      const myself = this;
-      return myself.boxWidthInPixel / (1.618 * myself.count - 1);
+      const myself = this
+      return myself.boxWidthInPixel / (1.618 * myself.count - 1)
       // return (myself.viewBoxWidth - myself.count * myself.strokeWidthInPixel) / (myself.count - 1);
     },
     pictureWidthInPixel() {
-      const myself = this;
-      return Math.ceil(myself.verticalMarginInPixel * 0.618);
+      const myself = this
+      return Math.ceil(myself.verticalMarginInPixel * 0.618)
     },
     pictureWidth() {
-      return this.pictureWidthInPixel + "px";
+      return this.pictureWidthInPixel + 'px'
     },
     defaultShadowStyle() {
-      const myself = this;
-      const deep = myself.deepInPixel < 0 ? myself.pictureWidthInPixel * (1 - 0.618) : myself.deepInPixel;
+      const myself = this
+      const deep = myself.deepInPixel < 0 ? myself.pictureWidthInPixel * (1 - 0.618) : myself.deepInPixel
       // 黄金等腰三角形，凹槽深度做高，取底边的一半
-      const spreadWidth = deep / Math.tan((72 / 180) * Math.PI);
+      const spreadWidth = deep / Math.tan((72 / 180) * Math.PI)
 
       // return "0 0 " + spreadWidth * 1.618 + "px " + spreadWidth + "px #999999 inset";
-      return "0 0 " + myself.pictureWidthInPixel / 4 + "px " + spreadWidth + "px #999999 inset";
+      return '0 0 ' + myself.pictureWidthInPixel / 4 + 'px ' + spreadWidth + 'px #999999 inset'
     },
     cssStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle);
+      const myself = this
+      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle)
       if (myself.useDefaultShadowStyle) {
-        theStyle.boxShadow = myself.defaultShadowStyle;
+        theStyle.boxShadow = myself.defaultShadowStyle
       }
 
-      return theStyle;
-    }
+      return theStyle
+    },
   },
   watch: {},
   beforeCreate() {},
@@ -117,6 +117,6 @@ export default defineComponent({
   deactivated() {},
   beforeUnmount() {},
   unmounted() {},
-  methods: {}
-});
+  methods: {},
+})
 </script>

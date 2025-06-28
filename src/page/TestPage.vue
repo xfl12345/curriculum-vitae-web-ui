@@ -4,6 +4,6 @@
 </template>
 
 <script setup lang="tsx">
-import ConvertSvgElementToDataUrlTestPage from "@/page/ConvertSvgElementToDataUrlTestPage.vue";
-import ConvertImgDataToDataUrlTestPage from "@/page/ConvertImgDataToDataUrlTestPage.vue";
+import ConvertSvgElementToDataUrlTestPage from '@/page/ConvertSvgElementToDataUrlTestPage.vue'
+import ConvertImgDataToDataUrlTestPage from '@/page/ConvertImgDataToDataUrlTestPage.vue'
 </script>

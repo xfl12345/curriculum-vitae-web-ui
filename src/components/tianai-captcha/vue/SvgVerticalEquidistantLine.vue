@@ -6,87 +6,87 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from 'vue'
+import { cssMixer } from '@/components/xfl-common/ts/CssMixer'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
 
 type Point = {
-  x: number;
-  y: number;
-};
+  x: number
+  y: number
+}
 
 const defaultCssStyle: VuePartialCssProperties = {
-  fill: "transparent",
-  stroke: "#4FC632",
-  strokeLinecap: "round"
-};
+  fill: 'transparent',
+  stroke: '#4FC632',
+  strokeLinecap: 'round',
+}
 
 export default defineComponent({
   components: {},
   props: {
     viewBoxWidth: {
       type: Number,
-      default: 36
+      default: 36,
     },
     viewBoxHeight: {
       type: Number,
-      default: 36
+      default: 36,
     },
     count: {
       type: Number,
-      default: 3
+      default: 3,
     },
     propsCssStyle: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
-    }
+      default: (): VuePartialCssProperties => defaultCssStyle,
+    },
   },
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
-    const myself = this;
+    const myself = this
 
-    return {};
+    return {}
   },
   computed: {
     verticalMarginInPixel() {
-      const myself = this;
+      const myself = this
       // 总宽度 = 水平间距 * (元素数量 - 1) + 元素宽度 * 元素数量
       // 其中，设定 元素宽度 = 0.618 * 水平间距
-      return myself.viewBoxWidth / (1.618 * myself.count - 1);
+      return myself.viewBoxWidth / (1.618 * myself.count - 1)
       // return (myself.viewBoxWidth - myself.count * myself.strokeWidthInPixel) / (myself.count - 1);
     },
     strokeWidthInPixel() {
-      const myself = this;
-      return myself.verticalMarginInPixel * 0.618;
+      const myself = this
+      return myself.verticalMarginInPixel * 0.618
     },
     strokeDasharrayInPixel() {
-      const myself = this;
-      return myself.viewBoxHeight + 2;
+      const myself = this
+      return myself.viewBoxHeight + 2
     },
     cssStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle);
-      theStyle.strokeWidth = myself.strokeWidthInPixel + "px";
-      theStyle.strokeDashoffset = "0";
-      theStyle.strokeDasharray = "" + myself.strokeDasharrayInPixel;
-      return theStyle;
+      const myself = this
+      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle)
+      theStyle.strokeWidth = myself.strokeWidthInPixel + 'px'
+      theStyle.strokeDashoffset = '0'
+      theStyle.strokeDasharray = '' + myself.strokeDasharrayInPixel
+      return theStyle
     },
     isRoundedStrokeLinecap() {
-      return "strokeLinecap" in this.cssStyle && this.cssStyle.strokeLinecap === "round";
-    }
+      return 'strokeLinecap' in this.cssStyle && this.cssStyle.strokeLinecap === 'round'
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    const myself = this;
+    const myself = this
   },
   beforeUpdate() {},
   updated() {},
@@ -96,29 +96,29 @@ export default defineComponent({
   unmounted() {},
   methods: {
     thePathString(index: number): string {
-      const myself = this;
+      const myself = this
       const start: Point = {
         x: index * myself.verticalMarginInPixel + (index + 0.5) * myself.strokeWidthInPixel,
-        y: myself.isRoundedStrokeLinecap ? myself.strokeWidthInPixel / 2 : 0
-      };
+        y: myself.isRoundedStrokeLinecap ? myself.strokeWidthInPixel / 2 : 0,
+      }
 
       return (
-        "M" +
+        'M' +
         myself.point2string(start) +
-        " L" +
+        ' L' +
         myself.point2string(start) +
-        " " +
+        ' ' +
         myself.point2string({ x: start.x, y: myself.viewBoxHeight - start.y })
-      );
+      )
     },
     point2string(thePoint: Point): string {
-      return thePoint.x + " " + thePoint.y;
+      return thePoint.x + ' ' + thePoint.y
     },
     calcPointDistance(a: Point, b: Point) {
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-  }
-});
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      return Math.sqrt(dx * dx + dy * dy)
+    },
+  },
+})
 </script>

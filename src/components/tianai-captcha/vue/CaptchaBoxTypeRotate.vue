@@ -56,7 +56,7 @@
       :bar-width-in-pixel="backgroundImageWidthInPixel"
       :placeholder="placeHolder"
       :props-placeholder-style="{
-        fontSize: Math.floor(backgroundImageWidthInPixel * 0.07) + 'px'
+        fontSize: Math.floor(backgroundImageWidthInPixel * 0.07) + 'px',
       }"
       style="margin: 11px 0"
       @moving="movingSlider"
@@ -66,7 +66,7 @@
       style="box-sizing: border-box; display: flex; vertical-align: middle"
       :style="{
         height: footerBoxHeightInPixel + boxPaddingInPixel + 'px',
-        paddingTop: boxPaddingInPixel + 'px'
+        paddingTop: boxPaddingInPixel + 'px',
       }"
     >
       <img
@@ -90,74 +90,74 @@
         style="vertical-align: inherit; display: inline-block; margin-left: auto"
         :style="{ color: isPassed ? 'darkgreen' : 'red', fontSize: footerBoxHeight }"
       >
-        {{ isPassed ? "验证通过" : "验证失败" }}
+        {{ isPassed ? '验证通过' : '验证失败' }}
       </div>
     </div>
   </div>
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import refreshIcon from "@/components/icon-park/refresh.svg";
-import closeIcon from "@/components/icon-park/close-one.svg";
-import type { EnumSizingType } from "@/components/xfl-common/ts/EnumSizingType";
-import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import { TianaiTrackEvent } from "../ts/TianaiTrackEvent";
-import { TianaiCaptchaClient } from "../ts/TianaiCaptchaClient";
-import type { ITianaiCaptchaClient, RequestResult } from "../ts/TianaiCaptchaClient";
-import CaptchaSlider from "./CaptchaSlider.vue";
+import { defineComponent, type PropType, ref } from 'vue'
+import refreshIcon from '@/components/icon-park/refresh.svg'
+import closeIcon from '@/components/icon-park/close-one.svg'
+import type { EnumSizingType } from '@/components/xfl-common/ts/EnumSizingType'
+import { cssMixer } from '@/components/xfl-common/ts/CssMixer'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import { TianaiTrackEvent } from '../ts/TianaiTrackEvent'
+import { TianaiCaptchaClient } from '../ts/TianaiCaptchaClient'
+import type { ITianaiCaptchaClient, RequestResult } from '../ts/TianaiCaptchaClient'
+import CaptchaSlider from './CaptchaSlider.vue'
 
 const defaultCssStyle: VuePartialCssProperties = {
-  backgroundColor: "#fff",
-  boxShadow: "0 0 11px 0 #999999"
-};
+  backgroundColor: '#fff',
+  boxShadow: '0 0 11px 0 #999999',
+}
 
 export default defineComponent({
   components: { CaptchaSlider },
   props: {
     sizingType: {
       type: String as PropType<EnumSizingType>,
-      default: "border"
+      default: 'border',
     },
     domBoxWidth: {
       type: Number,
-      default: 278
+      default: 278,
     },
     tianaiCaptchaClient: {
       type: Object as PropType<ITianaiCaptchaClient>,
       required: true,
       default: () => {
-        const client = new TianaiCaptchaClient();
-        client.captchaType = "ROTATE";
-        return client;
-      }
+        const client = new TianaiCaptchaClient()
+        client.captchaType = 'ROTATE'
+        return client
+      },
     },
     pictureWidthInPixel: {
       type: Number,
-      default: 260
+      default: 260,
     },
     placeHolder: {
       type: String,
-      default: "拖动滑块完成拼图"
+      default: '拖动滑块完成拼图',
     },
     enableResultFeedback: {
       type: Boolean,
-      default: false
+      default: false,
     },
     propsCssStyle: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
-    }
+      default: (): VuePartialCssProperties => defaultCssStyle,
+    },
   },
-  emits: ["captchaDone", "onClickCloseButton"],
+  emits: ['captchaDone', 'onClickCloseButton'],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
-    const rotateBgImg = ref<HTMLImageElement>();
-    const rotateImage = ref<HTMLImageElement>();
+    const rotateBgImg = ref<HTMLImageElement>()
+    const rotateImage = ref<HTMLImageElement>()
 
-    const captchaSlider = ref<InstanceType<typeof CaptchaSlider>>();
+    const captchaSlider = ref<InstanceType<typeof CaptchaSlider>>()
 
     return {
       templateRoot,
@@ -165,12 +165,12 @@ export default defineComponent({
       rotateImage,
       captchaSlider,
       refreshIcon,
-      closeIcon
-    };
+      closeIcon,
+    }
   },
   data() {
-    const myself = this;
-    const rotateImgDivStyle: VuePartialCssProperties = {};
+    const myself = this
+    const rotateImgDivStyle: VuePartialCssProperties = {}
 
     return {
       rotateImgDivStyle,
@@ -180,107 +180,107 @@ export default defineComponent({
       isPassed: false,
       actionCount: 0,
       isRequestFailed: false,
-      requestFailedFeedBack: ""
-    };
+      requestFailedFeedBack: '',
+    }
   },
   computed: {
     boxPaddingInPixel() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
-          result = Math.floor(myself.pictureWidthInPixel * 0.035);
-          break;
+        case 'content': {
+          result = Math.floor(myself.pictureWidthInPixel * 0.035)
+          break
         }
-        case "border":
+        case 'border':
         default: {
-          result = Math.ceil(myself.domBoxWidth * 0.03);
-          break;
+          result = Math.ceil(myself.domBoxWidth * 0.03)
+          break
         }
       }
 
-      return result;
+      return result
     },
     boxWidthInPixel() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
-          result = myself.pictureWidthInPixel + myself.boxPaddingInPixel * 2;
-          break;
+        case 'content': {
+          result = myself.pictureWidthInPixel + myself.boxPaddingInPixel * 2
+          break
         }
-        case "border":
+        case 'border':
         default: {
-          result = myself.domBoxWidth;
-          break;
+          result = myself.domBoxWidth
+          break
         }
       }
 
-      return result;
+      return result
     },
     boxInnerWidth() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
-          result = myself.pictureWidthInPixel;
-          break;
+        case 'content': {
+          result = myself.pictureWidthInPixel
+          break
         }
-        case "border":
+        case 'border':
         default: {
-          result = myself.boxWidthInPixel - 2 * myself.boxPaddingInPixel;
-          break;
+          result = myself.boxWidthInPixel - 2 * myself.boxPaddingInPixel
+          break
         }
       }
 
-      return result;
+      return result
     },
     sliderAvailableOffsetX() {
-      const myself = this;
+      const myself = this
       if (myself.captchaSlider) {
-        return myself.captchaSlider!.buttonAvailableOffsetX;
+        return myself.captchaSlider!.buttonAvailableOffsetX
       }
-      return myself.backgroundImageWidthInPixel;
+      return myself.backgroundImageWidthInPixel
     },
     backgroundImageWidthInPixel() {
-      return this.boxInnerWidth;
+      return this.boxInnerWidth
     },
     backgroundImageHeightInPixel() {
-      return Math.floor(this.backgroundImageWidthInPixel * 0.618);
+      return Math.floor(this.backgroundImageWidthInPixel * 0.618)
     },
     footerBoxHeightInPixel() {
-      return Math.round(this.boxInnerWidth * 0.0923);
+      return Math.round(this.boxInnerWidth * 0.0923)
     },
     footerBoxHeight() {
-      return this.footerBoxHeightInPixel + "px";
+      return this.footerBoxHeightInPixel + 'px'
     },
     footerBoxButtonStyle(): VuePartialCssProperties {
-      const myself = this;
+      const myself = this
       return {
         height: myself.footerBoxHeight,
         width: myself.footerBoxHeight,
-        marginRight: myself.footerBoxHeightInPixel / 4 + "px",
-        cursor: "pointer"
-      };
+        marginRight: myself.footerBoxHeightInPixel / 4 + 'px',
+        cursor: 'pointer',
+      }
     },
     cssStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle);
-      theStyle.width = myself.boxWidthInPixel + "px";
-      theStyle.padding = myself.boxPaddingInPixel + "px";
-      theStyle.borderRadius = myself.boxPaddingInPixel + "px";
-      return theStyle;
-    }
+      const myself = this
+      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle)
+      theStyle.width = myself.boxWidthInPixel + 'px'
+      theStyle.padding = myself.boxPaddingInPixel + 'px'
+      theStyle.borderRadius = myself.boxPaddingInPixel + 'px'
+      return theStyle
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    this.refreshCaptcha();
+    this.refreshCaptcha()
   },
   beforeUpdate() {},
   updated() {},
@@ -290,46 +290,46 @@ export default defineComponent({
   unmounted() {},
   methods: {
     reset() {
-      const myself = this;
+      const myself = this
       // 空白 1px 图片
       const blankImage =
-        "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==";
-      myself.sliderImageSource = blankImage;
-      myself.backgroundImageSource = blankImage;
+        'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=='
+      myself.sliderImageSource = blankImage
+      myself.backgroundImageSource = blankImage
 
-      myself.captchaSlider!.resetButton();
-      myself.rotateImgDivStyle.transform = "rotate(0deg)";
+      myself.captchaSlider!.resetButton()
+      myself.rotateImgDivStyle.transform = 'rotate(0deg)'
     },
     movingSlider(trackRecord: TianaiTrackEvent) {
-      const myself = this;
-      const moveX = trackRecord.moveX!;
+      const myself = this
+      const moveX = trackRecord.moveX!
 
       myself.rotateImgDivStyle.transform =
-        "rotate(" + moveX / (myself.sliderAvailableOffsetX / 360) + "deg)";
+        'rotate(' + moveX / (myself.sliderAvailableOffsetX / 360) + 'deg)'
     },
     onRefreshButtonClick() {
-      const myself = this;
-      myself.showResultFeedback = false;
-      myself.refreshCaptcha();
+      const myself = this
+      myself.showResultFeedback = false
+      myself.refreshCaptcha()
     },
     refreshCaptcha() {
-      const myself = this;
-      myself.reset();
-      myself.isRequestFailed = false;
+      const myself = this
+      myself.reset()
+      myself.isRequestFailed = false
       myself.tianaiCaptchaClient.refresh().then(
         (obj) => {
-          myself.backgroundImageSource = myself.tianaiCaptchaClient.backgroundImage;
-          myself.sliderImageSource = myself.tianaiCaptchaClient.sliderImage;
+          myself.backgroundImageSource = myself.tianaiCaptchaClient.backgroundImage
+          myself.sliderImageSource = myself.tianaiCaptchaClient.sliderImage
         },
         (error) => {
-          myself.requestFailedFeedBack = myself.tianaiCaptchaClient.getReasonInText(error);
-          myself.isRequestFailed = true;
+          myself.requestFailedFeedBack = myself.tianaiCaptchaClient.getReasonInText(error)
+          myself.isRequestFailed = true
         }
-      );
+      )
     },
     valid(trackRecord: TianaiTrackEvent) {
-      const myself = this;
-      const sliderImg = myself.rotateImage!;
+      const myself = this
+      const sliderImg = myself.rotateImage!
 
       const data = {
         bgImageWidth: myself.sliderAvailableOffsetX,
@@ -338,28 +338,28 @@ export default defineComponent({
         sliderImageHeight: sliderImg.height,
         startSlidingTime: trackRecord.startTime,
         entSlidingTime: trackRecord.stopTime,
-        trackList: trackRecord.tracks
-      };
+        trackList: trackRecord.tracks,
+      }
 
       const afterAjax = (result: RequestResult) => {
-        myself.isPassed = result.success;
-        myself.actionCount += 1;
-        myself.showResultFeedback = true;
+        myself.isPassed = result.success
+        myself.actionCount += 1
+        myself.showResultFeedback = true
         if (!result.success) {
-          myself.refreshCaptcha();
+          myself.refreshCaptcha()
         }
-        myself.$emit("captchaDone", result);
-      };
+        myself.$emit('captchaDone', result)
+      }
       myself.tianaiCaptchaClient.validate(data).then(afterAjax, (error) => {
-        myself.requestFailedFeedBack = myself.tianaiCaptchaClient.getReasonInText(error);
-        myself.isRequestFailed = true;
+        myself.requestFailedFeedBack = myself.tianaiCaptchaClient.getReasonInText(error)
+        myself.isRequestFailed = true
 
         afterAjax({
           success: false,
-          payload: typeof error.response !== "undefined" ? error.response.data : null
-        });
-      });
-    }
-  }
-});
+          payload: typeof error.response !== 'undefined' ? error.response.data : null,
+        })
+      })
+    },
+  },
+})
 </script>

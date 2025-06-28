@@ -1,7 +1,7 @@
 export interface SaTokenResult {
-  code: number;
+  code: number
 
-  msg: string;
+  msg: string
 
-  data: any;
+  data: any
 }

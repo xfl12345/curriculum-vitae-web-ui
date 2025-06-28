@@ -1,18 +1,18 @@
-import { resolve } from "node:path";
+import { resolve } from 'node:path'
 
-import type { ServerOptions, UserConfig } from "vite";
-import { createLogger, defineConfig, loadEnv } from "vite";
-import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
-import vueDevTools from "vite-plugin-vue-devtools";
-import { mockDevServerPlugin } from "vite-plugin-mock-dev-server";
+import type { ServerOptions, UserConfig } from 'vite'
+import { createLogger, defineConfig, loadEnv } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import { mockDevServerPlugin } from 'vite-plugin-mock-dev-server'
 // import AutoImport from "unplugin-auto-import/vite";
 // import Components from "unplugin-vue-components/vite";
 // import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
-import axios from "axios";
+import axios from 'axios'
 
 export default defineConfig(async ({ mode }) => {
-  const env = loadEnv(mode, process.cwd());
+  const env = loadEnv(mode, process.cwd())
 
   // https://vitejs.dev/config/
   const myViteConfig = {
@@ -20,9 +20,9 @@ export default defineConfig(async ({ mode }) => {
       vue(),
       vueJsx({
         transformOn: true,
-        mergeProps: true
+        mergeProps: true,
       }),
-      vueDevTools()
+      vueDevTools(),
       // babel(),
       // AutoImport({
       //   imports: [
@@ -36,42 +36,42 @@ export default defineConfig(async ({ mode }) => {
       //   resolvers: [NaiveUiResolver()]
       // })
     ],
-    assetsInclude: ["**/*.bmp"],
+    assetsInclude: ['**/*.bmp'],
     resolve: {
       alias: {
         // "@": fileURLToPath(new URL("./src", import.meta.url)),
-        "@": resolve(__dirname, "src"),
-        "vue-i18n": "vue-i18n/dist/vue-i18n.mjs"
-      }
+        '@': resolve(__dirname, 'src'),
+        'vue-i18n': 'vue-i18n/dist/vue-i18n.mjs',
+      },
     },
     build: {
-      assetsDir: "static/",
+      assetsDir: 'static/',
       rollupOptions: {
         output: {
           entryFileNames: `assets/[name].js`,
           chunkFileNames: `assets/[name].js`,
-          assetFileNames: `assets/[name].[ext]`
-        }
-      }
+          assetFileNames: `assets/[name].[ext]`,
+        },
+      },
     },
-    base: "./"
-  } as UserConfig;
+    base: './',
+  } as UserConfig
 
   // 先判断一下是否处于开发模式，再决定是否启用 server
-  if (mode === "development") {
-    const remoteServerHttpScheme = JSON.parse(env.VITE_REMOTE_SERVER_ENABLE_HTTPS ?? "false")
-      ? "https"
-      : "http";
-    const remoteServerWebSocketScheme = JSON.parse(env.VITE_REMOTE_SERVER_ENABLE_WSS ?? "false")
-      ? "wss"
-      : "ws";
+  if (mode === 'development') {
+    const remoteServerHttpScheme = JSON.parse(env.VITE_REMOTE_SERVER_ENABLE_HTTPS ?? 'false')
+      ? 'https'
+      : 'http'
+    const remoteServerWebSocketScheme = JSON.parse(env.VITE_REMOTE_SERVER_ENABLE_WSS ?? 'false')
+      ? 'wss'
+      : 'ws'
 
-    const remoteServerHost = env.VITE_SERVER_REMOTE_HOST ?? "127.0.0.1:8880";
-    const remoteServerRootURL = remoteServerHttpScheme + "://" + remoteServerHost;
+    const remoteServerHost = env.VITE_SERVER_REMOTE_HOST ?? '127.0.0.1:8880'
+    const remoteServerRootURL = remoteServerHttpScheme + '://' + remoteServerHost
 
-    const logger = createLogger("info", { prefix: "[vite:dynamic-mock-server]" });
-    const justLog = (...msg: any[]) => logger.info(msg.join(" "), { clear: false, timestamp: true });
-    justLog("remoteServerRootURL=" + remoteServerRootURL);
+    const logger = createLogger('info', { prefix: '[vite:dynamic-mock-server]' })
+    const justLog = (...msg: any[]) => logger.info(msg.join(' '), { clear: false, timestamp: true })
+    justLog('remoteServerRootURL=' + remoteServerRootURL)
     myViteConfig.server = {
       // hmr: {
       //   overlay: false
@@ -80,52 +80,52 @@ export default defineConfig(async ({ mode }) => {
       // //host: 'localhost',  // 指定服务器主机名
       // // host: '0.0.0.0',
       // // host: '::',
-      host: "::",
+      host: '::',
       proxy: {
-        "/static/secret/": {
+        '/static/secret/': {
           target: remoteServerRootURL,
-          changeOrigin: true
+          changeOrigin: true,
           // rewrite: (path) => path.replace(/^\/backend/, "")
         },
-        "/static/public/": {
+        '/static/public/': {
           target: remoteServerRootURL,
-          changeOrigin: true
+          changeOrigin: true,
         },
-        "/captcha": {
+        '/captcha': {
           target: remoteServerRootURL,
-          changeOrigin: true
+          changeOrigin: true,
         },
-        "/login": {
+        '/login': {
           target: remoteServerRootURL,
-          changeOrigin: true
+          changeOrigin: true,
         },
-        "/logout": {
+        '/logout': {
           target: remoteServerRootURL,
-          changeOrigin: true
+          changeOrigin: true,
         },
-        "/sms": {
+        '/sms': {
           target: remoteServerRootURL,
-          changeOrigin: true
+          changeOrigin: true,
         },
-        "/sms/ws-connect": {
-          target: remoteServerWebSocketScheme + "://" + remoteServerHost,
-          changeOrigin: true
-        }
-      }
-    } as Partial<ServerOptions>;
+        '/sms/ws-connect': {
+          target: remoteServerWebSocketScheme + '://' + remoteServerHost,
+          changeOrigin: true,
+        },
+      },
+    } as Partial<ServerOptions>
 
     try {
       // 验证 远程API 是否可用
-      await axios.get(remoteServerRootURL + "/login/status");
-      justLog("Remote server API request succeed!");
-      return myViteConfig;
+      await axios.get(remoteServerRootURL + '/login/status')
+      justLog('Remote server API request succeed!')
+      return myViteConfig
     } catch (error) {
       // 当 远程API 不可用的时候，使用 mock
-      justLog("Remote server API request failed! Use mock instead.");
-      myViteConfig.plugins!.push(mockDevServerPlugin());
-      return myViteConfig;
+      justLog('Remote server API request failed! Use mock instead.')
+      myViteConfig.plugins!.push(mockDevServerPlugin())
+      return myViteConfig
     }
   } else {
-    return myViteConfig;
+    return myViteConfig
   }
-});
+})

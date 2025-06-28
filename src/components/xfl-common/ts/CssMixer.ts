@@ -1,14 +1,14 @@
-import type { VuePartialCssProperties } from "./VuePartialCssProperties";
+import type { VuePartialCssProperties } from './VuePartialCssProperties'
 
 export const cssMixer = (
   defaultCssStyle: VuePartialCssProperties,
   inputCssStyle: VuePartialCssProperties
 ): VuePartialCssProperties => {
-  const theStyle: VuePartialCssProperties = { ...(defaultCssStyle as any) };
+  const theStyle: VuePartialCssProperties = { ...(defaultCssStyle as any) }
   if (defaultCssStyle !== inputCssStyle) {
     Object.keys(inputCssStyle).forEach((key) => {
-      (theStyle as any)[key] = inputCssStyle[key as keyof typeof inputCssStyle];
-    });
+      ;(theStyle as any)[key] = inputCssStyle[key as keyof typeof inputCssStyle]
+    })
   }
-  return theStyle;
-};
+  return theStyle
+}

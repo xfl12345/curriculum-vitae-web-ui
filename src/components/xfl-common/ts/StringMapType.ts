@@ -1,3 +1,3 @@
 export interface StringKeyMapType {
-  [index: string]: any;
+  [index: string]: any
 }

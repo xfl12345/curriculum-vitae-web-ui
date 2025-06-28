@@ -5,4 +5,4 @@
 //   left
 // }
 
-export type EnumDirection = "top" | "right" | "bottom" | "left";
+export type EnumDirection = 'top' | 'right' | 'bottom' | 'left'

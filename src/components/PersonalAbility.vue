@@ -30,35 +30,35 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, type PropType, ref } from "vue";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import RainbowProgressBar from "@/components/xfl-common/vue/RainbowProgressBar.vue";
-import { SkillDegree } from "@/tsmod/SkillDegree";
+import { computed, type PropType, ref } from 'vue'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
+import RainbowProgressBar from '@/components/xfl-common/vue/RainbowProgressBar.vue'
+import { SkillDegree } from '@/tsmod/SkillDegree'
 
-const templateRoot = ref<HTMLDivElement>();
+const templateRoot = ref<HTMLDivElement>()
 
 const props = defineProps({
   theFontSizeInPixel: {
     type: Number,
-    default: 24
+    default: 24,
   },
   skillDegreeList: {
     type: Array as PropType<SkillDegree[]>,
     default: () => {
-      return [];
-    }
-  }
-});
+      return []
+    },
+  },
+})
 
 const theFontSize = computed(() => {
-  return props.theFontSizeInPixel + "px";
-});
+  return props.theFontSizeInPixel + 'px'
+})
 
 const theLineHeight = computed(() => {
-  return Math.ceil(props.theFontSizeInPixel * 1.25) + "px";
-});
+  return Math.ceil(props.theFontSizeInPixel * 1.25) + 'px'
+})
 
 const quarterOfFontSize = computed(() => {
-  return Math.floor(props.theFontSizeInPixel / 4) + "px";
-});
+  return Math.floor(props.theFontSizeInPixel / 4) + 'px'
+})
 </script>

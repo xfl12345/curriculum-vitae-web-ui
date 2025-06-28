@@ -31,52 +31,52 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   props: {
     xGrow: {
       type: String,
-      default: "0"
+      default: '0',
     },
     xBasis: {
       type: String,
-      default: "auto"
+      default: 'auto',
     },
     xShrink: {
       type: String,
-      default: "1"
+      default: '1',
     },
     yGrow: {
       type: String,
-      default: "0"
+      default: '0',
     },
     yBasis: {
       type: String,
-      default: "auto"
+      default: 'auto',
     },
     yShrink: {
       type: String,
-      default: "1"
-    }
+      default: '1',
+    },
   },
   setup() {
-    const templateRoot = ref<HTMLDivElement>();
-    const columnCenterBox = ref<HTMLDivElement>();
-    const rowCenterBox = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
+    const columnCenterBox = ref<HTMLDivElement>()
+    const rowCenterBox = ref<HTMLDivElement>()
     return {
       templateRoot,
       columnCenterBox,
-      rowCenterBox
-    };
+      rowCenterBox,
+    }
   },
   data() {
-    return {};
+    return {}
   },
   watch: {},
   mounted() {},
-  methods: {}
-});
+  methods: {},
+})
 </script>
 
 <style scoped></style>

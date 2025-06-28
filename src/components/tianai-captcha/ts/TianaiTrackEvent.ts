@@ -1,16 +1,16 @@
-import { Point2D } from "./Point";
-import { Step } from "./Step";
+import { Point2D } from './Point'
+import { Step } from './Step'
 
 export class TianaiTrackEvent {
-  startTime?: Date;
+  startTime?: Date
 
-  stopTime?: Date;
+  stopTime?: Date
 
-  tracks: Step[] = [];
+  tracks: Step[] = []
 
-  startPoint?: Point2D;
+  startPoint?: Point2D
 
-  moveX: number = 0;
+  moveX: number = 0
 
-  movePercent: number = 0;
+  movePercent: number = 0
 }

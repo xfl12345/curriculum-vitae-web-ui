@@ -24,23 +24,23 @@
 </template>
 
 <script setup lang="tsx">
-import { computed } from "vue";
-import { getTextSize } from "@/components/xfl-common/ts/FontUtils";
+import { computed } from 'vue'
+import { getTextSize } from '@/components/xfl-common/ts/FontUtils'
 
 const props = defineProps({
   theFontSizeInPixel: {
     type: Number,
-    default: () => getTextSize("medium")
+    default: () => getTextSize('medium'),
   },
   message: {
     type: String,
-    default: ""
-  }
-});
+    default: '',
+  },
+})
 
-const emit = defineEmits(["jump2LoginPage", "refreshCvData"]);
+const emit = defineEmits(['jump2LoginPage', 'refreshCvData'])
 
 const theFontSize = computed<string>(() => {
-  return props.theFontSizeInPixel + "px";
-});
+  return props.theFontSizeInPixel + 'px'
+})
 </script>

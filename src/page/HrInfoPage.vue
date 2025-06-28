@@ -17,29 +17,29 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import "vxe-table/lib/style.css";
-import { VxeGrid, VxePager, type VxeGridInstance, type VxeGridProps } from "vxe-table";
+import { defineComponent, ref } from 'vue'
+import 'vxe-table/lib/style.css'
+import { VxeGrid, VxePager, type VxeGridInstance, type VxeGridProps } from 'vxe-table'
 
 export default defineComponent({
   components: { VxeGrid, VxePager },
   props: {},
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
-    const xGrid = ref<VxeGridInstance>();
+    const templateRoot = ref<HTMLDivElement>()
+    const xGrid = ref<VxeGridInstance>()
 
     return {
       xGrid,
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
-    const myself = this;
+    const myself = this
     const gridOptions: VxeGridProps = {
       loading: false,
-      height: "700px",
-      headerAlign: "center",
+      height: '700px',
+      headerAlign: 'center',
       keepSource: true,
       autoResize: true,
       stripe: true,
@@ -47,40 +47,40 @@ export default defineComponent({
       customConfig: {
         storage: {
           visible: true,
-          resizable: true
-        }
+          resizable: true,
+        },
       },
       editConfig: {
-        trigger: "manual",
-        mode: "row",
+        trigger: 'manual',
+        mode: 'row',
         showStatus: true,
-        icon: "fa fa-file-text-o"
+        icon: 'fa fa-file-text-o',
       },
       columnConfig: {
         resizable: true,
         isCurrent: true,
         isHover: true,
-        useKey: true
+        useKey: true,
       },
       rowConfig: {
         isCurrent: true,
         isHover: true,
-        useKey: true
+        useKey: true,
       },
       mouseConfig: {
-        selected: true
+        selected: true,
       },
       toolbarConfig: {
         custom: true,
         refresh: {
           queryMethod: (obj) => {
-            console.log("vxeTable触发了 toolbar 刷新事件，page=" + JSON.stringify(obj.page));
-            return myself.handleVxeTableAjaxQuery(obj);
-          }
-        }
+            console.log('vxeTable触发了 toolbar 刷新事件，page=' + JSON.stringify(obj.page))
+            return myself.handleVxeTableAjaxQuery(obj)
+          },
+        },
       },
       pagerConfig: {
-        pageSize: 15
+        pageSize: 15,
       },
       // proxyConfig: {
       //   ajax: {
@@ -91,25 +91,25 @@ export default defineComponent({
       //   }
       // },
       columns: [
-        { type: "checkbox", width: 60 },
-        { field: "name", title: "Name", width: 200, resizable: false, slots: { header: "name_header" } },
-        { field: "age", title: "Age", width: 100 },
+        { type: 'checkbox', width: 60 },
+        { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header' } },
+        { field: 'age', title: 'Age', width: 100 },
         {
-          field: "num1",
-          title: "Num1",
+          field: 'num1',
+          title: 'Num1',
           showHeaderOverflow: true,
-          filters: [{ data: "" }],
-          editRender: { autofocus: ".my-input" }
-        }
-      ]
+          filters: [{ data: '' }],
+          editRender: { autofocus: '.my-input' },
+        },
+      ],
       // data: []
-    };
+    }
     return {
       gridOptions,
       gridData: {
-        selectRecords: [] as any[]
-      }
-    };
+        selectRecords: [] as any[],
+      },
+    }
   },
   computed: {},
   watch: {},
@@ -126,10 +126,10 @@ export default defineComponent({
   methods: {
     handleVxeTableAjaxQuery(obj: { [key: string]: any }) {
       return new Promise((resolve, reject) => {
-        resolve(666);
-      });
+        resolve(666)
+      })
     },
-    handlePageChange() {}
-  }
-});
+    handlePageChange() {},
+  },
+})
 </script>

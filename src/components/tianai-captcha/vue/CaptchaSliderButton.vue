@@ -6,8 +6,8 @@
       {
         width: boxWidth,
         height: boxWidth,
-        padding: enableShadow ? boxShadowSpreadWidthInPixel + 'px' : undefined
-      }
+        padding: enableShadow ? boxShadowSpreadWidthInPixel + 'px' : undefined,
+      },
     ]"
   >
     <!-- 圆圈边框 -->
@@ -64,17 +64,17 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
-import type { EnumSizingType } from "@/components/xfl-common/ts/EnumSizingType";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import DivVerticalEquidistantLine from "./DivVerticalEquidistantLine.vue";
-import DivSliderPicture from "./DivSliderPicture.vue";
+import { defineComponent, type PropType, ref } from 'vue'
+import { cssMixer } from '@/components/xfl-common/ts/CssMixer'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
+import type { EnumSizingType } from '@/components/xfl-common/ts/EnumSizingType'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import DivVerticalEquidistantLine from './DivVerticalEquidistantLine.vue'
+import DivSliderPicture from './DivSliderPicture.vue'
 
 const defaultCssStyle: VuePartialCssProperties = {
-  backgroundColor: "white"
-};
+  backgroundColor: 'white',
+}
 
 export default defineComponent({
   components: { CenterBox, DivSliderPicture, DivVerticalEquidistantLine },
@@ -85,23 +85,23 @@ export default defineComponent({
     // },
     isDisabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     sizingType: {
       type: String as PropType<EnumSizingType>,
-      default: "border"
+      default: 'border',
     },
     domSquareBoxWidth: {
       type: Number,
-      default: 56
+      default: 56,
     },
     deepInPixel: {
       type: Number,
-      default: -1
+      default: -1,
     },
     propsRadiusInPixel: {
       type: Number,
-      default: 56
+      default: 56,
     },
     // 因为 DivSliderPicture 暂不支持控制是否启用阴影，所以只好先强制默认开启
     // enableShadow: {
@@ -110,121 +110,121 @@ export default defineComponent({
     // },
     centerIconFillColor: {
       type: String,
-      default: "#03DE00"
+      default: '#03DE00',
     },
     propsCssStyle: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
+      default: (): VuePartialCssProperties => defaultCssStyle,
     },
     touchMovePreventDefault: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   emits: [
-    "buttonOnMouseDown",
-    "buttonOnMouseUp",
-    "buttonOnTouchStart",
-    "buttonOnTouchEnd",
-    "radiusChanged"
+    'buttonOnMouseDown',
+    'buttonOnMouseUp',
+    'buttonOnTouchStart',
+    'buttonOnTouchEnd',
+    'radiusChanged',
   ],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
     return {
       isMoving: false,
-      enableShadow: true
-    };
+      enableShadow: true,
+    }
   },
   computed: {
     boxWidthInPixel() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
+        case 'content': {
           result =
             myself.propsRadiusInPixel! * 2 +
-            (myself.enableShadow ? myself.boxShadowSpreadWidthInPixel * 2 : 0);
-          break;
+            (myself.enableShadow ? myself.boxShadowSpreadWidthInPixel * 2 : 0)
+          break
         }
-        case "border":
+        case 'border':
         default: {
-          result = myself.domSquareBoxWidth;
-          break;
+          result = myself.domSquareBoxWidth
+          break
         }
       }
 
-      return result;
+      return result
     },
     boxWidth() {
-      return this.boxWidthInPixel + "px";
+      return this.boxWidthInPixel + 'px'
     },
     radiusInPixel() {
-      const myself = this;
-      let result = 0;
+      const myself = this
+      let result = 0
 
       switch (myself.sizingType) {
-        case "content": {
-          result = myself.propsRadiusInPixel;
-          break;
+        case 'content': {
+          result = myself.propsRadiusInPixel
+          break
         }
-        case "border":
+        case 'border':
         default: {
           result =
-            myself.boxWidthInPixel / 2 - (myself.enableShadow ? myself.boxShadowSpreadWidthInPixel : 0);
-          break;
+            myself.boxWidthInPixel / 2 - (myself.enableShadow ? myself.boxShadowSpreadWidthInPixel : 0)
+          break
         }
       }
 
-      return Math.floor(result);
+      return Math.floor(result)
     },
     radius() {
-      return this.radiusInPixel + "px";
+      return this.radiusInPixel + 'px'
     },
     pictureHeightInPixel() {
       // return (this.radiusInPixel * 2) / 7;
       // 2除以7 约等于 292除以1024 ，292 / 1024 = 0.2861328125
       // return this.radiusInPixel * 0.2861328125;
-      return this.radiusInPixel * 0.618;
+      return this.radiusInPixel * 0.618
       // return this.radiusInPixel * 0.75;
     },
     boxShadowSpreadWidthInPixel() {
-      const myself = this;
-      const deep = myself.deepInPixel < 0 ? myself.boxWidthInPixel * (1 - 0.618) : myself.deepInPixel;
+      const myself = this
+      const deep = myself.deepInPixel < 0 ? myself.boxWidthInPixel * (1 - 0.618) : myself.deepInPixel
       // 黄金等腰三角形，凹槽深度做高，取底边的一半
-      return deep / Math.tan((72 / 180) * Math.PI);
+      return deep / Math.tan((72 / 180) * Math.PI)
     },
     shadowStyle() {
-      return "0 0 " + this.boxShadowSpreadWidthInPixel + "px 0 #999999";
+      return '0 0 ' + this.boxShadowSpreadWidthInPixel + 'px 0 #999999'
     },
     cssStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle);
+      const myself = this
+      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle)
       if (myself.enableShadow) {
-        theStyle.boxShadow = myself.shadowStyle;
+        theStyle.boxShadow = myself.shadowStyle
       }
 
-      return theStyle;
-    }
+      return theStyle
+    },
   },
   watch: {
     radiusInPixel(newValue, oldValue) {
       if (newValue !== oldValue) {
-        this.$emit("radiusChanged", newValue);
+        this.$emit('radiusChanged', newValue)
       }
-    }
+    },
   },
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    this.$emit("radiusChanged", this.radiusInPixel);
+    this.$emit('radiusChanged', this.radiusInPixel)
   },
   beforeUpdate() {},
   updated() {},
@@ -234,21 +234,21 @@ export default defineComponent({
   unmounted() {},
   methods: {
     buttonOnMouseDown(event: MouseEvent) {
-      this.isMoving = true;
-      this.$emit("buttonOnMouseDown", event);
+      this.isMoving = true
+      this.$emit('buttonOnMouseDown', event)
     },
     buttonOnMouseUp(event: MouseEvent) {
-      this.isMoving = false;
-      this.$emit("buttonOnMouseUp", event);
+      this.isMoving = false
+      this.$emit('buttonOnMouseUp', event)
     },
     buttonOnTouchStart(event: TouchEvent) {
-      this.isMoving = true;
-      this.$emit("buttonOnTouchStart", event);
+      this.isMoving = true
+      this.$emit('buttonOnTouchStart', event)
     },
     buttonOnTouchEnd(event: TouchEvent) {
-      this.isMoving = false;
-      this.$emit("buttonOnTouchEnd", event);
-    }
-  }
-});
+      this.isMoving = false
+      this.$emit('buttonOnTouchEnd', event)
+    },
+  },
+})
 </script>

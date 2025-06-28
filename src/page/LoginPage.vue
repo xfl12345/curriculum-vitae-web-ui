@@ -22,7 +22,7 @@
               :style="{
                 padding: boxPaddingInPixel + 'px',
                 // R^2=2*((R-P)^2)  --->  R=(2+sqrt(2))*P
-                borderRadius: boxPaddingInPixel * 3.4142 + 'px'
+                borderRadius: boxPaddingInPixel * 3.4142 + 'px',
               }"
             >
               <div
@@ -33,7 +33,7 @@
                   style="width: 100%; text-align: center"
                   :style="{ fontSize: theFontSizeInPixel * 2 + 'px' }"
                 >
-                  <span v-if="loginMessage === ''">{{ t("word.welcome") }}</span>
+                  <span v-if="loginMessage === ''">{{ t('word.welcome') }}</span>
                   <span :style="{ color: signedIn ? 'lawngreen' : 'red' }">{{ loginMessage }}</span>
                 </div>
                 <br />
@@ -78,18 +78,19 @@
                             // flexGrow: 0,
                             // flexShrink: 0,
                             // flexBasis: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
-                            minWidth: theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px'
+                            minWidth:
+                              theFontSizeInPixel * 4 + Math.floor(theFontSizeInPixel / 2) * 2 + 'px',
                           }"
                           @click.prevent="
                             () => {
                               if (!isInSmsCoolDown) {
-                                captchaPanelOpened = true;
+                                captchaPanelOpened = true
                               }
                             }
                           "
                         >
                           <span>{{
-                            isInSmsCoolDown ? smsCoolDownTimeLeft : t("message.clickMe2Get")
+                            isInSmsCoolDown ? smsCoolDownTimeLeft : t('message.clickMe2Get')
                           }}</span>
                         </div>
                       </template>
@@ -106,10 +107,10 @@
                   :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
                 >
                   <button class="mySubmitBtn" style="cursor: pointer" @click="onClickLoginButton">
-                    {{ t("word.login") }}
+                    {{ t('word.login') }}
                   </button>
                   <button class="mySubmitBtn" style="cursor: pointer" @click="onClickAnonymousEntryButton">
-                    {{ t("word.anonymousEntry") }}
+                    {{ t('word.anonymousEntry') }}
                   </button>
                 </div>
               </div>
@@ -128,7 +129,7 @@
                   :style="{ paddingBottom: theFontSizeInPixel / 2 + 'px' }"
                 >
                   <button class="mySubmitBtn" style="cursor: pointer" @click="onClickLogoutButton">
-                    {{ t("word.logout") }}
+                    {{ t('word.logout') }}
                   </button>
                 </div>
               </div>
@@ -163,37 +164,37 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { useGlobalStore } from "@/store";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
-import XflsSingleLineInput from "@/components/xfl-common/vue/XflsSingleLineInput.vue";
-import CaptchaBoxTypeRotate from "@/components/tianai-captcha/vue/CaptchaBoxTypeRotate.vue";
-import { XFLsCvCaptchaClient } from "@/model/XFLsCvCaptchaClient";
-import { CountDownHelper } from "@/components/xfl-common/ts/CountDownHelper";
-import type { RequestResult } from "@/components/tianai-captcha/ts/TianaiCaptchaClient";
-import type { IGenericJsonApiResponseData, RateLimitedApiResultPayload } from "@/model/JsonApiResponseData";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import { getTextSize } from "@/components/xfl-common/ts/FontUtils";
+import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useGlobalStore } from '@/store'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
+import XflsSingleLineInput from '@/components/xfl-common/vue/XflsSingleLineInput.vue'
+import CaptchaBoxTypeRotate from '@/components/tianai-captcha/vue/CaptchaBoxTypeRotate.vue'
+import { XFLsCvCaptchaClient } from '@/model/XFLsCvCaptchaClient'
+import { CountDownHelper } from '@/components/xfl-common/ts/CountDownHelper'
+import type { RequestResult } from '@/components/tianai-captcha/ts/TianaiCaptchaClient'
+import type { IGenericJsonApiResponseData, RateLimitedApiResultPayload } from '@/model/JsonApiResponseData'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import { getTextSize } from '@/components/xfl-common/ts/FontUtils'
 
-import { getPublicWebUiData } from "@/model/JsonDataApi";
+import { getPublicWebUiData } from '@/model/JsonDataApi'
 
 export default defineComponent({
   components: {
     CaptchaBoxTypeRotate,
     XflsSingleLineInput,
-    CenterBox
+    CenterBox,
   },
   setup() {
-    const templateRoot = ref<HTMLDivElement>();
-    const contentBox = ref<HTMLDivElement>();
-    const inputPhoneNumber = ref<InstanceType<typeof XflsSingleLineInput>>();
-    const inputVerificationCode = ref<InstanceType<typeof XflsSingleLineInput>>();
+    const templateRoot = ref<HTMLDivElement>()
+    const contentBox = ref<HTMLDivElement>()
+    const inputPhoneNumber = ref<InstanceType<typeof XflsSingleLineInput>>()
+    const inputVerificationCode = ref<InstanceType<typeof XflsSingleLineInput>>()
 
-    const router = useRouter();
-    const store = useGlobalStore();
-    const { t } = useI18n();
+    const router = useRouter()
+    const store = useGlobalStore()
+    const { t } = useI18n()
     return {
       templateRoot,
       contentBox,
@@ -201,193 +202,193 @@ export default defineComponent({
       inputVerificationCode,
       router,
       store,
-      t
-    };
+      t,
+    }
   },
   data() {
-    const myself = this;
-    const tianaiCaptchaClient = new XFLsCvCaptchaClient();
-    const smsCoolDownHelper = new CountDownHelper();
-    smsCoolDownHelper.timeout = 60 * 1000;
+    const myself = this
+    const tianaiCaptchaClient = new XFLsCvCaptchaClient()
+    const smsCoolDownHelper = new CountDownHelper()
+    smsCoolDownHelper.timeout = 60 * 1000
 
     return {
       theFontSizeInPixel: 16,
-      phoneNumber: "",
-      verificationCode: "",
+      phoneNumber: '',
+      verificationCode: '',
       signedIn: false,
-      loginMessage: "",
+      loginMessage: '',
       captchaPanelOpened: false,
       captchaPassed: false,
       smsCoolDownTimeLeft: 0,
       smsCoolDownHelper,
       tianaiCaptchaClient,
       captchaBoxDomWidth: 360,
-      extraTextOfChinaICP: "",
-      theBackGroundImage: ""
-    };
+      extraTextOfChinaICP: '',
+      theBackGroundImage: '',
+    }
   },
   computed: {
     theRootWidth(): number {
-      return this.store.globalState.uiCalculation.document.body.clientWidth;
+      return this.store.globalState.uiCalculation.document.body.clientWidth
     },
     theRootHeight(): number {
-      return this.store.globalState.uiCalculation.window.innerHeight;
+      return this.store.globalState.uiCalculation.window.innerHeight
     },
     theCenterBoxMinWidth(): number {
-      const myself = this;
-      return myself.getCenterBoxMinWidth(myself.theFontSizeInPixel);
+      const myself = this
+      return myself.getCenterBoxMinWidth(myself.theFontSizeInPixel)
     },
     theFontSize(): string {
-      return this.theFontSizeInPixel + "px";
+      return this.theFontSizeInPixel + 'px'
     },
     boxPaddingInPixel(): number {
-      return this.theFontSizeInPixel / 4;
+      return this.theFontSizeInPixel / 4
     },
     formDivHorizontalPadding(): string {
-      return this.theFontSizeInPixel * 2 + "px";
+      return this.theFontSizeInPixel * 2 + 'px'
     },
     isInSmsCoolDown() {
-      return this.smsCoolDownTimeLeft > 0;
+      return this.smsCoolDownTimeLeft > 0
     },
     rootStyle(): VuePartialCssProperties {
-      const myself = this;
-      const uiCalculation = myself.store.globalState.uiCalculation;
+      const myself = this
+      const uiCalculation = myself.store.globalState.uiCalculation
       return {
         // width: uiCalculation.window.screen.availWidth + "px",
         // height: uiCalculation.window.screen.availHeight + "px",
-        width: myself.theRootWidth + "px",
-        height: myself.theRootHeight + "px",
+        width: myself.theRootWidth + 'px',
+        height: myself.theRootHeight + 'px',
         // width: uiCalculation.document.body.scrollWidth + "px",
         // height: uiCalculation.document.body.scrollHeight + "px",
-        minWidth: myself.theCenterBoxMinWidth + "px",
+        minWidth: myself.theCenterBoxMinWidth + 'px',
         fontSize: myself.theFontSize,
         // minWidth: myself.theFontSizeInPixel * 26 + "px"
         backgroundImage:
-          myself.theBackGroundImage === "" ? undefined : `url('${myself.theBackGroundImage}')`
-      };
-    }
+          myself.theBackGroundImage === '' ? undefined : `url('${myself.theBackGroundImage}')`,
+      }
+    },
   },
   beforeMount() {
-    const myself = this;
-    myself.theFontSizeInPixel = myself.getTheFontSizeInPixel();
+    const myself = this
+    myself.theFontSizeInPixel = myself.getTheFontSizeInPixel()
     getPublicWebUiData().then((publicWebUiData) => {
-      console.log(publicWebUiData);
-      myself.extraTextOfChinaICP = publicWebUiData.textOfChinaICP;
-      myself.theBackGroundImage = publicWebUiData.backgroundPathOfIndexPage;
-    });
+      console.log(publicWebUiData)
+      myself.extraTextOfChinaICP = publicWebUiData.textOfChinaICP
+      myself.theBackGroundImage = publicWebUiData.backgroundPathOfIndexPage
+    })
     myself.store.globalState.loginManager.isAlreadyLogin().then((result: boolean) => {
-      myself.signedIn = result;
-    });
+      myself.signedIn = result
+    })
   },
   mounted() {
-    const myself = this;
+    const myself = this
     myself.captchaBoxDomWidth =
-      parseInt(getComputedStyle(myself.contentBox!).width, 10) - myself.boxPaddingInPixel * 2;
+      parseInt(getComputedStyle(myself.contentBox!).width, 10) - myself.boxPaddingInPixel * 2
     if (myself.captchaBoxDomWidth > 600) {
-      myself.captchaBoxDomWidth = 600;
+      myself.captchaBoxDomWidth = 600
     }
 
     myself.tianaiCaptchaClient.verificationPayloadSupplier = () => {
       return new Promise<any>((resolve) => {
         resolve({
-          operation: "pull-sms-verification-code",
-          data: { phoneNumber: myself.phoneNumber }
-        });
-      });
-    };
+          operation: 'pull-sms-verification-code',
+          data: { phoneNumber: myself.phoneNumber },
+        })
+      })
+    }
   },
   unmounted() {
-    const myself = this;
+    const myself = this
   },
   methods: {
     getCenterBoxMinWidth(fontSizeInPixel: number) {
-      return fontSizeInPixel * 22; // 保证至少保留 22 个字的宽度
+      return fontSizeInPixel * 22 // 保证至少保留 22 个字的宽度
     },
     getTheFontSizeInPixel(): number {
-      const myself = this;
-      const globalFontSize = myself.store.theFontSizeInPixel;
-      let fontSize = globalFontSize;
+      const myself = this
+      const globalFontSize = myself.store.theFontSizeInPixel
+      let fontSize = globalFontSize
       if (myself.getCenterBoxMinWidth(globalFontSize) > myself.theRootWidth) {
         do {
-          fontSize -= 1;
-        } while (myself.getCenterBoxMinWidth(fontSize) > myself.theRootWidth);
+          fontSize -= 1
+        } while (myself.getCenterBoxMinWidth(fontSize) > myself.theRootWidth)
       }
 
-      fontSize = Math.floor(fontSize);
+      fontSize = Math.floor(fontSize)
       if (fontSize === 0) {
-        fontSize = Math.round(getTextSize("medium")); // 破罐破摔
+        fontSize = Math.round(getTextSize('medium')) // 破罐破摔
       }
 
-      return fontSize;
+      return fontSize
     },
     onInputPhoneNumberKeyDownEnter() {
-      const myself = this;
-      myself.inputVerificationCode!.inputArea!.click();
+      const myself = this
+      myself.inputVerificationCode!.inputArea!.click()
     },
     onInputVerificationCodeKeyDownEnter() {
-      const myself = this;
-      myself.onClickLoginButton();
+      const myself = this
+      myself.onClickLoginButton()
     },
     onClickLoginButton() {
-      const myself = this;
+      const myself = this
       myself.store.globalState.loginManager
         .loginViaSms(myself.phoneNumber, myself.verificationCode)
         .then((result: any) => {
-          myself.signedIn = result.success;
-          myself.loginMessage = result.message;
+          myself.signedIn = result.success
+          myself.loginMessage = result.message
           if (result.success) {
-            myself.jump2CvPage();
+            myself.jump2CvPage()
           }
-        });
+        })
     },
     onClickAnonymousEntryButton() {
-      const myself = this;
+      const myself = this
       myself.store.globalState.loginManager.loginAsAnonymous().then((result: any) => {
-        myself.signedIn = result;
-        myself.loginMessage = "";
-        myself.jump2CvPage();
-      });
+        myself.signedIn = result
+        myself.loginMessage = ''
+        myself.jump2CvPage()
+      })
     },
     onClickLogoutButton() {
-      const myself = this;
+      const myself = this
       myself.store.globalState.loginManager.logout().then((result: boolean) => {
-        myself.signedIn = !result;
-        myself.loginMessage = "";
-      });
+        myself.signedIn = !result
+        myself.loginMessage = ''
+      })
     },
     onCaptchaDone(args: RequestResult) {
-      const myself = this;
-      myself.captchaPassed = args.success;
+      const myself = this
+      myself.captchaPassed = args.success
       if (myself.captchaPassed) {
-        myself.captchaPanelOpened = false;
+        myself.captchaPanelOpened = false
       }
 
       const responseData = args.payload as IGenericJsonApiResponseData<
         IGenericJsonApiResponseData<RateLimitedApiResultPayload>
-      >;
-      let loginMessage = "";
+      >
+      let loginMessage = ''
       if (responseData.success) {
-        loginMessage += "人机验证通过。";
+        loginMessage += '人机验证通过。'
         if (responseData.data.success) {
-          loginMessage += "拉取短信验证码成功！";
-          myself.smsCoolDownHelper.timeout = responseData.data.data.coolDownRemainder;
+          loginMessage += '拉取短信验证码成功！'
+          myself.smsCoolDownHelper.timeout = responseData.data.data.coolDownRemainder
           myself.smsCoolDownHelper.start((eta) => {
-            myself.smsCoolDownTimeLeft = Math.floor(eta / 1000);
-          });
+            myself.smsCoolDownTimeLeft = Math.floor(eta / 1000)
+          })
         } else {
-          loginMessage += "拉取短信验证码失败！" + responseData.data.message;
+          loginMessage += '拉取短信验证码失败！' + responseData.data.message
         }
       } else {
-        loginMessage += "人机验证失败。";
+        loginMessage += '人机验证失败。'
       }
 
-      myself.loginMessage = loginMessage;
+      myself.loginMessage = loginMessage
     },
     jump2CvPage() {
-      this.router.push({ name: "cv" });
-    }
-  }
-});
+      this.router.push({ name: 'cv' })
+    },
+  },
+})
 </script>
 
 <style scoped>

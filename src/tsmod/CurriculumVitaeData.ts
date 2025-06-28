@@ -1,70 +1,70 @@
-import { SkillDegree } from "@/tsmod/SkillDegree";
-import { ValuePair } from "@/tsmod/ValuePair";
+import { SkillDegree } from '@/tsmod/SkillDegree'
+import { ValuePair } from '@/tsmod/ValuePair'
 
 export interface JourneyItem {
-  id: number;
-  period: string;
-  headerCenter: string;
-  headerRight: string;
-  body?: string;
+  id: number
+  period: string
+  headerCenter: string
+  headerRight: string
+  body?: string
 }
 
 export interface OnlyContentItem {
-  id: number;
-  content: string;
+  id: number
+  content: string
 }
 
 // export
 
 export interface BasicInformation {
-  name?: ValuePair;
-  phoneNumberSameToWechat?: ValuePair;
-  emailAddress?: ValuePair;
-  birthdayInYearAndMonth?: ValuePair;
-  maritalStatus?: ValuePair;
-  jobPrefer: ValuePair;
-  nation?: ValuePair;
-  stature?: ValuePair;
-  schooling?: ValuePair;
-  lastInstitute?: ValuePair;
-  nativePlace?: ValuePair;
-  facePhoto: string;
-  [propName: string]: any;
+  name?: ValuePair
+  phoneNumberSameToWechat?: ValuePair
+  emailAddress?: ValuePair
+  birthdayInYearAndMonth?: ValuePair
+  maritalStatus?: ValuePair
+  jobPrefer: ValuePair
+  nation?: ValuePair
+  stature?: ValuePair
+  schooling?: ValuePair
+  lastInstitute?: ValuePair
+  nativePlace?: ValuePair
+  facePhoto: string
+  [propName: string]: any
 }
 
 export class EmptyBasicInformation implements BasicInformation {
   jobPrefer: {
-    theDisplayValue: "";
+    theDisplayValue: ''
 
-    theCopyValue: "";
-  };
+    theCopyValue: ''
+  }
 
   // 空白 1px 图片
-  facePhoto: "data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==";
+  facePhoto: 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=='
 }
 
 export interface ProjectExperienceItem {
-  id: number;
-  period: string;
-  name: string;
-  technologyStack: string;
-  body?: string;
+  id: number
+  period: string
+  name: string
+  technologyStack: string
+  body?: string
 }
 
 export class CurriculumVitaeData {
-  basicInformation: BasicInformation = new EmptyBasicInformation();
+  basicInformation: BasicInformation = new EmptyBasicInformation()
 
-  community: object = {};
+  community: object = {}
 
-  skillDegree: SkillDegree[] = [];
+  skillDegree: SkillDegree[] = []
 
-  journey: JourneyItem[] = [];
+  journey: JourneyItem[] = []
 
-  projectExperience: ProjectExperienceItem[] = [];
+  projectExperience: ProjectExperienceItem[] = []
 
-  certificate: OnlyContentItem[] = [];
+  certificate: OnlyContentItem[] = []
 
-  interestingBlog: OnlyContentItem[] = [];
+  interestingBlog: OnlyContentItem[] = []
 
-  selfAppraisal: string = "";
+  selfAppraisal: string = ''
 }

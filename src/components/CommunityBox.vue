@@ -68,60 +68,60 @@
 </template>
 
 <script setup lang="tsx">
-import { reactive, ref, computed, watch } from "vue";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import UrlItem from "@/components/UrlItem.vue";
+import { reactive, ref, computed, watch } from 'vue'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
+import UrlItem from '@/components/UrlItem.vue'
 
 const props = withDefaults(
   defineProps<{
-    theFontSizeInPixel?: number;
-    communityUrlList?: string[];
-    wechatUrl?: string;
-    weChatHeadPhoto?: string;
-    curriculumVitaeSourceCodeUrl?: string;
+    theFontSizeInPixel?: number
+    communityUrlList?: string[]
+    wechatUrl?: string
+    weChatHeadPhoto?: string
+    curriculumVitaeSourceCodeUrl?: string
   }>(),
   {
     theFontSizeInPixel: 16,
     communityUrlList: () => [],
-    wechatUrl: "",
-    weChatHeadPhoto: "",
-    curriculumVitaeSourceCodeUrl: ""
+    wechatUrl: '',
+    weChatHeadPhoto: '',
+    curriculumVitaeSourceCodeUrl: '',
   }
-);
+)
 
-const templateRoot = ref<HTMLDivElement>();
-const qrCodeLeftBox = ref<HTMLDivElement>();
-const qrCodeWeChat = ref<HTMLDivElement>();
-const qrCodeCurriculumVitaeSourceCode = ref<HTMLDivElement>();
+const templateRoot = ref<HTMLDivElement>()
+const qrCodeLeftBox = ref<HTMLDivElement>()
+const qrCodeWeChat = ref<HTMLDivElement>()
+const qrCodeCurriculumVitaeSourceCode = ref<HTMLDivElement>()
 
 const state = reactive({
   isQrCodeRightBoxUiCanLoad: false,
   isQrCodeLeftBoxUiLoaded: false,
-  qrCodeLeftBoxHeightInPixel: 0
-});
+  qrCodeLeftBoxHeightInPixel: 0,
+})
 
-const qrCodeRightBoxHeightInPixel = computed(() => state.qrCodeLeftBoxHeightInPixel);
-const qrCodeRightBoxHeight = computed(() => qrCodeRightBoxHeightInPixel.value + "px");
-const theFontSize = computed(() => props.theFontSizeInPixel + "px");
-const fingerEmojiFontSizeInPixel = computed(() => Math.ceil((qrCodeRightBoxHeightInPixel.value * 3) / 8));
-const fingerEmojiFontSize = computed(() => fingerEmojiFontSizeInPixel.value + "px");
-const funnyWelcomeBoxFontSize = computed(() => Math.ceil(fingerEmojiFontSizeInPixel.value * 0.6) + "px");
+const qrCodeRightBoxHeightInPixel = computed(() => state.qrCodeLeftBoxHeightInPixel)
+const qrCodeRightBoxHeight = computed(() => qrCodeRightBoxHeightInPixel.value + 'px')
+const theFontSize = computed(() => props.theFontSizeInPixel + 'px')
+const fingerEmojiFontSizeInPixel = computed(() => Math.ceil((qrCodeRightBoxHeightInPixel.value * 3) / 8))
+const fingerEmojiFontSize = computed(() => fingerEmojiFontSizeInPixel.value + 'px')
+const funnyWelcomeBoxFontSize = computed(() => Math.ceil(fingerEmojiFontSizeInPixel.value * 0.6) + 'px')
 
 watch(
   () => props.theFontSizeInPixel,
   (theNew, theOld) => {
     if (theNew !== theOld) {
-      state.isQrCodeRightBoxUiCanLoad = false;
+      state.isQrCodeRightBoxUiCanLoad = false
     }
   }
-);
+)
 
-const openUrl = window.open;
+const openUrl = window.open
 
 function qrCodeLeftBoxResize(widthAndHeight: any) {
-  const myself = state;
-  myself.isQrCodeRightBoxUiCanLoad = false;
-  myself.qrCodeLeftBoxHeightInPixel = widthAndHeight.height;
-  myself.isQrCodeRightBoxUiCanLoad = true;
+  const myself = state
+  myself.isQrCodeRightBoxUiCanLoad = false
+  myself.qrCodeLeftBoxHeightInPixel = widthAndHeight.height
+  myself.isQrCodeRightBoxUiCanLoad = true
 }
 </script>

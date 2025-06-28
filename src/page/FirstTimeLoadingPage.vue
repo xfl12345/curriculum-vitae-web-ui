@@ -35,7 +35,7 @@
                   // opacity: slotProps.isLimitReached ? 0 : 1,
                   height: slotProps.isLimitReached ? '100%' : '50%',
                   // transform: slotProps.isLimitReached ? undefined : 'scale(1, 1.75)',
-                  fontSize: slotProps.innerBoxWidthInPixel / (slotProps.isLimitReached ? 2.2 : 2.5) + 'px'
+                  fontSize: slotProps.innerBoxWidthInPixel / (slotProps.isLimitReached ? 2.2 : 2.5) + 'px',
                 }"
               >
                 <div
@@ -55,12 +55,12 @@
                         ? {
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
                           }
-                        : undefined
+                        : undefined,
                     ]"
                   >
-                    <span style="">{{ slotProps.percentage + "%" }}</span>
+                    <span style="">{{ slotProps.percentage + '%' }}</span>
                   </div>
                 </div>
               </div>
@@ -77,7 +77,7 @@
                     <div>
                       是否支持：[<span
                         :style="{ color: fontDetection.currentItem.isSupport ? 'darkGreen' : 'red' }"
-                        >{{ fontDetection.currentItem.isSupport ? "是" : "否" }}</span
+                        >{{ fontDetection.currentItem.isSupport ? '是' : '否' }}</span
                       >]
                     </div>
                   </div>
@@ -114,7 +114,7 @@
                     animationTimingFunction: 'liner',
                     transitionDuration: '1s',
                     strokeLinecap: 'round',
-                    strokeLinejoin: 'round'
+                    strokeLinejoin: 'round',
                   }"
                 />
               </svg>
@@ -134,37 +134,37 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useGlobalStore } from "@/store";
-import { useRouter } from "vue-router";
-import tinygradient from "tinygradient";
-import CircleProgressBar from "@/components/xfl-common/vue/CircleProgressBar.vue";
-import CenterBox from "@/components/xfl-common/vue/CenterBox.vue";
-import SvgRightPicturePath from "@/components/xfl-common/vue/SvgRightPicturePath.vue";
-import { applyNewFont2GlobalDom, SupportedFontFamilyDetector } from "@/components/xfl-common/ts/FontUtils";
+import { defineComponent, ref } from 'vue'
+import { useGlobalStore } from '@/store'
+import { useRouter } from 'vue-router'
+import tinygradient from 'tinygradient'
+import CircleProgressBar from '@/components/xfl-common/vue/CircleProgressBar.vue'
+import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
+import SvgRightPicturePath from '@/components/xfl-common/vue/SvgRightPicturePath.vue'
+import { applyNewFont2GlobalDom, SupportedFontFamilyDetector } from '@/components/xfl-common/ts/FontUtils'
 
 export default defineComponent({
   components: { SvgRightPicturePath, CenterBox, CircleProgressBar },
   setup(props, ctx) {
-    const store = useGlobalStore();
-    const router = useRouter();
+    const store = useGlobalStore()
+    const router = useRouter()
 
-    const templateRoot = ref<HTMLDivElement>();
-    const canvas4font = ref<HTMLCanvasElement>();
+    const templateRoot = ref<HTMLDivElement>()
+    const canvas4font = ref<HTMLCanvasElement>()
 
     return {
       templateRoot,
       store,
       router,
-      canvas4font
-    };
+      canvas4font,
+    }
   },
   data() {
-    const progressMax = 100;
-    const circleProgressBarColorArray = tinygradient("red", "aqua")
-      .hsv(progressMax + 1, "long")
-      .map((item) => item.toHexString());
-    const checkItemNameList = ["正在检查您的浏览器，请稍等……", "正在检查浏览器对字体支持的情况"];
+    const progressMax = 100
+    const circleProgressBarColorArray = tinygradient('red', 'aqua')
+      .hsv(progressMax + 1, 'long')
+      .map((item) => item.toHexString())
+    const checkItemNameList = ['正在检查您的浏览器，请稍等……', '正在检查浏览器对字体支持的情况']
     return {
       exhibition: false,
       canMount: true,
@@ -178,147 +178,147 @@ export default defineComponent({
       isMounted: false,
       fontDetection: {
         currentItem: {
-          fontName: "",
-          isSupport: false
+          fontName: '',
+          isSupport: false,
         },
         isNeedToLoadExtraFont: false,
-        loadFontMessage: "",
-        isAllRescueFailed: false
-      }
-    };
+        loadFontMessage: '',
+        isAllRescueFailed: false,
+      },
+    }
   },
   computed: {
     stateWindow() {
-      const myself = this;
+      const myself = this
       return {
         innerWidth: myself.store.globalState.uiCalculation.window.innerWidth,
-        innerHeight: myself.store.globalState.uiCalculation.window.innerHeight
-      };
+        innerHeight: myself.store.globalState.uiCalculation.window.innerHeight,
+      }
     },
     circleProgressBarWidthInPixel() {
-      const myself = this;
-      let result = 1000;
-      if (this.isMounted && "clientWidth" in document.body) {
+      const myself = this
+      let result = 1000
+      if (this.isMounted && 'clientWidth' in document.body) {
         // 宽度高度谁更大？两者之间选最小。
         result =
           myself.stateWindow.innerWidth < myself.stateWindow.innerHeight
             ? myself.stateWindow.innerWidth
-            : myself.stateWindow.innerHeight;
+            : myself.stateWindow.innerHeight
 
-        result -= parseInt(getComputedStyle(this.templateRoot!).paddingTop, 10) << 1;
+        result -= parseInt(getComputedStyle(this.templateRoot!).paddingTop, 10) << 1
       }
-      return result;
+      return result
     },
     circleProgressBarWidth() {
-      return this.circleProgressBarWidthInPixel + "px";
+      return this.circleProgressBarWidthInPixel + 'px'
     },
     circleProgressBarStrokeWidthInPixel() {
-      const myself = this;
-      const circleWidth = myself.circleProgressBarWidthInPixel;
-      let result;
+      const myself = this
+      const circleWidth = myself.circleProgressBarWidthInPixel
+      let result
       if (circleWidth >= 900) {
-        result = 40;
+        result = 40
       } else if (circleWidth > 200) {
-        result = circleWidth / 30;
+        result = circleWidth / 30
       } else {
-        result = 4;
+        result = 4
       }
 
-      return result;
-    }
+      return result
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {
-    const myself = this;
-    myself.exhibition = JSON.parse(myself.$route.query.exhibition as string) as boolean;
+    const myself = this
+    myself.exhibition = JSON.parse(myself.$route.query.exhibition as string) as boolean
     if (!myself.exhibition) {
       if (myself.store.globalState.browserInitiated) {
-        myself.canMount = false;
-        myself.router.push({ name: "cv" });
+        myself.canMount = false
+        myself.router.push({ name: 'cv' })
       }
     }
   },
   mounted() {
-    const myself = this;
+    const myself = this
     if (!myself.canMount) {
-      return;
+      return
     }
 
-    myself.isMounted = true;
+    myself.isMounted = true
     // myself.store.state
 
     setTimeout(() => {
-      myself.checkItemIndex += 1;
+      myself.checkItemIndex += 1
 
-      const fontList = myself.store.globalState.diyFontFamilyList;
-      const detector = new SupportedFontFamilyDetector();
-      detector.selectedFontCanvas = this.canvas4font!;
+      const fontList = myself.store.globalState.diyFontFamilyList
+      const detector = new SupportedFontFamilyDetector()
+      detector.selectedFontCanvas = this.canvas4font!
       // detector.testChar = "楷";
-      detector.testChar = "a";
-      detector.defaultFontCanvas.width = detector.selectedFontCanvas.width;
-      detector.defaultFontCanvas.height = detector.selectedFontCanvas.height;
+      detector.testChar = 'a'
+      detector.defaultFontCanvas.width = detector.selectedFontCanvas.width
+      detector.defaultFontCanvas.height = detector.selectedFontCanvas.height
 
-      const progressUnit = myself.progressMax / (fontList.length + 1);
-      const supportFontStatus = {} as any;
-      let i = 0;
+      const progressUnit = myself.progressMax / (fontList.length + 1)
+      const supportFontStatus = {} as any
+      let i = 0
 
-      const ptr = {} as any;
-      ptr.func = () => {};
+      const ptr = {} as any
+      ptr.func = () => {}
       ptr.func = () => {
         if (i >= fontList.length) {
           if (Object.values(supportFontStatus).filter((value) => value).length === 0) {
-            myself.fontDetection.loadFontMessage = "由于所有字体均不支持，正在下载额外字体";
-            myself.fontDetection.isNeedToLoadExtraFont = true;
-            const fontName = "FangZhengKaiTi";
+            myself.fontDetection.loadFontMessage = '由于所有字体均不支持，正在下载额外字体'
+            myself.fontDetection.isNeedToLoadExtraFont = true
+            const fontName = 'FangZhengKaiTi'
 
-            applyNewFont2GlobalDom(fontName, "url(static/font/FZ_KAITI_ZH_HANS.woff2)").then((result) => {
-              myself.fontDetection.loadFontMessage = "下载成功，并已应用。正在检测能否渲染。";
+            applyNewFont2GlobalDom(fontName, 'url(static/font/FZ_KAITI_ZH_HANS.woff2)').then((result) => {
+              myself.fontDetection.loadFontMessage = '下载成功，并已应用。正在检测能否渲染。'
               // console.log(result);
-              myself.store.addFontFamily(fontName);
+              myself.store.addFontFamily(fontName)
               if (detector.isSupported(fontName)) {
-                myself.onAllDone();
+                myself.onAllDone()
               } else {
-                myself.onFailed();
-                myself.fontDetection.isAllRescueFailed = true;
+                myself.onFailed()
+                myself.fontDetection.isAllRescueFailed = true
                 myself.fontDetection.loadFontMessage =
-                  "渲染失败。因浏览器不能正常显示字体，界面布局可能混乱，是否继续访问？";
-                console.log("Apply new font failed.");
+                  '渲染失败。因浏览器不能正常显示字体，界面布局可能混乱，是否继续访问？'
+                console.log('Apply new font failed.')
               }
-            });
+            })
           } else {
-            myself.onAllDone();
+            myself.onAllDone()
           }
 
-          return;
+          return
         }
-        const fontName = fontList[i];
-        const currentItem = myself.fontDetection.currentItem;
-        currentItem.fontName = fontName;
-        const isSupport = detector.isSupported(fontName);
-        currentItem.isSupport = isSupport;
-        supportFontStatus[fontList[i]] = isSupport;
+        const fontName = fontList[i]
+        const currentItem = myself.fontDetection.currentItem
+        currentItem.fontName = fontName
+        const isSupport = detector.isSupported(fontName)
+        currentItem.isSupport = isSupport
+        supportFontStatus[fontList[i]] = isSupport
 
         // 加百分比的小循环
-        const targetProgress = myself.progress + progressUnit;
-        const ptr2 = {} as any;
-        ptr2.func = () => {};
+        const targetProgress = myself.progress + progressUnit
+        const ptr2 = {} as any
+        ptr2.func = () => {}
         ptr2.func = () => {
           if (myself.progress < targetProgress) {
-            myself.progress += 1;
-            setTimeout(ptr2.func, 20);
+            myself.progress += 1
+            setTimeout(ptr2.func, 20)
           } else {
             // 加完进入下一回合
-            i += 1;
-            ptr.func();
+            i += 1
+            ptr.func()
           }
-        };
-        ptr2.func();
-      };
+        }
+        ptr2.func()
+      }
 
-      ptr.func();
-    }, 500);
+      ptr.func()
+    }, 500)
   },
   beforeUpdate() {},
   updated() {},
@@ -328,32 +328,32 @@ export default defineComponent({
   unmounted() {},
   methods: {
     jumpTarget() {
-      const myself = this;
-      const tmpJumpTarget = myself.$route.query.jumpTarget as string | undefined;
-      const jumpTarget: string = typeof tmpJumpTarget === "undefined" ? "cv" : tmpJumpTarget;
-      myself.router.push(jumpTarget);
+      const myself = this
+      const tmpJumpTarget = myself.$route.query.jumpTarget as string | undefined
+      const jumpTarget: string = typeof tmpJumpTarget === 'undefined' ? 'cv' : tmpJumpTarget
+      myself.router.push(jumpTarget)
     },
     onOneHundredReached(reached: boolean) {
-      const myself = this;
+      const myself = this
       if (reached) {
         setTimeout(() => {
-          myself.isShowPercentageBox = !reached;
-        }, 1000);
+          myself.isShowPercentageBox = !reached
+        }, 1000)
       } else {
-        myself.isShowPercentageBox = !reached;
+        myself.isShowPercentageBox = !reached
       }
     },
     onAllDone() {
-      const myself = this;
-      myself.store.setBrowserInitiatedFlag(true);
-      myself.progress = myself.progressMax;
+      const myself = this
+      myself.store.setBrowserInitiatedFlag(true)
+      myself.progress = myself.progressMax
       if (!myself.exhibition) {
-        setTimeout(myself.jumpTarget, 2300);
+        setTimeout(myself.jumpTarget, 2300)
       }
     },
     onFailed() {
-      this.circleProgressBarColorArray = ["#FF0000", "#FF0000"];
-    }
-  }
-});
+      this.circleProgressBarColorArray = ['#FF0000', '#FF0000']
+    },
+  },
+})
 </script>

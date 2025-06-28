@@ -1,19 +1,19 @@
-import { Step } from "./Step";
+import { Step } from './Step'
 
 export class ImageCaptchaTrack {
-  bgImageWidth?: number;
+  bgImageWidth?: number
 
-  bgImageHeight?: number;
+  bgImageHeight?: number
 
-  sliderImageWidth?: number;
+  sliderImageWidth?: number
 
-  sliderImageHeight?: number;
+  sliderImageHeight?: number
 
-  startSlidingTime?: Date;
+  startSlidingTime?: Date
 
-  entSlidingTime?: Date;
+  entSlidingTime?: Date
 
-  trackList?: Step[];
+  trackList?: Step[]
 
-  data?: any;
+  data?: any
 }

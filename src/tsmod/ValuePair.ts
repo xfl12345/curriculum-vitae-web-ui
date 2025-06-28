@@ -1,18 +1,18 @@
 export class ValuePair {
-  theDisplayValue: string;
+  theDisplayValue: string
 
-  theCopyValue: string;
+  theCopyValue: string
 
   constructor(theDisplayValue: string, theCopyValue: string) {
-    this.theDisplayValue = theDisplayValue;
-    this.theCopyValue = theCopyValue;
+    this.theDisplayValue = theDisplayValue
+    this.theCopyValue = theCopyValue
   }
 
   static createValuePairBlankInstance(): ValuePair {
-    return new ValuePair("", "");
+    return new ValuePair('', '')
   }
 
   static createValuePairInstance2(theCopyValue: string): ValuePair {
-    return new ValuePair(theCopyValue, theCopyValue);
+    return new ValuePair(theCopyValue, theCopyValue)
   }
 }

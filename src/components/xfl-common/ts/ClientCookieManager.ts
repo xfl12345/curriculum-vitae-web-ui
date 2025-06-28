@@ -1,25 +1,25 @@
 export const getTargetKvFromDocumentCookie = (targetFieldName: string) => {
   const targetKvList = document.cookie
-    .split("; ")
-    .filter((value, index, array) => value.startsWith(targetFieldName + "="));
-  return targetKvList.length > 0 ? targetKvList[0] : "";
-};
+    .split('; ')
+    .filter((value, index, array) => value.startsWith(targetFieldName + '='))
+  return targetKvList.length > 0 ? targetKvList[0] : ''
+}
 
-export const currentCookieKey = "xflsV1Cookie";
+export const currentCookieKey = 'xflsV1Cookie'
 
 export class ClientCookieManager {
-  clientCookie: any;
+  clientCookie: any
 
   reloadCookie = () => {
-    const kvString = getTargetKvFromDocumentCookie(currentCookieKey);
-    this.clientCookie = kvString === "" ? {} : JSON.parse(kvString.slice(currentCookieKey.length + 1));
-  };
+    const kvString = getTargetKvFromDocumentCookie(currentCookieKey)
+    this.clientCookie = kvString === '' ? {} : JSON.parse(kvString.slice(currentCookieKey.length + 1))
+  }
 
   saveCookie = () => {
-    const myself = this;
+    const myself = this
     // const expires = getTargetKvFromDocumentCookie("expires");
     // document.cookie = currentCookieKey + "=" + JSON.stringify(myself.clientCookie) + ";" + expires;
-    const expire = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 100).toUTCString();
-    document.cookie = currentCookieKey + "=" + JSON.stringify(myself.clientCookie) + "; " + expire;
-  };
+    const expire = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 100).toUTCString()
+    document.cookie = currentCookieKey + '=' + JSON.stringify(myself.clientCookie) + '; ' + expire
+  }
 }

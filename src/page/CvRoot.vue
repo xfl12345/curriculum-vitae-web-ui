@@ -145,27 +145,27 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useGlobalStore } from "@/store";
-import { useRouter } from "vue-router";
-import { v1 as uuidv1 } from "uuid";
-import { paperA4Standard } from "@/assets/json/common.json";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import type { PaperSizeStandard } from "@/components/xfl-common/ts/PaperSizeStandard";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import { CurriculumVitaeData } from "@/tsmod/CurriculumVitaeData";
-import { getCurriculumVitaeData } from "@/model/JsonDataApi";
-import CvChapter from "@/components/CvChapter.vue";
-import RecordItem from "@/components/RecordItem.vue";
-import CommunityBox from "@/components/CommunityBox.vue";
-import HiddenEggPanel from "@/components/HiddenEggPanel.vue";
-import BasicInfoGlance from "@/components/BasicInfoGlance.vue";
-import PersonalAbility from "@/components/PersonalAbility.vue";
-import Vue3MountedHelper from "@/components/xfl-common/vue/Vue3MountedHelper.vue";
-import LoadCvDataFailedMessageBox from "@/components/LoadCvDataFailedMessageBox.vue";
-import ProjectExperienceItem from "@/components/ProjectExperienceItem.vue";
-import { CvPageFontSizeHelper } from "@/model/CvPageFontSizeHelper";
+import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useGlobalStore } from '@/store'
+import { useRouter } from 'vue-router'
+import { v1 as uuidv1 } from 'uuid'
+import { paperA4Standard } from '@/assets/json/common.json'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
+import type { PaperSizeStandard } from '@/components/xfl-common/ts/PaperSizeStandard'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import { CurriculumVitaeData } from '@/tsmod/CurriculumVitaeData'
+import { getCurriculumVitaeData } from '@/model/JsonDataApi'
+import CvChapter from '@/components/CvChapter.vue'
+import RecordItem from '@/components/RecordItem.vue'
+import CommunityBox from '@/components/CommunityBox.vue'
+import HiddenEggPanel from '@/components/HiddenEggPanel.vue'
+import BasicInfoGlance from '@/components/BasicInfoGlance.vue'
+import PersonalAbility from '@/components/PersonalAbility.vue'
+import Vue3MountedHelper from '@/components/xfl-common/vue/Vue3MountedHelper.vue'
+import LoadCvDataFailedMessageBox from '@/components/LoadCvDataFailedMessageBox.vue'
+import ProjectExperienceItem from '@/components/ProjectExperienceItem.vue'
+import { CvPageFontSizeHelper } from '@/model/CvPageFontSizeHelper'
 
 export default defineComponent({
   components: {
@@ -178,18 +178,18 @@ export default defineComponent({
     CvChapter,
     PersonalAbility,
     RecordItem,
-    TextPrettier
+    TextPrettier,
   },
   setup() {
-    const { t } = useI18n();
-    const store = useGlobalStore();
-    const router = useRouter();
+    const { t } = useI18n()
+    const store = useGlobalStore()
+    const router = useRouter()
 
-    const templateRoot = ref<HTMLDivElement>();
-    const cvBox = ref<HTMLDivElement>();
-    const cvBoxBody = ref<HTMLDivElement>();
-    const loadCvDataFailedMessageBox = ref<HTMLDivElement>();
-    const paperSizeStandard: PaperSizeStandard = paperA4Standard.sizeInMillimetre as PaperSizeStandard;
+    const templateRoot = ref<HTMLDivElement>()
+    const cvBox = ref<HTMLDivElement>()
+    const cvBoxBody = ref<HTMLDivElement>()
+    const loadCvDataFailedMessageBox = ref<HTMLDivElement>()
+    const paperSizeStandard: PaperSizeStandard = paperA4Standard.sizeInMillimetre as PaperSizeStandard
 
     return {
       debugCvBoxSize: store.globalState.developmentModeFlag,
@@ -200,19 +200,19 @@ export default defineComponent({
       cvBox,
       cvBoxBody,
       loadCvDataFailedMessageBox,
-      paperSizeStandard
-    };
+      paperSizeStandard,
+    }
   },
   data() {
-    const myself = this;
-    const rootNodeStyle: VuePartialCssProperties = {};
-    const cvData: Partial<CurriculumVitaeData> = {};
-    const rootScale = 7;
+    const myself = this
+    const rootNodeStyle: VuePartialCssProperties = {}
+    const cvData: Partial<CurriculumVitaeData> = {}
+    const rootScale = 7
     const widthAndHeight = {
       width: 800,
-      height: 600
-    };
-    const cvPageFontSizeHelper: CvPageFontSizeHelper = null;
+      height: 600,
+    }
+    const cvPageFontSizeHelper: CvPageFontSizeHelper = null
     return {
       rootNodeStyle,
       isReloadingCvData: false,
@@ -222,70 +222,70 @@ export default defineComponent({
       rootScale: 7,
       widthAndHeight,
       cvBoxMounted: false,
-      adjustingFontSize: "",
+      adjustingFontSize: '',
       theFontSizeInPixel: 36,
       adjustFontSizeRequestQueueLength: 0,
       cvPageFontSizeHelper,
-      loadCvDataFailedMessage: ""
-    };
+      loadCvDataFailedMessage: '',
+    }
   },
   computed: {
     isCvDataLoaded() {
-      return "basicInformation" in this.cvData;
+      return 'basicInformation' in this.cvData
     },
     theFontSize() {
-      return this.theFontSizeInPixel + "px";
+      return this.theFontSizeInPixel + 'px'
     },
     isNotInAdjustingFontSize() {
-      return this.adjustingFontSize === "";
+      return this.adjustingFontSize === ''
     },
     cvBoxWidthInPixel() {
-      return Math.ceil(this.paperSizeStandard.width * this.rootScale);
+      return Math.ceil(this.paperSizeStandard.width * this.rootScale)
     },
     cvBoxHeightInPixel() {
-      return Math.ceil(this.paperSizeStandard.height * this.rootScale);
+      return Math.ceil(this.paperSizeStandard.height * this.rootScale)
     },
     cvBoxParentStyle() {
-      const myself = this;
-      const theStyle = {} as VuePartialCssProperties;
+      const myself = this
+      const theStyle = {} as VuePartialCssProperties
       if (
         myself.cvBoxWidthInPixel < myself.store.globalState.uiCalculation.window.screen.availWidth &&
         myself.cvBoxWidthInPixel < myself.store.globalState.uiCalculation.window.innerWidth &&
         myself.isNotInAdjustingFontSize
       ) {
-        theStyle.justifyContent = "center";
-        theStyle.width = "100%";
-        theStyle.height = "100%";
+        theStyle.justifyContent = 'center'
+        theStyle.width = '100%'
+        theStyle.height = '100%'
       } else {
-        theStyle.justifyContent = "flex-start";
+        theStyle.justifyContent = 'flex-start'
       }
 
-      return theStyle;
+      return theStyle
     },
     cvBoxStyle(): VuePartialCssProperties {
-      const myself = this;
-      const width = myself.cvBoxWidthInPixel + "px";
-      const height = myself.cvBoxHeightInPixel + "px";
+      const myself = this
+      const width = myself.cvBoxWidthInPixel + 'px'
+      const height = myself.cvBoxHeightInPixel + 'px'
 
       return {
         minWidth: width,
         width,
         height,
-        justifyContent: myself.isNotInAdjustingFontSize ? "center" : undefined
-      };
-    }
+        justifyContent: myself.isNotInAdjustingFontSize ? 'center' : undefined,
+      }
+    },
   },
   watch: {
     rootScale(newValue, oldValue) {
       if (newValue !== oldValue) {
-        console.log("rootScale: " + newValue);
-        this.adjustFontSize();
+        console.log('rootScale: ' + newValue)
+        this.adjustFontSize()
       }
-    }
+    },
   },
   created() {
-    const myself = this;
-    myself.rootScale = myself.store.globalState.uiCalculation.rootScale;
+    const myself = this
+    myself.rootScale = myself.store.globalState.uiCalculation.rootScale
 
     myself.cvPageFontSizeHelper = new CvPageFontSizeHelper(myself, {
       getCvBoxHeightInPixel: () => myself.cvBoxHeightInPixel,
@@ -294,119 +294,119 @@ export default defineComponent({
       getScrollHeight: () => myself.cvBoxBody.scrollHeight,
       getFontSize: () => myself.theFontSizeInPixel,
       setFontSize: (fontSize: number) => {
-        myself.theFontSizeInPixel = fontSize;
+        myself.theFontSizeInPixel = fontSize
       },
       isNeedRestart: () => myself.adjustFontSizeRequestQueueLength > 0,
       restartedCallback() {
-        myself.adjustFontSizeRequestQueueLength = 0;
+        myself.adjustFontSizeRequestQueueLength = 0
       },
       setNextDomRefreshedCallback(func: () => {}) {
-        myself.$nextTick(func);
+        myself.$nextTick(func)
       },
       onFinishedCallback() {
-        myself.adjustingFontSize = "";
-      }
-    });
+        myself.adjustingFontSize = ''
+      },
+    })
   },
   beforeMount() {
-    const myself = this;
-    const window = myself.store.globalState.uiCalculation.window;
-    myself.rootScale = Math.floor(window.innerWidth / myself.paperSizeStandard.width);
+    const myself = this
+    const window = myself.store.globalState.uiCalculation.window
+    myself.rootScale = Math.floor(window.innerWidth / myself.paperSizeStandard.width)
     if ((myself.rootScale + 0.5) * myself.paperSizeStandard.width <= window.innerWidth) {
-      myself.rootScale += 0.5;
+      myself.rootScale += 0.5
     }
     if (myself.rootScale < 5) {
-      myself.rootScale = 5;
+      myself.rootScale = 5
     }
 
-    myself.store.setRootScale(myself.rootScale);
-    myself.widthAndHeight.width = myself.cvBoxWidthInPixel;
-    myself.widthAndHeight.height = myself.cvBoxHeightInPixel;
+    myself.store.setRootScale(myself.rootScale)
+    myself.widthAndHeight.width = myself.cvBoxWidthInPixel
+    myself.widthAndHeight.height = myself.cvBoxHeightInPixel
     myself.store.globalState.loginManager.isAlreadyLogin().then((result: boolean) => {
       if (!result) {
-        myself.jump2LoginPage(); // 没登录
+        myself.jump2LoginPage() // 没登录
       } else if (!myself.isCvDataLoaded) {
-        myself.refreshCvData(); // 没缓存
+        myself.refreshCvData() // 没缓存
       }
-    });
+    })
   },
   mounted() {
-    const myself = this;
+    const myself = this
   },
   unmounted() {
-    const myself = this;
+    const myself = this
   },
   methods: {
     openUrl(url: string) {
-      window.open(url);
+      window.open(url)
     },
     jump2LoginPage() {
-      this.router.push({ name: "login" });
+      this.router.push({ name: 'login' })
     },
     jump2IndexPage() {
-      this.router.push({ name: "index" });
+      this.router.push({ name: 'index' })
     },
     refreshCvData() {
-      const myself = this;
-      myself.isLoadCvDataFailed = false;
-      myself.cvData = {};
+      const myself = this
+      myself.isLoadCvDataFailed = false
+      myself.cvData = {}
       getCurriculumVitaeData(myself.store.globalState.loginManager)
         .then(
           (responseData) => {
-            myself.cvData = responseData;
+            myself.cvData = responseData
           },
           (response) => {
-            console.log("onReject", response);
+            console.log('onReject', response)
             if (response.response && response.response.status === 403) {
-              myself.loadCvDataFailedMessage = "代码 403 。您无权访问简历数据。";
+              myself.loadCvDataFailedMessage = '代码 403 。您无权访问简历数据。'
             } else {
-              myself.loadCvDataFailedMessage = response.message;
+              myself.loadCvDataFailedMessage = response.message
             }
-            myself.isLoadCvDataFailed = true;
+            myself.isLoadCvDataFailed = true
           }
         )
         .catch((reason) => {
-          console.log("onException", reason);
-          myself.loadCvDataFailedMessage = reason;
-          myself.isLoadCvDataFailed = true;
-        });
+          console.log('onException', reason)
+          myself.loadCvDataFailedMessage = reason
+          myself.isLoadCvDataFailed = true
+        })
     },
     openHiddenEggPanel() {
       // this.store.commit("setUpdateBrowserSelfValue", false);
-      this.isHiddenEggPanelOpened = true;
+      this.isHiddenEggPanelOpened = true
     },
     closeHiddenEggPanel() {
       // this.store.commit("setUpdateBrowserSelfValue", true);
-      this.isHiddenEggPanelOpened = false;
+      this.isHiddenEggPanelOpened = false
     },
     cvBoxResize(widthAndHeight: any) {
-      const myself = this;
-      myself.widthAndHeight.width = widthAndHeight.width;
-      myself.widthAndHeight.height = widthAndHeight.height;
+      const myself = this
+      myself.widthAndHeight.width = widthAndHeight.width
+      myself.widthAndHeight.height = widthAndHeight.height
     },
     resetRootScale() {
-      const myself = this;
-      myself.rootScale = myself.store.globalState.uiCalculation.rootScale;
+      const myself = this
+      myself.rootScale = myself.store.globalState.uiCalculation.rootScale
     },
     onCvBoxMounted() {
-      this.cvBoxMounted = true;
-      this.adjustFontSize();
+      this.cvBoxMounted = true
+      this.adjustFontSize()
     },
     adjustFontSize() {
-      const myself = this;
+      const myself = this
 
-      myself.adjustFontSizeRequestQueueLength += 1;
-      if (!myself.cvBoxMounted || myself.adjustingFontSize !== "") {
-        return;
+      myself.adjustFontSizeRequestQueueLength += 1
+      if (!myself.cvBoxMounted || myself.adjustingFontSize !== '') {
+        return
       }
-      const myThreadId = uuidv1();
-      myself.adjustingFontSize = myThreadId;
+      const myThreadId = uuidv1()
+      myself.adjustingFontSize = myThreadId
       if (myself.adjustingFontSize !== myThreadId) {
-        return;
+        return
       }
 
-      myself.cvPageFontSizeHelper.adjustFontSize();
-    }
-  }
-});
+      myself.cvPageFontSizeHelper.adjustFontSize()
+    },
+  },
+})
 </script>

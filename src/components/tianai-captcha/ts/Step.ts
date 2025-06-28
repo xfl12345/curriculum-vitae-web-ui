@@ -1,9 +1,9 @@
 export class Step {
-  x?: number;
+  x?: number
 
-  y?: number;
+  y?: number
 
-  type?: string;
+  type?: string
 
-  t?: number;
+  t?: number
 }

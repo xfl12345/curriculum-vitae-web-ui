@@ -1,5 +1,5 @@
 export interface PaperSizeStandard {
-  height: number;
+  height: number
 
-  width: number;
+  width: number
 }

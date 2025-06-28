@@ -1,10 +1,10 @@
 export class SkillDegree {
-  skillName: string;
+  skillName: string
 
-  degree: number;
+  degree: number
 
   constructor(skillName: string, degree: number) {
-    this.skillName = skillName;
-    this.degree = degree;
+    this.skillName = skillName
+    this.degree = degree
   }
 }

@@ -9,203 +9,203 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import type { EnumDirection } from "../ts/Direction";
+import { defineComponent, type PropType, ref } from 'vue'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import type { EnumDirection } from '../ts/Direction'
 
 export default defineComponent({
   components: {},
   props: {
     triangleHeightInPixel: {
       type: Number,
-      default: 100
+      default: 100,
     },
     direction: {
       type: String as PropType<EnumDirection>,
-      default: "left"
+      default: 'left',
     },
     color: {
       type: String,
-      default: "lawngreen"
+      default: 'lawngreen',
     },
     // box-shadow: h-shadow v-shadow blur spread color inset(outset)；
     boxShadowHShadow: {
       type: Number,
-      default: 0
+      default: 0,
     },
     boxShadowVShadow: {
       type: Number,
-      default: 0
+      default: 0,
     },
     boxShadowBlur: {
       type: Number,
-      default: 10
+      default: 10,
     },
     boxShadowSpread: {
       type: Number,
-      default: 5
+      default: 5,
     },
     boxShadowColor: {
       type: String,
-      default: "#999999"
-    }
+      default: '#999999',
+    },
   },
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     rotateBoxSize() {
       // 至少要比 triangleHeightInPixel * sqrt(2) 要大
-      return this.triangleHeightInPixel * 1.5 + "px";
+      return this.triangleHeightInPixel * 1.5 + 'px'
     },
     rotateBoxShadow() {
-      const myself = this;
+      const myself = this
       // box-shadow: h-shadow v-shadow blur spread color inset(outset)；
       return [
-        myself.boxShadowHShadow + "px",
-        myself.boxShadowVShadow + "px",
-        myself.boxShadowBlur + "px",
-        myself.boxShadowSpread + "px",
-        myself.boxShadowColor
-      ].join(" ");
+        myself.boxShadowHShadow + 'px',
+        myself.boxShadowVShadow + 'px',
+        myself.boxShadowBlur + 'px',
+        myself.boxShadowSpread + 'px',
+        myself.boxShadowColor,
+      ].join(' ')
     },
     triangleHeight() {
-      return this.triangleHeightInPixel + "px";
+      return this.triangleHeightInPixel + 'px'
     },
     rootBoxStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = {};
+      const myself = this
+      const theStyle: VuePartialCssProperties = {}
       switch (myself.direction) {
-        case "right":
-        case "left": {
-          theStyle.width = myself.triangleHeight;
-          theStyle.height = myself.triangleHeightInPixel * 2 + "px";
-          break;
+        case 'right':
+        case 'left': {
+          theStyle.width = myself.triangleHeight
+          theStyle.height = myself.triangleHeightInPixel * 2 + 'px'
+          break
         }
-        case "top":
-        case "bottom": {
-          theStyle.width = myself.triangleHeightInPixel * 2 + "px";
-          theStyle.height = myself.triangleHeight;
-          break;
+        case 'top':
+        case 'bottom': {
+          theStyle.width = myself.triangleHeightInPixel * 2 + 'px'
+          theStyle.height = myself.triangleHeight
+          break
         }
         default:
-          break;
+          break
       }
 
       switch (myself.direction) {
-        case "right":
-          theStyle.clipPath = "polygon(0 0, 100% 50%, 0 100%)";
-          break;
-        case "left":
-          theStyle.clipPath = "polygon(100% 0, 0 50%, 100% 100%)";
-          break;
-        case "top":
-          theStyle.clipPath = "polygon(0 100%, 50% 0, 100% 100%)";
-          break;
-        case "bottom":
-          theStyle.clipPath = "polygon(0 0, 50% 100%, 100% 0)";
-          break;
+        case 'right':
+          theStyle.clipPath = 'polygon(0 0, 100% 50%, 0 100%)'
+          break
+        case 'left':
+          theStyle.clipPath = 'polygon(100% 0, 0 50%, 100% 100%)'
+          break
+        case 'top':
+          theStyle.clipPath = 'polygon(0 100%, 50% 0, 100% 100%)'
+          break
+        case 'bottom':
+          theStyle.clipPath = 'polygon(0 0, 50% 100%, 100% 0)'
+          break
         default:
-          break;
+          break
       }
 
-      return theStyle;
+      return theStyle
     },
     rotateBoxStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = {};
-      theStyle.width = myself.rotateBoxSize;
-      theStyle.height = myself.rotateBoxSize;
-      theStyle.boxShadow = myself.rotateBoxShadow + " inset";
+      const myself = this
+      const theStyle: VuePartialCssProperties = {}
+      theStyle.width = myself.rotateBoxSize
+      theStyle.height = myself.rotateBoxSize
+      theStyle.boxShadow = myself.rotateBoxShadow + ' inset'
       switch (myself.direction) {
-        case "right": {
-          theStyle.top = myself.triangleHeight;
-          theStyle.right = "0";
-          theStyle.transformOrigin = theStyle.width + " 0";
-          theStyle.transform = "rotate(45deg)";
-          break;
+        case 'right': {
+          theStyle.top = myself.triangleHeight
+          theStyle.right = '0'
+          theStyle.transformOrigin = theStyle.width + ' 0'
+          theStyle.transform = 'rotate(45deg)'
+          break
         }
-        case "left": {
-          theStyle.top = myself.triangleHeight;
-          theStyle.left = "0";
-          theStyle.transformOrigin = "0 0";
-          theStyle.transform = "rotate(-45deg)";
-          break;
+        case 'left': {
+          theStyle.top = myself.triangleHeight
+          theStyle.left = '0'
+          theStyle.transformOrigin = '0 0'
+          theStyle.transform = 'rotate(-45deg)'
+          break
         }
-        case "top": {
-          theStyle.top = "0";
-          theStyle.left = myself.triangleHeight;
-          theStyle.transformOrigin = "0 0";
-          theStyle.transform = "rotate(45deg)";
-          break;
+        case 'top': {
+          theStyle.top = '0'
+          theStyle.left = myself.triangleHeight
+          theStyle.transformOrigin = '0 0'
+          theStyle.transform = 'rotate(45deg)'
+          break
         }
-        case "bottom": {
-          theStyle.top = myself.triangleHeight;
-          theStyle.right = myself.triangleHeight;
-          theStyle.transformOrigin = theStyle.width + " 0";
-          theStyle.transform = "rotate(135deg)";
-          break;
+        case 'bottom': {
+          theStyle.top = myself.triangleHeight
+          theStyle.right = myself.triangleHeight
+          theStyle.transformOrigin = theStyle.width + ' 0'
+          theStyle.transform = 'rotate(135deg)'
+          break
         }
         default:
-          break;
+          break
       }
 
-      return theStyle;
+      return theStyle
     },
     triangleBaseBorderHelperBoxStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = {};
-      theStyle.boxShadow = myself.rotateBoxShadow;
-      theStyle.borderRadius = Math.ceil(7 * 0.414 * myself.boxShadowBlur) + "px";
-      const longEdge = myself.triangleHeightInPixel * 2 + "px";
+      const myself = this
+      const theStyle: VuePartialCssProperties = {}
+      theStyle.boxShadow = myself.rotateBoxShadow
+      theStyle.borderRadius = Math.ceil(7 * 0.414 * myself.boxShadowBlur) + 'px'
+      const longEdge = myself.triangleHeightInPixel * 2 + 'px'
       const shortEdge =
         8 *
           (myself.boxShadowBlur > myself.boxShadowSpread ? myself.boxShadowBlur : myself.boxShadowSpread) +
-        "px";
+        'px'
 
       switch (myself.direction) {
-        case "right": {
-          theStyle.width = shortEdge;
-          theStyle.height = longEdge;
-          theStyle.top = "0";
-          theStyle.left = "-" + theStyle.width;
-          break;
+        case 'right': {
+          theStyle.width = shortEdge
+          theStyle.height = longEdge
+          theStyle.top = '0'
+          theStyle.left = '-' + theStyle.width
+          break
         }
-        case "left": {
-          theStyle.width = shortEdge;
-          theStyle.height = longEdge;
-          theStyle.top = "0";
-          theStyle.left = myself.triangleHeight;
-          break;
+        case 'left': {
+          theStyle.width = shortEdge
+          theStyle.height = longEdge
+          theStyle.top = '0'
+          theStyle.left = myself.triangleHeight
+          break
         }
-        case "top": {
-          theStyle.width = longEdge;
-          theStyle.height = shortEdge;
-          theStyle.top = myself.triangleHeight;
-          theStyle.left = "0";
-          break;
+        case 'top': {
+          theStyle.width = longEdge
+          theStyle.height = shortEdge
+          theStyle.top = myself.triangleHeight
+          theStyle.left = '0'
+          break
         }
-        case "bottom": {
-          theStyle.width = longEdge;
-          theStyle.height = shortEdge;
-          theStyle.top = "-" + theStyle.height;
-          theStyle.left = "0";
-          break;
+        case 'bottom': {
+          theStyle.width = longEdge
+          theStyle.height = shortEdge
+          theStyle.top = '-' + theStyle.height
+          theStyle.left = '0'
+          break
         }
         default:
-          break;
+          break
       }
 
-      return theStyle;
-    }
+      return theStyle
+    },
   },
   watch: {},
   beforeCreate() {},
@@ -218,6 +218,6 @@ export default defineComponent({
   deactivated() {},
   beforeUnmount() {},
   unmounted() {},
-  methods: {}
-});
+  methods: {},
+})
 </script>

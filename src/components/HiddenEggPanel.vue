@@ -76,8 +76,8 @@
               :theme="null"
               :theme-overrides="{
                 common: {
-                  lineHeight: 'normal'
-                }
+                  lineHeight: 'normal',
+                },
               }"
             >
               <n-global-style />
@@ -95,7 +95,7 @@
           <button
             style="cursor: pointer; font-size: inherit"
             :style="{
-              borderRadius: theFontSize
+              borderRadius: theFontSize,
             }"
             @click="$emit('resetRootScale')"
           >
@@ -116,10 +116,10 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useGlobalStore } from "@/store";
-import { NConfigProvider, NGlobalStyle, NSlider, NSpace } from "naive-ui";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import { defineComponent, ref } from 'vue'
+import { useGlobalStore } from '@/store'
+import { NConfigProvider, NGlobalStyle, NSlider, NSpace } from 'naive-ui'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
 
 // noinspection JSSuspiciousNameCombination
 export default defineComponent({
@@ -127,87 +127,87 @@ export default defineComponent({
     NGlobalStyle,
     NSlider,
     NConfigProvider,
-    NSpace
+    NSpace,
   },
   props: {
     rootScale: {
       type: Number,
-      required: true
+      required: true,
     },
     isPanelOpened: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
-  emits: ["update:rootScale", "update:isPanelOpened", "jump2IndexPage", "resetRootScale", "refreshCvData"],
+  emits: ['update:rootScale', 'update:isPanelOpened', 'jump2IndexPage', 'resetRootScale', 'refreshCvData'],
   setup(props, ctx) {
-    const store = useGlobalStore();
-    const templateRoot = ref<HTMLDivElement>();
+    const store = useGlobalStore()
+    const templateRoot = ref<HTMLDivElement>()
 
     return {
       templateRoot,
-      store
-    };
+      store,
+    }
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     theFontSizeInPixel() {
-      return this.store.theFontSizeInPixel;
+      return this.store.theFontSizeInPixel
     },
     theFontSize() {
-      return this.theFontSizeInPixel + "px";
+      return this.theFontSizeInPixel + 'px'
     },
     theRootScale: {
       get() {
-        return this.rootScale;
+        return this.rootScale
       },
       set(value: string) {
-        this.$emit("update:rootScale", value);
-      }
+        this.$emit('update:rootScale', value)
+      },
     },
     theIsPanelOpened: {
       get() {
-        return this.isPanelOpened;
+        return this.isPanelOpened
       },
       set(value: string) {
-        this.$emit("update:isPanelOpened", value);
-      }
+        this.$emit('update:isPanelOpened', value)
+      },
     },
     uiCalculation() {
-      const myself = this;
+      const myself = this
       const fullPage = {
-        width: myself.store.globalState.uiCalculation.document.body.scrollWidth + "px",
-        height: myself.store.globalState.uiCalculation.document.body.scrollHeight + "px"
-      };
+        width: myself.store.globalState.uiCalculation.document.body.scrollWidth + 'px',
+        height: myself.store.globalState.uiCalculation.document.body.scrollHeight + 'px',
+      }
 
       return {
-        fullPage
-      };
+        fullPage,
+      }
     },
     contentBoxMinWidthInPixel() {
-      return this.theFontSizeInPixel * 16;
+      return this.theFontSizeInPixel * 16
     },
     contentBoxStyle() {
-      const myself = this;
-      const minHeightInPixel = 300;
-      const minWidthInPixel = 800;
+      const myself = this
+      const minHeightInPixel = 300
+      const minWidthInPixel = 800
 
       const theStyle: VuePartialCssProperties = {
         fontSize: myself.theFontSize,
-        minWidth: myself.contentBoxMinWidthInPixel + "px"
-      };
+        minWidth: myself.contentBoxMinWidthInPixel + 'px',
+      }
 
-      return theStyle;
-    }
+      return theStyle
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    const myself = this;
+    const myself = this
   },
   beforeUpdate() {},
   updated() {},
@@ -217,8 +217,8 @@ export default defineComponent({
   unmounted() {},
   methods: {
     closePanel() {
-      this.theIsPanelOpened = false;
-    }
-  }
-});
+      this.theIsPanelOpened = false
+    },
+  },
+})
 </script>

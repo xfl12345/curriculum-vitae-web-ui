@@ -1,1 +1,1 @@
-export type EnumSizingType = "content" | "border";
+export type EnumSizingType = 'content' | 'border'

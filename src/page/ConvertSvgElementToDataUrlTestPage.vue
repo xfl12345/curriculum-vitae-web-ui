@@ -75,59 +75,59 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { Clipboard } from "v-clipboard";
+import { defineComponent, ref } from 'vue'
+import { Clipboard } from 'v-clipboard'
 
 export default defineComponent({
   setup() {
-    const referenceSVG = ref<HTMLImageElement>();
+    const referenceSVG = ref<HTMLImageElement>()
     return {
-      referenceSVG
-    };
+      referenceSVG,
+    }
   },
   data() {
     // type CopyActionStatusType = "idle" | "ok" | "failed";
-    const copyActionStatus = "idle";
+    const copyActionStatus = 'idle'
     return {
       vueMounted: false,
       copyActionStatus,
-      copyActionFeedbackMessageBoxTimeoutHandle: null
-    };
+      copyActionFeedbackMessageBoxTimeoutHandle: null,
+    }
   },
   computed: {
     bgDataURL() {
       if (this.vueMounted) {
-        const svg = this.referenceSVG;
-        const theData = "data:image/svg+xml;base64," + window.btoa(svg.outerHTML);
-        console.log(theData);
-        return theData;
+        const svg = this.referenceSVG
+        const theData = 'data:image/svg+xml;base64,' + window.btoa(svg.outerHTML)
+        console.log(theData)
+        return theData
       }
-      return "";
-    }
+      return ''
+    },
   },
   mounted() {
-    this.vueMounted = true;
+    this.vueMounted = true
   },
   unmounted() {
-    this.vueMounted = false;
+    this.vueMounted = false
   },
   methods: {
     updateCopyFeedbackMessage(status: string) {
-      const myself = this;
-      myself.copyActionStatus = status;
-      clearTimeout(myself.copyActionFeedbackMessageBoxTimeoutHandle);
+      const myself = this
+      myself.copyActionStatus = status
+      clearTimeout(myself.copyActionFeedbackMessageBoxTimeoutHandle)
       myself.copyActionFeedbackMessageBoxTimeoutHandle = setTimeout(() => {
-        myself.copyActionStatus = "idle";
-      }, 3000);
+        myself.copyActionStatus = 'idle'
+      }, 3000)
     },
     copyValue2ClipBoard() {
-      const myself = this;
+      const myself = this
 
       Clipboard.copy(myself.bgDataURL).then(
-        () => myself.updateCopyFeedbackMessage("ok"),
-        () => myself.updateCopyFeedbackMessage("failed")
-      );
-    }
-  }
-});
+        () => myself.updateCopyFeedbackMessage('ok'),
+        () => myself.updateCopyFeedbackMessage('failed')
+      )
+    },
+  },
+})
 </script>

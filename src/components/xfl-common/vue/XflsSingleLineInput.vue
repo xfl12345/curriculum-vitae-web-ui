@@ -24,7 +24,7 @@
       "
       :style="{
         width: theTitleBoxWidth,
-        padding: '0 ' + borderRadius
+        padding: '0 ' + borderRadius,
       }"
       @click="inputAreaGetFocus"
     >
@@ -81,86 +81,86 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { defineComponent, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export default defineComponent({
   props: {
     theFontSizeInPixel: {
       type: Number,
-      default: 24
+      default: 24,
     },
     theTitle: {
       type: String,
-      required: true
+      required: true,
     },
     theTitleBoxWidth: {
       type: String,
-      default: "auto"
+      default: 'auto',
     },
     propsPlaceholder: {
       type: String,
-      default: undefined
+      default: undefined,
     },
     theInputType: {
       type: String,
-      default: "text"
+      default: 'text',
     },
     theInputValue: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  emits: ["update:theInputValue", "onKeyDownEnter"],
+  emits: ['update:theInputValue', 'onKeyDownEnter'],
   setup() {
-    const templateRoot = ref<HTMLDivElement>();
-    const inputArea = ref<HTMLInputElement>();
-    const { t } = useI18n();
+    const templateRoot = ref<HTMLDivElement>()
+    const inputArea = ref<HTMLInputElement>()
+    const { t } = useI18n()
 
     return {
       templateRoot,
       inputArea,
-      t
-    };
+      t,
+    }
   },
   data() {
     return {
-      borderColor: "deepskyblue",
-      originBorderColor: "deepskyblue"
-    };
+      borderColor: 'deepskyblue',
+      originBorderColor: 'deepskyblue',
+    }
   },
   computed: {
     borderRadius() {
-      return Math.ceil(this.theFontSizeInPixel / 2) + "px";
+      return Math.ceil(this.theFontSizeInPixel / 2) + 'px'
     },
     placeholder() {
-      const myself = this;
-      return typeof myself.propsPlaceholder === "undefined"
-        ? myself.t("message.pleaseEnter") + myself.theTitle
-        : myself.propsPlaceholder;
-    }
+      const myself = this
+      return typeof myself.propsPlaceholder === 'undefined'
+        ? myself.t('message.pleaseEnter') + myself.theTitle
+        : myself.propsPlaceholder
+    },
   },
   mounted() {},
   methods: {
     inputAreaGetFocus() {
-      const myself = this;
-      myself.inputArea!.focus();
+      const myself = this
+      myself.inputArea!.focus()
     },
     onFocusInput() {
-      this.borderColor = "aqua";
+      this.borderColor = 'aqua'
     },
     onBlurInput() {
-      const myself = this;
-      myself.borderColor = myself.originBorderColor;
+      const myself = this
+      myself.borderColor = myself.originBorderColor
     },
     onKeyDownEnter() {
-      this.$emit("onKeyDownEnter");
+      this.$emit('onKeyDownEnter')
     },
     popInputValue(event: Event) {
-      this.$emit("update:theInputValue", "" + (event.target as HTMLInputElement)!.value);
-    }
-  }
-});
+      this.$emit('update:theInputValue', '' + (event.target as HTMLInputElement)!.value)
+    },
+  },
+})
 </script>
 
 <style scoped>
@@ -180,7 +180,7 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-input[type="number"] {
+input[type='number'] {
   appearance: none;
   -webkit-appearance: none;
   /* -moz-appearance: none; */

@@ -3,118 +3,118 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import { cssMixer } from "../ts/CssMixer";
-import type { VuePartialCssProperties } from "../ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from 'vue'
+import { cssMixer } from '../ts/CssMixer'
+import type { VuePartialCssProperties } from '../ts/VuePartialCssProperties'
 
 type Point = {
-  x: number;
-  y: number;
-};
+  x: number
+  y: number
+}
 
 interface PointDict {
-  [index: string]: Point;
+  [index: string]: Point
 }
 
 const defaultCssStyle: VuePartialCssProperties = {
-  fill: "transparent",
-  strokeWidth: "2px",
-  stroke: "black",
-  transitionDuration: "0.5s"
-};
+  fill: 'transparent',
+  strokeWidth: '2px',
+  stroke: 'black',
+  transitionDuration: '0.5s',
+}
 
 export default defineComponent({
   components: {},
   props: {
     width: {
       type: Number,
-      required: true
+      required: true,
     },
     height: {
       type: Number,
-      required: true
+      required: true,
     },
     offsetX: {
       type: Number,
-      default: 0
+      default: 0,
     },
     offsetY: {
       type: Number,
-      default: 0
+      default: 0,
     },
     delayShowPictureInMs: {
       type: Number,
-      default: 100
+      default: 100,
     },
     propsCssStyle: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
-    }
+      default: (): VuePartialCssProperties => defaultCssStyle,
+    },
   },
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
     // const cssStyle: PartialCssStyleType = {};
 
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
-    const myself = this;
+    const myself = this
 
     return {
-      isShowPic: myself.delayShowPictureInMs === 0
-    };
+      isShowPic: myself.delayShowPictureInMs === 0,
+    }
   },
   computed: {
     points(): PointDict {
-      const myself = this;
-      const offsetHeight = myself.height + myself.offsetY;
-      const offsetWidth = myself.width + myself.offsetX;
-      const startY = offsetHeight * 0.618;
+      const myself = this
+      const offsetHeight = myself.height + myself.offsetY
+      const offsetWidth = myself.width + myself.offsetX
+      const startY = offsetHeight * 0.618
       return {
         start: { x: myself.offsetX, y: startY },
         breakPoint: { x: offsetHeight - startY, y: offsetHeight },
-        end: { x: offsetWidth, y: myself.offsetY }
-      };
+        end: { x: offsetWidth, y: myself.offsetY },
+      }
     },
     thePathString(): string {
-      const myself = this;
-      let d = "M" + myself.point2string(myself.points.start);
-      d += " " + myself.point2string(myself.points.breakPoint);
-      d += " " + myself.point2string(myself.points.end);
+      const myself = this
+      let d = 'M' + myself.point2string(myself.points.start)
+      d += ' ' + myself.point2string(myself.points.breakPoint)
+      d += ' ' + myself.point2string(myself.points.end)
 
-      return d;
+      return d
     },
     strokeDasharrayInPixel() {
-      const myself = this;
+      const myself = this
       return (
         myself.calcPointDistance(myself.points.start, myself.points.breakPoint) +
         myself.calcPointDistance(myself.points.end, myself.points.breakPoint) +
         2
-      );
+      )
     },
     cssStyle(): VuePartialCssProperties {
-      const myself = this;
-      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle);
-      theStyle.strokeDashoffset = "" + (myself.isShowPic ? 0 : myself.strokeDasharrayInPixel);
-      theStyle.strokeDasharray = "" + myself.strokeDasharrayInPixel;
-      return theStyle;
-    }
+      const myself = this
+      const theStyle: VuePartialCssProperties = cssMixer(defaultCssStyle, myself.propsCssStyle)
+      theStyle.strokeDashoffset = '' + (myself.isShowPic ? 0 : myself.strokeDasharrayInPixel)
+      theStyle.strokeDasharray = '' + myself.strokeDasharrayInPixel
+      return theStyle
+    },
   },
   watch: {},
   beforeCreate() {},
   created() {},
   beforeMount() {},
   mounted() {
-    const myself = this;
+    const myself = this
     if (!myself.isShowPic) {
       this.$nextTick(() => {
         setTimeout(() => {
-          myself.isShowPic = true;
-        }, myself.delayShowPictureInMs);
-      });
+          myself.isShowPic = true
+        }, myself.delayShowPictureInMs)
+      })
     }
   },
   beforeUpdate() {},
@@ -125,13 +125,13 @@ export default defineComponent({
   unmounted() {},
   methods: {
     point2string(thePoint: Point): string {
-      return thePoint.x + " " + thePoint.y;
+      return thePoint.x + ' ' + thePoint.y
     },
     calcPointDistance(a: Point, b: Point) {
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-  }
-});
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      return Math.sqrt(dx * dx + dy * dy)
+    },
+  },
+})
 </script>

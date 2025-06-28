@@ -21,99 +21,99 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, type PropType, ref } from "vue";
-import { cssMixer } from "@/components/xfl-common/ts/CssMixer";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
+import { defineComponent, type PropType, ref } from 'vue'
+import { cssMixer } from '@/components/xfl-common/ts/CssMixer'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
 
-const defaultCssStyle: VuePartialCssProperties = {};
+const defaultCssStyle: VuePartialCssProperties = {}
 
 export default defineComponent({
   components: {},
   props: {
     boxHeightInPixel: {
       type: Number,
-      default: 22
+      default: 22,
     },
     deepInPixel: {
       type: Number,
-      default: -1
+      default: -1,
     },
     useDefaultShadowStyle: {
       type: Boolean,
-      default: true
+      default: true,
     },
     color: {
       type: String,
-      default: "#03DE00"
+      default: '#03DE00',
     },
     propsCssStyle: {
       type: Object as PropType<VuePartialCssProperties>,
-      default: (): VuePartialCssProperties => defaultCssStyle
-    }
+      default: (): VuePartialCssProperties => defaultCssStyle,
+    },
   },
   emits: [],
   setup(props, ctx) {
-    const templateRoot = ref<HTMLDivElement>();
+    const templateRoot = ref<HTMLDivElement>()
 
     return {
-      templateRoot
-    };
+      templateRoot,
+    }
   },
   data() {
-    return {};
+    return {}
   },
   computed: {
     boxWidthInPixel() {
-      const myself = this;
+      const myself = this
       // return Math.ceil(((myself.boxHeightInPixel * 0.618) / (1 - 0.618)) * 2) + 2 * myself.boxHeightInPixel;
-      return Math.floor(2 * myself.boxHeightInPixel);
+      return Math.floor(2 * myself.boxHeightInPixel)
     },
     boxWidth() {
-      return this.boxWidthInPixel + "px";
+      return this.boxWidthInPixel + 'px'
     },
     boxHeight() {
-      return this.boxHeightInPixel + "px";
+      return this.boxHeightInPixel + 'px'
     },
     peerPictureWidthInPixel() {
-      const myself = this;
-      return myself.boxHeightInPixel / 2;
+      const myself = this
+      return myself.boxHeightInPixel / 2
     },
     peerPictureWidth() {
-      return this.peerPictureWidthInPixel + "px";
+      return this.peerPictureWidthInPixel + 'px'
     },
     defaultShadowStyle() {
-      const myself = this;
+      const myself = this
       const deep =
-        myself.deepInPixel < 0 ? myself.peerPictureWidthInPixel * (1 - 0.618) : myself.deepInPixel;
+        myself.deepInPixel < 0 ? myself.peerPictureWidthInPixel * (1 - 0.618) : myself.deepInPixel
       // 黄金等腰三角形，凹槽深度做高，取底边的一半
-      const spreadWidth = deep / Math.tan((72 / 180) * Math.PI);
+      const spreadWidth = deep / Math.tan((72 / 180) * Math.PI)
 
       // return "0 0 " + spreadWidth * 1.618 + "px " + spreadWidth + "px #999999 inset";
-      return "0 0 " + myself.peerPictureWidthInPixel / 4 + "px " + spreadWidth + "px #999999 inset";
+      return '0 0 ' + myself.peerPictureWidthInPixel / 4 + 'px ' + spreadWidth + 'px #999999 inset'
     },
     cssStyle(): VuePartialCssProperties {
-      const myself = this;
+      const myself = this
       const theStyle: VuePartialCssProperties = cssMixer(
         defaultCssStyle,
         myself.propsCssStyle
-      ) as VuePartialCssProperties;
+      ) as VuePartialCssProperties
 
-      theStyle.boxSizing = "border-box";
-      theStyle.width = "0";
-      theStyle.height = "0";
-      theStyle.borderStyle = "solid";
+      theStyle.boxSizing = 'border-box'
+      theStyle.width = '0'
+      theStyle.height = '0'
+      theStyle.borderStyle = 'solid'
       if (myself.useDefaultShadowStyle) {
-        theStyle.boxShadow = myself.defaultShadowStyle;
+        theStyle.boxShadow = myself.defaultShadowStyle
       }
 
-      return theStyle as VuePartialCssProperties;
+      return theStyle as VuePartialCssProperties
     },
     leftTrianglePicture(): VuePartialCssProperties {
-      return this.triangleBorderCssStyleGenerator("right");
+      return this.triangleBorderCssStyleGenerator('right')
     },
     rightTrianglePicture(): VuePartialCssProperties {
-      return this.triangleBorderCssStyleGenerator("left");
-    }
+      return this.triangleBorderCssStyleGenerator('left')
+    },
   },
   watch: {},
   beforeCreate() {},
@@ -128,45 +128,45 @@ export default defineComponent({
   unmounted() {},
   methods: {
     triangleBorderCssStyleGenerator(direction: string): VuePartialCssProperties {
-      const myself = this;
+      const myself = this
 
-      const defaultStyleString = myself.peerPictureWidth + " solid transparent";
-      const fullWidthStyleString = myself.peerPictureWidth + " solid " + myself.color;
-      const zeroWidthStyleString = "0 solid " + myself.color;
+      const defaultStyleString = myself.peerPictureWidth + ' solid transparent'
+      const fullWidthStyleString = myself.peerPictureWidth + ' solid ' + myself.color
+      const zeroWidthStyleString = '0 solid ' + myself.color
       const theStyle: VuePartialCssProperties = {
         borderRight: defaultStyleString,
         borderBottom: defaultStyleString,
         borderLeft: defaultStyleString,
-        borderTop: defaultStyleString
-      };
-
-      switch (direction) {
-        case "right": {
-          theStyle.borderRight = fullWidthStyleString;
-          theStyle.borderLeft = zeroWidthStyleString;
-          break;
-        }
-        case "left": {
-          theStyle.borderLeft = fullWidthStyleString;
-          theStyle.borderRight = zeroWidthStyleString;
-          break;
-        }
-        case "top": {
-          theStyle.borderTop = fullWidthStyleString;
-          theStyle.borderBottom = zeroWidthStyleString;
-          break;
-        }
-        case "bottom": {
-          theStyle.borderBottom = fullWidthStyleString;
-          theStyle.borderTop = zeroWidthStyleString;
-          break;
-        }
-        default:
-          break;
+        borderTop: defaultStyleString,
       }
 
-      return theStyle;
-    }
-  }
-});
+      switch (direction) {
+        case 'right': {
+          theStyle.borderRight = fullWidthStyleString
+          theStyle.borderLeft = zeroWidthStyleString
+          break
+        }
+        case 'left': {
+          theStyle.borderLeft = fullWidthStyleString
+          theStyle.borderRight = zeroWidthStyleString
+          break
+        }
+        case 'top': {
+          theStyle.borderTop = fullWidthStyleString
+          theStyle.borderBottom = zeroWidthStyleString
+          break
+        }
+        case 'bottom': {
+          theStyle.borderBottom = fullWidthStyleString
+          theStyle.borderTop = zeroWidthStyleString
+          break
+        }
+        default:
+          break
+      }
+
+      return theStyle
+    },
+  },
+})
 </script>

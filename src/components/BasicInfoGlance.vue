@@ -43,82 +43,82 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, type PropType, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { KeyValuePair } from "@/tsmod/KeyValuePair";
-import { type BasicInformation, EmptyBasicInformation } from "@/tsmod/CurriculumVitaeData";
-import BasicInfoPair from "@/components/BasicInfoPair.vue";
+import { computed, type PropType, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { KeyValuePair } from '@/tsmod/KeyValuePair'
+import { type BasicInformation, EmptyBasicInformation } from '@/tsmod/CurriculumVitaeData'
+import BasicInfoPair from '@/components/BasicInfoPair.vue'
 
-const templateRoot = ref<HTMLDivElement>();
-const leftGroup = ref<Array<InstanceType<typeof BasicInfoPair>>>();
+const templateRoot = ref<HTMLDivElement>()
+const leftGroup = ref<Array<InstanceType<typeof BasicInfoPair>>>()
 
-const { t } = useI18n();
+const { t } = useI18n()
 const props = defineProps({
   theFontSizeInPixel: {
     type: Number,
-    default: 24
+    default: 24,
   },
   basicInformation: {
     type: Object as PropType<BasicInformation>,
-    default: (): BasicInformation => new EmptyBasicInformation()
-  }
-});
+    default: (): BasicInformation => new EmptyBasicInformation(),
+  },
+})
 
 const getTranslatedString = (key: string) => {
-  return t("word." + key);
-};
+  return t('word.' + key)
+}
 
 const getTheCopyValue = (key: string) => {
-  return props.basicInformation[key].theCopyValue;
-};
+  return props.basicInformation[key].theCopyValue
+}
 
 const getTheDisplayValue = (key: string) => {
-  return "theDisplayValue" in props.basicInformation[key]
+  return 'theDisplayValue' in props.basicInformation[key]
     ? props.basicInformation[key].theDisplayValue
-    : props.basicInformation[key].theCopyValue;
-};
+    : props.basicInformation[key].theCopyValue
+}
 
-const leftGroupKeyBoxWidth = ref(400);
-leftGroupKeyBoxWidth.value = getTranslatedString("jobPrefer").length * props.theFontSizeInPixel;
+const leftGroupKeyBoxWidth = ref(400)
+leftGroupKeyBoxWidth.value = getTranslatedString('jobPrefer').length * props.theFontSizeInPixel
 const updateLeftGroupKeyBoxWidth = () => {
-  let result = 400;
-  if (typeof leftGroup.value !== "undefined") {
-    result = leftGroup.value[0].rootBoxOfKey.offsetWidth ?? 400;
+  let result = 400
+  if (typeof leftGroup.value !== 'undefined') {
+    result = leftGroup.value[0].rootBoxOfKey.offsetWidth ?? 400
   }
   // console.log("updateLeftGroupKeyBoxWidth", result);
-  leftGroupKeyBoxWidth.value = result;
-};
+  leftGroupKeyBoxWidth.value = result
+}
 
 const jobPreferKV = computed(() => {
-  const valuePair = props.basicInformation.jobPrefer;
+  const valuePair = props.basicInformation.jobPrefer
   return new KeyValuePair(
-    getTranslatedString("jobPrefer"),
-    typeof valuePair.theDisplayValue === "undefined" ? valuePair.theCopyValue : valuePair.theDisplayValue,
+    getTranslatedString('jobPrefer'),
+    typeof valuePair.theDisplayValue === 'undefined' ? valuePair.theCopyValue : valuePair.theDisplayValue,
     valuePair.theCopyValue
-  );
-});
+  )
+})
 
 const group1ItemKeyList = [
-  "name",
-  "phoneNumberSameToWechat",
-  "emailAddress",
-  "birthdayInYearAndMonth",
-  "maritalStatus"
-];
+  'name',
+  'phoneNumberSameToWechat',
+  'emailAddress',
+  'birthdayInYearAndMonth',
+  'maritalStatus',
+]
 
-const group2ItemKeyList = ["nation", "stature", "schooling", "lastInstitute", "nativePlace"];
+const group2ItemKeyList = ['nation', 'stature', 'schooling', 'lastInstitute', 'nativePlace']
 
 const myCache = computed(() => {
-  const theMap = new Map() as Map<string, any>;
+  const theMap = new Map() as Map<string, any>
   const putInCache = (value: string, index: number, array: any) => {
     theMap.set(
       value,
       new KeyValuePair(getTranslatedString(value), getTheDisplayValue(value), getTheCopyValue(value))
-    );
-  };
-  group1ItemKeyList.forEach(putInCache);
-  group2ItemKeyList.forEach(putInCache);
+    )
+  }
+  group1ItemKeyList.forEach(putInCache)
+  group2ItemKeyList.forEach(putInCache)
 
-  return theMap;
-});
+  return theMap
+})
 </script>

@@ -19,41 +19,41 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, ref } from "vue";
-import type { VuePartialCssProperties } from "@/components/xfl-common/ts/VuePartialCssProperties";
-import TextPrettier from "@/components/xfl-common/vue/TextPrettier.vue";
-import CardView from "@/components/CardView.vue";
+import { computed, ref } from 'vue'
+import type { VuePartialCssProperties } from '@/components/xfl-common/ts/VuePartialCssProperties'
+import TextPrettier from '@/components/xfl-common/vue/TextPrettier.vue'
+import CardView from '@/components/CardView.vue'
 
-const templateRoot = ref<HTMLDivElement>();
+const templateRoot = ref<HTMLDivElement>()
 
 const props = defineProps({
   theFontSizeInPixel: {
     type: Number,
-    default: 24
+    default: 24,
   },
   thePeriod: {
     type: String,
-    default: ""
+    default: '',
   },
   theName: {
     type: String,
-    default: ""
+    default: '',
   },
   theTechnologyStack: {
     type: String,
-    default: ""
+    default: '',
   },
   theBody: {
     type: String,
-    default: ""
-  }
-});
+    default: '',
+  },
+})
 
-const theFontSize = computed(() => props.theFontSizeInPixel + "px");
+const theFontSize = computed(() => props.theFontSizeInPixel + 'px')
 const headerBoxCommonStyle = computed((): VuePartialCssProperties => {
   return {
-    margin: "0 " + theFontSize.value,
-    whiteSpace: "nowrap"
-  };
-});
+    margin: '0 ' + theFontSize.value,
+    whiteSpace: 'nowrap',
+  }
+})
 </script>

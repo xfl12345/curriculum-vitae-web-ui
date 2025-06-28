@@ -38,54 +38,54 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "ChatGPTWorks",
+  name: 'ChatGPTWorks',
   data() {
     return {
-      name: "Your Name",
-      email: "your.email@example.com",
-      phone: "123-456-7890",
-      location: "City, State",
+      name: 'Your Name',
+      email: 'your.email@example.com',
+      phone: '123-456-7890',
+      location: 'City, State',
       summary:
-        "A brief introduction of yourself highlighting your career objectives, key skills and achievements.",
-      skills: ["Skill 1", "Skill 2", "Skill 3"],
+        'A brief introduction of yourself highlighting your career objectives, key skills and achievements.',
+      skills: ['Skill 1', 'Skill 2', 'Skill 3'],
       experience: [
         {
-          position: "Position 1",
-          company: "Company 1",
-          startDate: "Jan 2018",
-          endDate: "Dec 2020",
-          tasks: ["Task 1", "Task 2", "Task 3"]
+          position: 'Position 1',
+          company: 'Company 1',
+          startDate: 'Jan 2018',
+          endDate: 'Dec 2020',
+          tasks: ['Task 1', 'Task 2', 'Task 3'],
         },
         {
-          position: "Position 2",
-          company: "Company 2",
-          startDate: "Jan 2016",
-          endDate: "Dec 2017",
-          tasks: ["Task 1", "Task 2"]
-        }
+          position: 'Position 2',
+          company: 'Company 2',
+          startDate: 'Jan 2016',
+          endDate: 'Dec 2017',
+          tasks: ['Task 1', 'Task 2'],
+        },
       ],
       education: [
         {
-          school: "University 1",
-          degree: "Bachelor",
-          major: "Computer Science",
-          startDate: "Sep 2012",
-          endDate: "May 2016"
+          school: 'University 1',
+          degree: 'Bachelor',
+          major: 'Computer Science',
+          startDate: 'Sep 2012',
+          endDate: 'May 2016',
         },
         {
-          school: "University 2",
-          degree: "Master",
-          major: "Engineering",
-          startDate: "Sep 2016",
-          endDate: "May 2018"
-        }
-      ]
-    };
-  }
-});
+          school: 'University 2',
+          degree: 'Master',
+          major: 'Engineering',
+          startDate: 'Sep 2016',
+          endDate: 'May 2018',
+        },
+      ],
+    }
+  },
+})
 </script>
 
 <style scoped>
