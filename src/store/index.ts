@@ -7,13 +7,13 @@ import { getBrowserFirstDefaultFontFamily, getTextSize } from '@/components/xfl-
 import { ClientCookieManager } from '@/components/xfl-common/ts/ClientCookieManager'
 import { LoginMananger } from '@/model/LoginMananger'
 import type { StringKeyMapType } from '@/components/xfl-common/ts/StringMapType'
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 
 const env = import.meta.env ?? ({} as any)
 
 export const useGlobalStore = defineStore('globalStore', {
   state: () => {
-    const globalState = {
+    const globalState = reactive({
       developmentModeFlag: JSON.parse(env.VITE_ENABLE_DEV_MODE ?? 'false'),
       uiCalculation: {
         rootScale: 8,
@@ -50,13 +50,13 @@ export const useGlobalStore = defineStore('globalStore', {
         ...document.defaultView!.getComputedStyle(document.body, '').fontFamily.split(','),
       ],
       diyFontFamilyList: ['楷体', 'KaiTi', '华文楷体', 'STKaiti'],
-    }
+    })
 
     function setRootScale(rootScale) {
       console.log('setRootScale', rootScale)
       globalState.uiCalculation.rootScale = rootScale
     }
-    function addFontFamily(fontName) {
+    function addFontFamily(fontName: string) {
       globalState.diyFontFamilyList = [fontName, ...globalState.diyFontFamilyList]
     }
     function updateGlobalUiCalculationData() {
