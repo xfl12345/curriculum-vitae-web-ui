@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="tsx">
-import { ref, reactive, computed, onBeforeMount, onMounted } from 'vue'
+import { ref, reactive, computed, onBeforeMount, onMounted, toRaw } from 'vue'
 import { useGlobalStore } from '@/store'
 import { useRouter } from 'vue-router'
 import tinygradient from 'tinygradient'
@@ -219,6 +219,7 @@ function startProgress() {
 
   const checkFont = () => {
     if (i >= fontList.length) {
+      console.log(toRaw(store.globalState.diyFontFamilyList))
       if (Object.values(supportFontStatus).filter((value) => value).length === 0) {
         fontDetection.loadFontMessage = '由于所有字体均不支持，正在下载额外字体'
         fontDetection.isNeedToLoadExtraFont = true
@@ -312,6 +313,9 @@ const onAllDone = () => {
 
 function resetProgressAndRun() {
   if (isAllAnimateFinished.value) {
+    checkItemIndex.value = 0
+    fontDetection.isAllRescueFailed = false
+    fontDetection.isNeedToLoadExtraFont = false
     progress.value = 0
     isAllAnimateFinished.value = false
     setTimeout(startProgress, 500)
