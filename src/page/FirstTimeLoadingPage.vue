@@ -1,13 +1,10 @@
 <template>
-  <div ref="templateRoot" style="height: 99vh; padding-top: 1vh">
+  <div ref="templateRoot" :class="[myVueStyle.root]">
     <div v-if="debugMode" style="position: fixed; top: 0; left: 0; border: hotpink dashed 1px; z-index: 1">
       {{ JSON.stringify(stateWindow) }}
     </div>
-    <div
-      style="display: flex; justify-content: center"
-      :style="{ minWidth: circleProgressBarWidth, minHeight: circleProgressBarWidth }"
-    >
-      <div style="">
+    <div :class="[myVueStyle.content]">
+      <div>
         <circle-progress-bar
           v-slot="slotProps"
           sizing-type="border"
@@ -20,17 +17,10 @@
           :transition-duration-in-seconds="0.3"
           @reached="onOneHundredReached"
         >
-          <div style="height: 100%; width: 100%">
-            <div v-if="isShowPercentageBox" style="width: 100%; height: 100%">
+          <div :class="[myVueStyle.fillParent]">
+            <div v-if="isShowPercentageBox" :class="[myVueStyle.fillParent]">
               <div
-                style="
-                  position: relative;
-                  transition-property: height, font-size, opacity;
-                  transition-duration: 0.8s, 0.8s, 1s;
-                  transition-timing-function: ease, ease, linear;
-                  transition-delay: 0s, 0s, 1s;
-                  line-height: 0.8;
-                "
+                :class="[myVueStyle.circleProgressBarPanel]"
                 :style="{
                   // opacity: slotProps.isLimitReached ? 0 : 1,
                   height: slotProps.isLimitReached ? '100%' : '50%',
@@ -39,14 +29,7 @@
                 }"
               >
                 <div
-                  style="
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                  "
+                  :class="[myVueStyle.circleProgressBarPanelBody]"
                   :style="[slotProps.isLimitReached ? { height: '100%' } : undefined]"
                 >
                   <div
@@ -337,3 +320,39 @@ function resetProgressAndRun() {
 
 const onFailed = () => (circleProgressBarColorArray.value = ['#FF0000', '#FF0000'])
 </script>
+<style module="myVueStyle" lang="css">
+.root {
+  height: 99vh;
+  padding-top: 1vh;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  min-width: v-bind('circleProgressBarWidth');
+  min-height: v-bind('circleProgressBarWidth');
+}
+
+.fillParent {
+  width: 100%;
+  height: 100%;
+}
+
+.circleProgressBarPanel {
+  position: relative;
+  transition-property: height, font-size, opacity;
+  transition-duration: 0.8s, 0.8s, 1s;
+  transition-timing-function: ease, ease, linear;
+  transition-delay: 0s, 0s, 1s;
+  line-height: 0.8;
+}
+
+.circleProgressBarPanelBody {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+</style>
