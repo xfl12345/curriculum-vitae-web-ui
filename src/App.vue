@@ -56,10 +56,10 @@ onBeforeUnmount(() => {
 
 const fontFamily = computed(() => {
   return (
-    store.globalState.diyFontFamilyList.join(', ') +
-    ', ' +
-    store.globalState.diyDefaultFontFamilyList.join(', ') +
-    ', ' +
+    store.globalState.diyFontFamilyList.join(',') +
+    ',' +
+    store.globalState.diyDefaultFontFamilyList.join(',') +
+    ',' +
     store.globalState.browserDefaultFontFamily
   )
 })
