@@ -12,7 +12,7 @@
           v-slot="slotProps"
           sizing-type="border"
           :progress="progress"
-          :progress-max="progressMax"
+          :progress-max="PROGRESS_MAX"
           :rounded="true"
           :dom-square-box-width="circleProgressBarWidthInPixel"
           :stroke-width-in-pixel="circleProgressBarStrokeWidthInPixel"
@@ -133,8 +133,8 @@
   </div>
 </template>
 
-<script lang="tsx">
-import { defineComponent, ref } from 'vue'
+<script setup lang="tsx">
+import { ref, reactive, computed, onBeforeMount, onMounted } from 'vue'
 import { useGlobalStore } from '@/store'
 import { useRouter } from 'vue-router'
 import tinygradient from 'tinygradient'
@@ -143,217 +143,172 @@ import CenterBox from '@/components/xfl-common/vue/CenterBox.vue'
 import SvgRightPicturePath from '@/components/xfl-common/vue/SvgRightPicturePath.vue'
 import { applyNewFont2GlobalDom, SupportedFontFamilyDetector } from '@/components/xfl-common/ts/FontUtils'
 
-export default defineComponent({
-  components: { SvgRightPicturePath, CenterBox, CircleProgressBar },
-  setup(props, ctx) {
-    const store = useGlobalStore()
-    const router = useRouter()
+// 引入全局状态和路由
+const store = useGlobalStore()
+const router = useRouter()
 
-    const templateRoot = ref<HTMLDivElement>()
-    const canvas4font = ref<HTMLCanvasElement>()
+// 定义响应式引用
+const templateRoot = ref<HTMLDivElement | null>(null)
+const canvas4font = ref<HTMLCanvasElement | null>(null)
 
-    return {
-      templateRoot,
-      store,
-      router,
-      canvas4font,
-    }
+// 定义数据
+const exhibition = ref(false)
+const canMount = ref(true)
+const debugMode = ref(false)
+const progress = ref(0)
+const PROGRESS_MAX = 100
+const circleProgressBarColorArray = ref(
+  tinygradient('red', 'aqua')
+    .hsv(PROGRESS_MAX + 1, 'long')
+    .map((item) => item.toHexString())
+)
+const checkItemIndex = ref(0)
+const checkItemNameList = ['正在检查您的浏览器，请稍等……', '正在检查浏览器对字体支持的情况']
+const isShowPercentageBox = ref(true)
+const isMounted = ref(false)
+
+// 使用 reactive 定义复杂对象
+const fontDetection = reactive({
+  currentItem: {
+    fontName: '',
+    isSupport: false,
   },
-  data() {
-    const progressMax = 100
-    const circleProgressBarColorArray = tinygradient('red', 'aqua')
-      .hsv(progressMax + 1, 'long')
-      .map((item) => item.toHexString())
-    const checkItemNameList = ['正在检查您的浏览器，请稍等……', '正在检查浏览器对字体支持的情况']
-    return {
-      exhibition: false,
-      canMount: true,
-      debugMode: false,
-      progress: 0,
-      progressMax,
-      circleProgressBarColorArray,
-      checkItemIndex: 0,
-      checkItemNameList,
-      isShowPercentageBox: true,
-      isMounted: false,
-      fontDetection: {
-        currentItem: {
-          fontName: '',
-          isSupport: false,
-        },
-        isNeedToLoadExtraFont: false,
-        loadFontMessage: '',
-        isAllRescueFailed: false,
-      },
-    }
-  },
-  computed: {
-    stateWindow() {
-      const myself = this
-      return {
-        innerWidth: myself.store.globalState.uiCalculation.window.innerWidth,
-        innerHeight: myself.store.globalState.uiCalculation.window.innerHeight,
-      }
-    },
-    circleProgressBarWidthInPixel() {
-      const myself = this
-      let result = 1000
-      if (this.isMounted && 'clientWidth' in document.body) {
-        // 宽度高度谁更大？两者之间选最小。
-        result =
-          myself.stateWindow.innerWidth < myself.stateWindow.innerHeight
-            ? myself.stateWindow.innerWidth
-            : myself.stateWindow.innerHeight
+  isNeedToLoadExtraFont: false,
+  loadFontMessage: '',
+  isAllRescueFailed: false,
+})
 
-        result -= parseInt(getComputedStyle(this.templateRoot!).paddingTop, 10) << 1
-      }
-      return result
-    },
-    circleProgressBarWidth() {
-      return this.circleProgressBarWidthInPixel + 'px'
-    },
-    circleProgressBarStrokeWidthInPixel() {
-      const myself = this
-      const circleWidth = myself.circleProgressBarWidthInPixel
-      let result
-      if (circleWidth >= 900) {
-        result = 40
-      } else if (circleWidth > 200) {
-        result = circleWidth / 30
-      } else {
-        result = 4
-      }
+// 定义计算属性
+const stateWindow = computed(() => ({
+  innerWidth: store.globalState.uiCalculation.window.innerWidth,
+  innerHeight: store.globalState.uiCalculation.window.innerHeight,
+}))
 
-      return result
-    },
-  },
-  watch: {},
-  beforeCreate() {},
-  created() {},
-  beforeMount() {
-    const myself = this
-    myself.exhibition = JSON.parse(myself.$route.query.exhibition as string) as boolean
-    if (!myself.exhibition) {
-      if (myself.store.globalState.browserInitiated) {
-        myself.canMount = false
-        myself.router.push({ name: 'cv' })
-      }
-    }
-  },
-  mounted() {
-    const myself = this
-    if (!myself.canMount) {
-      return
-    }
+const circleProgressBarWidthInPixel = computed(() => {
+  let result = 1000
+  if (isMounted.value && 'clientWidth' in document.body) {
+    result = Math.min(stateWindow.value.innerWidth, stateWindow.value.innerHeight)
+    result -= parseInt(getComputedStyle(templateRoot.value!).paddingTop, 10) << 1
+  }
+  return result
+})
 
-    myself.isMounted = true
-    // myself.store.state
+const circleProgressBarWidth = computed(() => circleProgressBarWidthInPixel.value + 'px')
 
-    setTimeout(() => {
-      myself.checkItemIndex += 1
+const circleProgressBarStrokeWidthInPixel = computed(() => {
+  const circleWidth = circleProgressBarWidthInPixel.value
+  let result
+  if (circleWidth >= 900) {
+    result = 40
+  } else if (circleWidth > 200) {
+    result = circleWidth / 30
+  } else {
+    result = 4
+  }
+  return result
+})
 
-      const fontList = myself.store.globalState.diyFontFamilyList
-      const detector = new SupportedFontFamilyDetector()
-      detector.selectedFontCanvas = this.canvas4font!
-      // detector.testChar = "楷";
+// 生命周期钩子
+onBeforeMount(() => {
+  const routeExhibition = router.currentRoute.value.query.exhibition as string | undefined
+  exhibition.value = routeExhibition ? JSON.parse(routeExhibition) : false
+  if (!exhibition.value && store.globalState.browserInitiated) {
+    canMount.value = false
+    router.push({ name: 'cv' })
+  }
+})
+
+onMounted(() => {
+  if (!canMount.value) return
+  isMounted.value = true
+
+  setTimeout(() => {
+    checkItemIndex.value += 1
+    const fontList = store.globalState.diyFontFamilyList
+    const detector = new SupportedFontFamilyDetector()
+    if (canvas4font.value) {
+      detector.selectedFontCanvas = canvas4font.value
       detector.testChar = 'a'
       detector.defaultFontCanvas.width = detector.selectedFontCanvas.width
       detector.defaultFontCanvas.height = detector.selectedFontCanvas.height
+    }
 
-      const progressUnit = myself.progressMax / (fontList.length + 1)
-      const supportFontStatus = {} as any
-      let i = 0
+    const progressUnit = PROGRESS_MAX / (fontList.length + 1)
+    const supportFontStatus: Record<string, boolean> = {}
+    let i = 0
 
-      const ptr = {} as any
-      ptr.func = () => {}
-      ptr.func = () => {
-        if (i >= fontList.length) {
-          if (Object.values(supportFontStatus).filter((value) => value).length === 0) {
-            myself.fontDetection.loadFontMessage = '由于所有字体均不支持，正在下载额外字体'
-            myself.fontDetection.isNeedToLoadExtraFont = true
-            const fontName = 'FangZhengKaiTi'
-
-            applyNewFont2GlobalDom(fontName, 'url(static/font/FZ_KAITI_ZH_HANS.woff2)').then((result) => {
-              myself.fontDetection.loadFontMessage = '下载成功，并已应用。正在检测能否渲染。'
-              // console.log(result);
-              myself.store.addFontFamily(fontName)
-              if (detector.isSupported(fontName)) {
-                myself.onAllDone()
-              } else {
-                myself.onFailed()
-                myself.fontDetection.isAllRescueFailed = true
-                myself.fontDetection.loadFontMessage =
-                  '渲染失败。因浏览器不能正常显示字体，界面布局可能混乱，是否继续访问？'
-                console.log('Apply new font failed.')
-              }
-            })
-          } else {
-            myself.onAllDone()
-          }
-
-          return
+    const checkFont = () => {
+      if (i >= fontList.length) {
+        if (Object.values(supportFontStatus).filter((value) => value).length === 0) {
+          fontDetection.loadFontMessage = '由于所有字体均不支持，正在下载额外字体'
+          fontDetection.isNeedToLoadExtraFont = true
+          const fontName = 'FangZhengKaiTi'
+          applyNewFont2GlobalDom(fontName, 'url(static/font/FZ_KAITI_ZH_HANS.woff2)').then(() => {
+            fontDetection.loadFontMessage = '下载成功，并已应用。正在检测能否渲染。'
+            store.addFontFamily(fontName)
+            if (detector.isSupported(fontName)) {
+              onAllDone()
+            } else {
+              onFailed()
+              fontDetection.isAllRescueFailed = true
+              fontDetection.loadFontMessage =
+                '渲染失败。因浏览器不能正常显示字体，界面布局可能混乱，是否继续访问？'
+              console.log('Apply new font failed.')
+            }
+          })
+        } else {
+          onAllDone()
         }
-        const fontName = fontList[i]
-        const currentItem = myself.fontDetection.currentItem
-        currentItem.fontName = fontName
-        const isSupport = detector.isSupported(fontName)
-        currentItem.isSupport = isSupport
-        supportFontStatus[fontList[i]] = isSupport
+        return
+      }
 
-        // 加百分比的小循环
-        const targetProgress = myself.progress + progressUnit
-        const ptr2 = {} as any
-        ptr2.func = () => {}
-        ptr2.func = () => {
-          if (myself.progress < targetProgress) {
-            myself.progress += 1
-            setTimeout(ptr2.func, 20)
-          } else {
-            // 加完进入下一回合
-            i += 1
-            ptr.func()
-          }
+      const fontName = fontList[i]
+      fontDetection.currentItem.fontName = fontName
+      const isSupport = detector.isSupported(fontName)
+      fontDetection.currentItem.isSupport = isSupport
+      supportFontStatus[fontList[i]] = isSupport
+
+      const targetProgress = progress.value + progressUnit
+      const updateProgress = () => {
+        if (progress.value < targetProgress) {
+          progress.value += 1
+          setTimeout(updateProgress, 20)
+        } else {
+          i += 1
+          checkFont()
         }
-        ptr2.func()
       }
+      updateProgress()
+    }
 
-      ptr.func()
-    }, 500)
-  },
-  beforeUpdate() {},
-  updated() {},
-  activated() {},
-  deactivated() {},
-  beforeUnmount() {},
-  unmounted() {},
-  methods: {
-    jumpTarget() {
-      const myself = this
-      const tmpJumpTarget = myself.$route.query.jumpTarget as string | undefined
-      const jumpTarget: string = typeof tmpJumpTarget === 'undefined' ? 'cv' : tmpJumpTarget
-      myself.router.push(jumpTarget)
-    },
-    onOneHundredReached(reached: boolean) {
-      const myself = this
-      if (reached) {
-        setTimeout(() => {
-          myself.isShowPercentageBox = !reached
-        }, 1000)
-      } else {
-        myself.isShowPercentageBox = !reached
-      }
-    },
-    onAllDone() {
-      const myself = this
-      myself.store.setBrowserInitiatedFlag(true)
-      myself.progress = myself.progressMax
-      if (!myself.exhibition) {
-        setTimeout(myself.jumpTarget, 2300)
-      }
-    },
-    onFailed() {
-      this.circleProgressBarColorArray = ['#FF0000', '#FF0000']
-    },
-  },
+    checkFont()
+  }, 500)
 })
+
+// 定义方法
+const jumpTarget = () => {
+  const tmpJumpTarget = router.currentRoute.value.query.jumpTarget as string | undefined
+  const jumpTarget = tmpJumpTarget ?? 'cv'
+  router.push(jumpTarget)
+}
+
+const onOneHundredReached = (reached: boolean) => {
+  if (reached) {
+    setTimeout(() => {
+      isShowPercentageBox.value = !reached
+    }, 1000)
+  } else {
+    isShowPercentageBox.value = !reached
+  }
+}
+
+const onAllDone = () => {
+  store.setBrowserInitiatedFlag(true)
+  progress.value = PROGRESS_MAX
+  if (!exhibition.value) {
+    setTimeout(jumpTarget, 2300)
+  }
+}
+
+const onFailed = () => (circleProgressBarColorArray.value = ['#FF0000', '#FF0000'])
 </script>
