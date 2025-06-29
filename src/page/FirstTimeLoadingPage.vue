@@ -123,6 +123,7 @@
         </circle-progress-bar>
         <div v-if="exhibition">
           <button @click="jumpTarget">点我继续转跳</button>
+          <button @click="resetProgressAndRun">点我再看一遍</button>
         </div>
         <div v-if="debugMode">
           <br />
@@ -156,6 +157,16 @@ const exhibition = ref(false)
 const canMount = ref(true)
 const debugMode = ref(false)
 const progress = ref(0)
+
+const isAllAnimateFinishedValue = ref(false)
+const isAllAnimateFinished = computed({
+  get() {
+    return progress.value === PROGRESS_MAX && isAllAnimateFinishedValue.value
+  },
+  set(value) {
+    isAllAnimateFinishedValue.value = progress.value === PROGRESS_MAX && value
+  },
+})
 const PROGRESS_MAX = 100
 const circleProgressBarColorArray = ref(
   tinygradient('red', 'aqua')
@@ -208,6 +219,68 @@ const circleProgressBarStrokeWidthInPixel = computed(() => {
   return result
 })
 
+function startProgress() {
+  checkItemIndex.value += 1
+  const fontList = store.globalState.diyFontFamilyList
+  const detector = new SupportedFontFamilyDetector()
+  if (canvas4font.value) {
+    detector.selectedFontCanvas = canvas4font.value
+    detector.testChar = 'a'
+    detector.defaultFontCanvas.width = detector.selectedFontCanvas.width
+    detector.defaultFontCanvas.height = detector.selectedFontCanvas.height
+  }
+
+  const progressUnit = PROGRESS_MAX / (fontList.length + 1)
+  const supportFontStatus: Record<string, boolean> = {}
+  let i = 0
+
+  const checkFont = () => {
+    if (i >= fontList.length) {
+      if (Object.values(supportFontStatus).filter((value) => value).length === 0) {
+        fontDetection.loadFontMessage = '由于所有字体均不支持，正在下载额外字体'
+        fontDetection.isNeedToLoadExtraFont = true
+        const fontName = 'FangZhengKaiTi'
+        applyNewFont2GlobalDom(fontName, 'url(static/font/FZ_KAITI_ZH_HANS.woff2)').then(() => {
+          fontDetection.loadFontMessage = '下载成功，并已应用。正在检测能否渲染。'
+          store.addFontFamily(fontName)
+          if (detector.isSupported(fontName)) {
+            onAllDone()
+          } else {
+            onFailed()
+            fontDetection.isAllRescueFailed = true
+            fontDetection.loadFontMessage =
+              '渲染失败。因浏览器不能正常显示字体，界面布局可能混乱，是否继续访问？'
+            console.log('Apply new font failed.')
+          }
+        })
+      } else {
+        onAllDone()
+      }
+      return
+    }
+
+    const fontName = fontList[i]
+    fontDetection.currentItem.fontName = fontName
+    const isSupport = detector.isSupported(fontName)
+    fontDetection.currentItem.isSupport = isSupport
+    supportFontStatus[fontList[i]] = isSupport
+
+    const targetProgress = progress.value + progressUnit
+    const updateProgress = () => {
+      if (progress.value < targetProgress) {
+        progress.value += 1
+        setTimeout(updateProgress, 20)
+      } else {
+        i += 1
+        checkFont()
+      }
+    }
+    updateProgress()
+  }
+
+  checkFont()
+}
+
 // 生命周期钩子
 onBeforeMount(() => {
   const routeExhibition = router.currentRoute.value.query.exhibition as string | undefined
@@ -222,67 +295,7 @@ onMounted(() => {
   if (!canMount.value) return
   isMounted.value = true
 
-  setTimeout(() => {
-    checkItemIndex.value += 1
-    const fontList = store.globalState.diyFontFamilyList
-    const detector = new SupportedFontFamilyDetector()
-    if (canvas4font.value) {
-      detector.selectedFontCanvas = canvas4font.value
-      detector.testChar = 'a'
-      detector.defaultFontCanvas.width = detector.selectedFontCanvas.width
-      detector.defaultFontCanvas.height = detector.selectedFontCanvas.height
-    }
-
-    const progressUnit = PROGRESS_MAX / (fontList.length + 1)
-    const supportFontStatus: Record<string, boolean> = {}
-    let i = 0
-
-    const checkFont = () => {
-      if (i >= fontList.length) {
-        if (Object.values(supportFontStatus).filter((value) => value).length === 0) {
-          fontDetection.loadFontMessage = '由于所有字体均不支持，正在下载额外字体'
-          fontDetection.isNeedToLoadExtraFont = true
-          const fontName = 'FangZhengKaiTi'
-          applyNewFont2GlobalDom(fontName, 'url(static/font/FZ_KAITI_ZH_HANS.woff2)').then(() => {
-            fontDetection.loadFontMessage = '下载成功，并已应用。正在检测能否渲染。'
-            store.addFontFamily(fontName)
-            if (detector.isSupported(fontName)) {
-              onAllDone()
-            } else {
-              onFailed()
-              fontDetection.isAllRescueFailed = true
-              fontDetection.loadFontMessage =
-                '渲染失败。因浏览器不能正常显示字体，界面布局可能混乱，是否继续访问？'
-              console.log('Apply new font failed.')
-            }
-          })
-        } else {
-          onAllDone()
-        }
-        return
-      }
-
-      const fontName = fontList[i]
-      fontDetection.currentItem.fontName = fontName
-      const isSupport = detector.isSupported(fontName)
-      fontDetection.currentItem.isSupport = isSupport
-      supportFontStatus[fontList[i]] = isSupport
-
-      const targetProgress = progress.value + progressUnit
-      const updateProgress = () => {
-        if (progress.value < targetProgress) {
-          progress.value += 1
-          setTimeout(updateProgress, 20)
-        } else {
-          i += 1
-          checkFont()
-        }
-      }
-      updateProgress()
-    }
-
-    checkFont()
-  }, 500)
+  setTimeout(startProgress, 500)
 })
 
 // 定义方法
@@ -305,8 +318,20 @@ const onOneHundredReached = (reached: boolean) => {
 const onAllDone = () => {
   store.setBrowserInitiatedFlag(true)
   progress.value = PROGRESS_MAX
-  if (!exhibition.value) {
+  if (exhibition.value) {
+    setTimeout(() => {
+      isAllAnimateFinished.value = true
+    }, 2300)
+  } else {
     setTimeout(jumpTarget, 2300)
+  }
+}
+
+function resetProgressAndRun() {
+  if (isAllAnimateFinished.value) {
+    progress.value = 0
+    isAllAnimateFinished.value = false
+    setTimeout(startProgress, 500)
   }
 }
 
